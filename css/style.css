@@ -142,10 +142,13 @@ main a {
   grid-area: right;
   padding-bottom: 39px;
 }
-.center {
+.center, .centermain {
   padding-left: 10px;
   padding-right: 10px;
   margin: 0 auto;
+}
+.centermain {
+  padding-bottom: 39px;
 }
 i {
   padding-right: 3px;
