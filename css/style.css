@@ -285,3 +285,9 @@ Moble Device
 .none {
   display: none;
 }
+.submenuyes, .submenuyes2 {
+  display: block;
+}
+#msg, #age, #copyright {
+  display: inline;
+}
