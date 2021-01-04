@@ -1,0 +1,94 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+/*******************************************************************************************
+Main Side
+*******************************************************************************************/
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 39px;
+}
+.grid div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2em;
+}
+h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+  text-align: center;
+}
+.random {
+  cursor: pointer;
+}
+.grid div a {
+  color: white;
+}
+#d01, #d03, #d05, #d07, #d09, #d11, #d13, #d15, #d17, #d19 {
+  background-color: tomato;
+}
+#d02, #d04, #d06, #d08, #d10, #d12, #d14, #d16, #d18, #d20 {
+  background-color: thistle;
+}
+.overlay {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 5px;
+}
+.indexcode {
+  text-shadow: 1px 1px 2px black;
+}
+/*******************************************************************************************
+Click Divs
+*******************************************************************************************/
+.gridclickdiv {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 39px;
+}
+.clickdiv {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2em;
+  background-color: black;
+  cursor: pointer;
+}
+/*******************************************************************************************
+For Phone
+*******************************************************************************************/
+@media (max-width: 657px) {
+  /* Main Side */
+  .grid {
+    width: 100vw;
+  }
+  .overlay, .indexcode {
+    font-size: 0.5em;
+  }
+  /* Click Divs */
+  .gridclickdiv {
+    width: 100vw;
+  }
+  .clickdiv {
+    font-size: 1em;
+  }
+}

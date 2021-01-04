@@ -1,0 +1,239 @@
+{"mygallery": [
+  {"file": "me/my-iris.png",
+    "title": "My Iris",
+    "alt": "Meine Iris"
+  },
+  {"file": "IMG_20201015_093917_878.jpg",
+    "title": "Look over Wiener Neudorf",
+    "alt": "Sicht über Wiener Neudorf"
+  },
+  {"file": "IMG_20201015_094029_842.jpg",
+    "title": "Plane arriving at Vienna Airport",
+    "alt": "Flugzeug landet beim Flughafen Wien"
+  },
+  {"file": "IMG_20201015_094158_991.jpg",
+    "title": "Föhrenberge Nature Park look to Schwechat",
+    "alt": "Naturpark Föhrenberge"
+  },
+  {"file": "IMG_20200909_191210.jpg",
+    "title": "Föhrenberge Nature Park",
+    "alt": "Naturpark Föhrenberge"
+  },
+  {"file": "IMG_20200909_191912.jpg",
+    "title": "Föhrenberge Nature Park",
+    "alt": "Naturpark Föhrenberge"
+  },
+  {"file": "IMG_20200919_172432.jpg",
+    "title": "Föhrenberge Nature Park",
+    "alt": "Naturpark Föhrenberge"
+  },
+  {"file": "IMG_20200919_172438.jpg",
+    "title": "Föhrenberge Nature Park",
+    "alt": "Naturpark Föhrenberge"
+  },
+  {"file": "IMG_20200831_185128.jpg",
+    "title": "Look over Mödling",
+    "alt": "Sicht über Mödling"
+  },
+  {"file": "IMG_20200831_185133.jpg",
+    "title": "Look over Mödling",
+    "alt": "Sicht über Mödling"
+  },
+  {"file": "IMG_20200831_185255.jpg",
+    "title": "Look over Mödling",
+    "alt": "Sicht über Mödling"
+  },
+  {"file": "IMG_20200831_185301.jpg",
+    "title": "Look over Mödling",
+    "alt": "Sicht über Mödling"
+  },
+  {"file": "IMG_20200831_185615.jpg",
+    "title": "Look over Mödling",
+    "alt": "Sicht über Mödling"
+  },
+  {"file": "IMG_20201015_094315_647.jpg",
+    "title": "Look over Mödling",
+    "alt": "Sicht über Mödling"
+  },
+  {"file": "IMG_20201026_163651_484.jpg",
+    "title": "Sunset at the Vienna Airport with a look at the Planes",
+    "alt": "Sonnenuntergang beim Flughafen Wien mit sicht auf die Flugzeuge"
+  },
+  {"file": "IMG_20201026_170656_177.jpg",
+    "title": "Sunset at the Vienna Airport",
+    "alt": "Sonnenuntergang beim Flughafen Wien"
+  },
+  {"file": "IMG_20201201_183202_978.jpg",
+    "title": "Look at the Moon",
+    "alt": "Bild vom Mond"
+  },
+  {"file": "flowers/IMG_20200319_160114.jpg",
+    "title": "Violet Flower",
+    "alt": "Violette Blume"
+  },
+  {"file": "flowers/IMG_20200329_155446.jpg",
+    "title": "White Flower",
+    "alt": "Weiße Blume"
+  },
+  {"file": "flowers/IMG_20200329_155452.jpg",
+    "title": "Yellow Flower",
+    "alt": "Gelbe Blume"
+  },
+  {"file": "flowers/IMG_20200329_155500.jpg",
+    "title": "White and Purple Flower",
+    "alt": "Weiß und Violette Blume"
+  },
+  {"file": "flowers/IMG_20200329_155535.jpg",
+    "title": "Flower",
+    "alt": "Blume"
+  },
+  {"file": "flowers/IMG_20200329_155553.jpg",
+    "title": "Flower",
+    "alt": "Blume"
+  },
+  {"file": "flowers/IMG_20200417_183535.jpg",
+    "title": "Flower",
+    "alt": "Blume"
+  },
+  {"file": "flowers/IMG_20200417_183543.jpg",
+    "title": "Flower",
+    "alt": "Blume"
+  },
+  {"file": "flowers/IMG_20200417_184036.jpg",
+    "title": "Flower",
+    "alt": "Blume"
+  },
+  {"file": "IMG_20200808_195102.jpg",
+    "title": "Look to Vienna",
+    "alt": "Sicht auf Wien"
+  },
+  {"file": "IMG_20200808_203828.jpg",
+    "title": "Sunset at the Anningerhaus",
+    "alt": "Sonnenuntergang beim Anningerhaus"
+  },
+  {"file": "IMG_20200811_194930.jpg",
+    "title": "Sunset over Vienna - Wienfluss Way",
+    "alt": "Sonnenuntergang über Wien - Wienfluss Weg"
+  },
+  {"file": "IMG_20200819_191916.jpg",
+    "title": "Vienna outer ring motorway look to Vienna",
+    "alt": "Wiener Außenring Autobahn sicht nach Wien"
+  },
+  {"file": "IMG_20200819_191919.jpg",
+    "title": "Vienna outer ring motorway look to Vienna - Closer look",
+    "alt": "Wiener Außenring Autobahn sicht nach Wien - Nähere Sicht"
+  },
+  {"file": "IMG_20201017_163540.jpg",
+    "title": "Wienfluss Way",
+    "alt": "Wienfluss Weg"
+  },
+  {"file": "IMG_20201017_163548.jpg",
+    "title": "Wienfluss Way",
+    "alt": "Wienfluss Weg"
+  },
+  {"file": "IMG_20201031_225501.jpg",
+    "title": "Moon between Clouds",
+    "alt": "Mond zwischen den Wolken"
+  },
+  {"file": "IMG_20201122_161159.jpg",
+    "title": "Sunset Mödling",
+    "alt": "Sonnenuntergang Mödling"
+  },
+  {"file": "IMG_20201122_161207.jpg",
+    "title": "Sunset Mödling",
+    "alt": "Sonnenuntergang Mödling"
+  },
+  {"file": "IMG_20201122_161228.jpg",
+    "title": "Sunset Mödling",
+    "alt": "Sonnenuntergang Mödling"
+  },
+  {"file": "IMG_20201122_161333.jpg",
+    "title": "Sunset Mödling",
+    "alt": "Sonnenuntergang Mödling"
+  },
+  {"file": "IMG_20201122_161341.jpg",
+    "title": "Sunset Mödling",
+    "alt": "Sonnenuntergang Mödling"
+  },
+  {"file": "IMG_20201128_193116.jpg",
+    "title": "Posthof Mödling",
+    "alt": "Posthof Mödling"
+  },
+  {"file": "IMG_20201126_195239_528.jpg",
+    "title": "Christmas decoration at the main square Mödling",
+    "alt": "Weihnachtsdekoration beim Hauptplatz Mödling"
+  },
+  {"file": "IMG_20201128_193418.jpg",
+    "title": "Christmas decoration at the main square Mödling",
+    "alt": "Weihnachtsdekoration beim Hauptplatz Mödling"
+  },
+  {"file": "IMG_20201210_183433.jpg",
+    "title": "Christmas decoration at the main square Mödling",
+    "alt": "Weihnachtsdekoration beim Hauptplatz Mödling"
+  },
+  {"file": "IMG_20201210_183622.jpg",
+    "title": "Christmas decoration at the main square Mödling",
+    "alt": "Weihnachtsdekoration beim Hauptplatz Mödling"
+  },
+  {"file": "IMG_20201210_183628.jpg",
+    "title": "Christmas decoration at the main square Mödling",
+    "alt": "Weihnachtsdekoration beim Hauptplatz Mödling"
+  },
+  {"file": "IMG_20201129_154258.jpg",
+    "title": "Ober St. Veit Sunset - Wienfluss Way",
+    "alt": "Ober St. Veit - Wienfluss Weg"
+  },
+  {"file": "IMG_20201201_185613.jpg",
+    "title": "EVN - Clouds over Mödling",
+    "alt": "EVN - Wolken über Mödling"
+  },
+  {"file": "IMG_20201203_070455.jpg",
+    "title": "Snow into Mödling",
+    "alt": "Schnee in Mödling"
+  },
+  {"file": "IMG_20201223_071758.jpg",
+    "title": "Sunrise over Mödling",
+    "alt": "Sonnenaufgang in Mödling"
+  },
+  {"file": "IMG_20201226_140726.jpg",
+    "title": "Old Fire extinguishing props depot Hinterbrühl",
+    "alt": "Altes Feuerlösch Requisiten Depot Hinterbrühl"
+  },
+  {"file": "IMG_20201226_140739_1.jpg",
+    "title": "Old Fire extinguishing props depot Hinterbrühl",
+    "alt": "Altes Feuerlösch Requisiten Depot Hinterbrühl"
+  },
+  {"file": "IMG_20201226_152457_2.jpg",
+    "title": "Föhrenberge Nature Park",
+    "alt": "Naturpark Föhrenberge"
+  },
+  {"file": "IMG_20201226_152520.jpg",
+    "title": "Föhrenberge Nature Park",
+    "alt": "Naturpark Föhrenberge"
+  },
+  {"file": "IMG_20201226_153154.jpg",
+    "title": "Son behind Clouds",
+    "alt": "Sonne hinter Wolken"
+  },
+  {"file": "IMG_20201226_153159.jpg",
+    "title": "Son behind Clouds",
+    "alt": "Sonne hinter Wolken"
+  },
+  {"file": "IMG_20201226_153258.jpg",
+    "title": "Son behind Clouds",
+    "alt": "Sonne hinter Wolken"
+  },
+  {"file": "IMG_20201226_153303.jpg",
+    "title": "Son behind Clouds",
+    "alt": "Sonne hinter Wolken"
+  },
+  {"file": "IMG_20201226_155455.jpg",
+    "title": "Vienna outer ring motorway look to Vienna",
+    "alt": "Wiener Außenring Autobahn sicht nach Wien"
+  },
+  {"file": "PANO_20201226_152531.jpg",
+    "title": "Föhrenberge Nature Park",
+    "alt": "Naturpark Föhrenberge"
+  }
+  ]
+}

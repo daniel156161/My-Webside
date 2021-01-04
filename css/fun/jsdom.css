@@ -1,0 +1,33 @@
+.clickdiv {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #000;
+  cursor: pointer;
+  color: #000;
+  margin-left: 10px;
+  color: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#d01 {
+  background-color: #6E6E6E;
+}
+#d02 {
+  background-color: blueviolet;
+}
+#d03 {
+  background-color: blue;
+}
+#d04 {
+  background-color: brown;
+}
+#d05 {
+  background-color: lawngreen;
+}
+#d06 {
+  background-color: #000;
+}
+#d07 {
+  background-color: #61f3f2;
+}

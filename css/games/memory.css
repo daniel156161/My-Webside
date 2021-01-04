@@ -1,0 +1,165 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+body {
+	width: 100vw;
+  height: 100vh;
+  color: #FFF;
+}
+#game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  padding-bottom: 39px;
+}
+#size {
+  width: 30vw;
+}
+/**********************************************************
+Statisticen of Gamesplay
+**********************************************************/
+#header, #footer {
+  margin: 10px auto;
+	display: flex;
+	height: 11vh;
+	width: 30vw;
+  justify-content: space-between;
+}
+.data-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+	font: 2em/1em Arial, sans-serif;
+	background-color: #555;
+  width: 49%;
+  border: 2px solid #000;
+}
+.button, #score {
+  cursor: pointer;
+}
+/**********************************************************
+Game Play
+**********************************************************/
+#main {
+  margin: 0 auto;
+	height: 30vw;
+	width: 30vw;
+	display: grid;
+	background-color: #000;
+  grid-row-gap: 2px;
+  grid-column-gap: 2px;
+	grid-template-rows: repeat(4, 1fr);
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-areas: 
+    "d01 d02 d03 d04" 
+    "d05 d06 d07 d08"
+    "d09 d10 d11 d12"
+    "d13 d14 d15 d16";
+  border: 2px solid #000;
+}
+/*********************************************************
+Icons
+**********************************************************/
+.iconscenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: #c9b9b9;
+}
+#game .fas {
+  color: #FFF;
+  font-size: 4em;
+}
+.open {
+  background-color: #adad24;
+}
+.correct {
+  background-color: #72B14D;
+}
+/**********************************************************
+Grid Area
+**********************************************************/
+#d01 {
+	grid-area: d01;
+}
+#d02 {
+	grid-area: d02;	
+}
+#d03 {
+	grid-area: d03;
+}
+#d04 {
+	grid-area: d04;
+}
+#d05 {
+	grid-area: d05;
+}
+#d06 {
+	grid-area: d06;
+}
+#d07 {
+	grid-area: d07;
+}
+#d08 {
+	grid-area: d08;
+}
+#d09 {
+	grid-area: d09;
+}
+#d10 {
+	grid-area: d10;
+}
+#d11 {
+	grid-area: d11;
+}
+#d12 {
+	grid-area: d12;
+}
+#d13 {
+	grid-area: d13;
+}
+#d14 {
+	grid-area: d14;
+}
+#d15 {
+	grid-area: d15;
+}
+#d16 {
+	grid-area: d16;
+}
+/**********************************************************
+Phone and iPad
+**********************************************************/
+@media (max-width: 1100px) {
+  #main {
+    height: 60vh;
+    width: 60vh;
+  }
+  #header, #footer {
+    width: 60vh;
+  }
+  #game {
+    width: 100vw;
+    height: 90vh;
+  }
+}
+@media (max-width: 574px) {
+  #main {
+    height: 40vh;
+    width: 40vh;
+  }
+  #header, #footer {
+    width: 40vh;
+    font-size: 0.8em;
+  }
+  #game .fas {
+    font-size: 3em;
+  }
+}
