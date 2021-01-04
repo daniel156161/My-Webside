@@ -1,7 +1,7 @@
-const divs = document.querySelectorAll('div')
-const codediv = document.querySelector('#d20')
-const header = document.querySelector('header')
-const headeritems = document.querySelectorAll('.bakground')
+const divs = document.querySelectorAll('div');
+const codediv = document.querySelector('#d20');
+const header = document.querySelector('header');
+const headeritems = document.querySelectorAll('.bakground');
 
 function random_color() {
   var x = Math.floor(Math.random() * 256);
@@ -14,12 +14,12 @@ function random_color() {
 for(div of divs) {
   if(div.classList[0] != 'hamburger') {
     if(div.classList[0] != 'grid') {
-      div.style.backgroundColor = random_color()
+      div.style.backgroundColor = random_color();
     }
   }
 }
 
-const random = document.querySelector('.random')
+const random = document.querySelector('.random');
 random.addEventListener('click', function() {
   let randnum = Math.floor(Math.random() * 2);
   if (randnum == 0) {
@@ -45,13 +45,17 @@ random.addEventListener('click', function() {
   }
   header.style.backgroundColor = color;
   for(headeritem of headeritems) {
-    headeritem.style.color = '#FFF'
+    headeritem.style.color = '#FFF';
   }
   for(child of header.children) {
     if(child.nodeName == 'H1') {
-      child.firstChild.classList.add('overlay')
+      child.firstChild.classList.add('overlay');
     } else {
-      child.classList.add('overlay')
+      if(child.innerHTML == 'A <strong>responsive</strong> website created by me.' || child.innerHTML == '<span class="overlay">A <strong>responsive</strong> website created by me.</span>') {
+        child.innerHTML = '<span class="overlay">A <strong>responsive</strong> website created by me.</span>';
+      } else {
+        child.classList.add('overlay');
+      }
     }
   }
   codediv.innerHTML = '<span class="indexcode">' + color + '</span>';

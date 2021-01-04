@@ -21,6 +21,9 @@ h1 {
   font-family: 'Castoro', serif;
   font-size: 2em;
 }
+h3 {
+  padding-left: 10px;
+}
 /**************************************************************************************
 Navigation Bar
 **************************************************************************************/
@@ -143,8 +146,6 @@ main a {
   padding-left: 10px;
   padding-right: 10px;
   margin: 0 auto;
-  justify-content: center;
-  padding-bottom: 39px;
 }
 i {
   padding-right: 3px;
@@ -153,6 +154,7 @@ i {
   position: relative;
   margin-right: 0.5vw;
   margin-bottom: 0.5vh;
+  padding-right: 10px;
 }
 .codeBlock .label {
   position: absolute;
@@ -160,6 +162,7 @@ i {
   right: 4px;
   top: 4px;
   font-size: 1em;
+  padding-right: 10px;
 }
 .mobile-break {
   display: none;
@@ -215,7 +218,9 @@ footer li a {
   padding: 10px 16px;
   text-decoration: none;
 }
-
+/**************************************************************************************
+Moble Device
+**************************************************************************************/
 @media (max-width: 574px) {
   /* Nav */
   nav {
@@ -261,9 +266,6 @@ footer li a {
   .mobile-break {
     display: inline;
   }
-  .pgp {
-    display: none;
-  }
   .codeBlock {
     margin-right: 0;
   }
@@ -282,10 +284,4 @@ footer li a {
 
 .none {
   display: none;
-}
-.submenuyes, .submenuyes2 {
-  display: block;
-}
-#msg, #age, #copyright {
-  display: inline;
 }

@@ -67,42 +67,6 @@
     "title": "Look at the Moon",
     "alt": "Bild vom Mond"
   },
-  {"file": "flowers/IMG_20200319_160114.jpg",
-    "title": "Violet Flower",
-    "alt": "Violette Blume"
-  },
-  {"file": "flowers/IMG_20200329_155446.jpg",
-    "title": "White Flower",
-    "alt": "Weiße Blume"
-  },
-  {"file": "flowers/IMG_20200329_155452.jpg",
-    "title": "Yellow Flower",
-    "alt": "Gelbe Blume"
-  },
-  {"file": "flowers/IMG_20200329_155500.jpg",
-    "title": "White and Purple Flower",
-    "alt": "Weiß und Violette Blume"
-  },
-  {"file": "flowers/IMG_20200329_155535.jpg",
-    "title": "Flower",
-    "alt": "Blume"
-  },
-  {"file": "flowers/IMG_20200329_155553.jpg",
-    "title": "Flower",
-    "alt": "Blume"
-  },
-  {"file": "flowers/IMG_20200417_183535.jpg",
-    "title": "Flower",
-    "alt": "Blume"
-  },
-  {"file": "flowers/IMG_20200417_183543.jpg",
-    "title": "Flower",
-    "alt": "Blume"
-  },
-  {"file": "flowers/IMG_20200417_184036.jpg",
-    "title": "Flower",
-    "alt": "Blume"
-  },
   {"file": "IMG_20200808_195102.jpg",
     "title": "Look to Vienna",
     "alt": "Sicht auf Wien"
@@ -235,5 +199,43 @@
     "title": "Föhrenberge Nature Park",
     "alt": "Naturpark Föhrenberge"
   }
+  ],
+  "flowers": [
+    {"file": "IMG_20200319_160114.jpg",
+      "title": "Violet Flower",
+      "alt": "Violette Blume"
+    },
+    {"file": "IMG_20200329_155446.jpg",
+      "title": "White Flower",
+      "alt": "Weiße Blume"
+    },
+    {"file": "IMG_20200329_155452.jpg",
+      "title": "Yellow Flower",
+      "alt": "Gelbe Blume"
+    },
+    {"file": "IMG_20200329_155500.jpg",
+      "title": "White and Purple Flower",
+      "alt": "Weiß und Violette Blume"
+    },
+    {"file": "IMG_20200329_155535.jpg",
+      "title": "Flower",
+      "alt": "Blume"
+    },
+    {"file": "IMG_20200329_155553.jpg",
+      "title": "Flower",
+      "alt": "Blume"
+    },
+    {"file": "IMG_20200417_183535.jpg",
+      "title": "Flower",
+      "alt": "Blume"
+    },
+    {"file": "IMG_20200417_183543.jpg",
+      "title": "Flower",
+      "alt": "Blume"
+    },
+    {"file": "IMG_20200417_184036.jpg",
+      "title": "Flower",
+      "alt": "Blume"
+    }
   ]
 }
