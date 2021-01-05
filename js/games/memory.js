@@ -280,6 +280,9 @@ Phone Screen Orientation
 const databoxs = document.querySelectorAll('.data-box');
 const databoxcsssize = window.getComputedStyle(databoxs[0]).fontSize;
 const fieldcsssize = window.getComputedStyle(fields[0]).fontSize;
+const footer = document.querySelector('footer');
+const game = document.querySelector('#game');
+const GamePaddingBottom = window.getComputedStyle(game).paddingBottom;
 
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
   //On load
@@ -305,6 +308,8 @@ function portraitScreenOrientation() {
   for(field of fields) {
     field.style.fontSize = fieldcsssize;
   }
+  footer.style.display = 'block';
+  game.style.paddingBottom = GamePaddingBottom;
 }
 //Screen 90°
 function landscapeScreenOrientation() {
@@ -314,4 +319,6 @@ function landscapeScreenOrientation() {
   for(field of fields) {
     field.style.fontSize = '0.5em';
   }
+  footer.style.display = 'none';
+  game.style.paddingBottom = '0';
 }
