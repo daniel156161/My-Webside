@@ -22,5 +22,5 @@ function random_bg_color() {
   var z = Math.floor(Math.random() * 256);
   var bgColor = "rgb(" + x + "," + y + "," + z + ")";
   document.body.style.background = bgColor;
-  setTimeout(random_bg_color, 500);
+  setTimeout(random_bg_color, 1500);
 }
