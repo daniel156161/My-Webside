@@ -1,5 +1,8 @@
 const items = document.querySelector('#game').querySelectorAll('.fas');
 const icons = [];
+//Data-boxs
+const databoxs = document.querySelectorAll('.data-box');
+const hardcorecolor = '#21518f';
 //Stats
 let isrunning = false;
 let stopgame = 0;
@@ -16,7 +19,6 @@ const fields = document.querySelectorAll('.iconscenter');
 const itemopen = [];
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
 const gamepause = '#E23D2F';
-const databoxs = document.querySelectorAll('.data-box');
 let itemclosetime = 2000;
 //Cookie
 let level;
@@ -130,7 +132,7 @@ function time() {
   gametime.innerHTML = 'Time: ' + minsmall10 + min + ":" + secsmall10 + sec;
   if(itemclosetime == 100) {
     for(databox of databoxs) {
-      databox.style.backgroundColor = '#6a95cc';
+      databox.style.backgroundColor = hardcorecolor;
     }
   } else {
     gametime.style.backgroundColor = gamerun;
@@ -151,7 +153,7 @@ function time() {
     if(itemclosetime == 0) {
       itemclosetime = 100;
       for(databox of databoxs) {
-        databox.style.backgroundColor = '#6a95cc';
+        databox.style.backgroundColor = hardcorecolor;
       }
     }
     setCookie(cookiename, `${level}`, cookieexdays);
@@ -246,7 +248,7 @@ function checkCookie(cname) {
         if(itemclosetime == 0) {
           itemclosetime = 100;
           for(databox of databoxs) {
-            databox.style.backgroundColor = '#6a95cc';
+            databox.style.backgroundColor = hardcorecolor;
           }
         }
       }
