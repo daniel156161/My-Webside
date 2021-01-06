@@ -16,6 +16,7 @@ const fields = document.querySelectorAll('.iconscenter');
 const itemopen = [];
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
 const gamepause = '#E23D2F';
+const databoxs = document.querySelectorAll('.data-box');
 let itemclosetime = 2000;
 //Cookie
 let level;
@@ -113,7 +114,13 @@ function time() {
     var minsmall10 = '';
   }
   gametime.innerHTML = 'Time: ' + minsmall10 + min + ":" + secsmall10 + sec;
-  gametime.style.backgroundColor = gamerun;
+  if(itemclosetime == 100) {
+    for(databox of databoxs) {
+      databox.style.backgroundColor = '#6a95cc';
+    }
+  } else {
+    gametime.style.backgroundColor = gamerun;
+  }
   if(stopgame != 8) {
     if(isrunning == true) {
       setTimeout(time, 1000);
@@ -129,6 +136,9 @@ function time() {
     itemclosetime = itemclosetime - 100;
     if(itemclosetime == 0) {
       itemclosetime = 100;
+      for(databox of databoxs) {
+        databox.style.backgroundColor = '#6a95cc';
+      }
     }
     setCookie(cookiename, `${level}`, cookieexdays);
     level++;
@@ -221,6 +231,9 @@ function checkCookie(cname) {
         itemclosetime = itemclosetime - 100;
         if(itemclosetime == 0) {
           itemclosetime = 100;
+          for(databox of databoxs) {
+            databox.style.backgroundColor = '#6a95cc';
+          }
         }
       }
     }
@@ -277,7 +290,6 @@ function shufflefun() {
 /***************************************************************************************************************
 Phone Screen Orientation
 ***************************************************************************************************************/
-const databoxs = document.querySelectorAll('.data-box');
 const databoxcsssize = window.getComputedStyle(databoxs[0]).fontSize;
 const fieldcsssize = window.getComputedStyle(fields[0]).fontSize;
 const footer = document.querySelector('footer');

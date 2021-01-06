@@ -5,7 +5,7 @@ const gallery = document.querySelector('#mygallery');
 const flowers = document.querySelector('#flowers');
 const h3s = document.querySelectorAll('h3');
 
-fetch("../img/pictures.json")
+fetch("../json/pictures.json")
   .then(response => response.json())
   .then(json => makeGallery(json));
 
