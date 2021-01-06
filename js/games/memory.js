@@ -1,5 +1,5 @@
 const items = document.querySelector('#game').querySelectorAll('.fas');
-const icons = ['fa-air-freshener', 'fa-dragon', 'fa-cookie', 'fa-at', 'fa-bahai', 'fa-bacterium', 'fa-paw', 'fa-feather', 'fa-air-freshener', 'fa-dragon', 'fa-cookie', 'fa-at', 'fa-bahai', 'fa-bacterium', 'fa-paw', 'fa-feather'];
+const icons = [];
 //Stats
 let isrunning = false;
 let stopgame = 0;
@@ -20,6 +20,23 @@ const databoxs = document.querySelectorAll('.data-box');
 let itemclosetime = 2000;
 //Cookie
 let level;
+/***************************************************************************************************************
+Icons
+***************************************************************************************************************/
+makeIcon();
+function makeIcon() {
+  fetch("../../json/memory.json")
+  .then(response => response.json())
+  .then(json => makeIconArray(json));
+}
+function makeIconArray(json) {
+  for (let i = 0; i < 2; i++) {
+    for(jsonicon of json.icons) {
+      icons.push(jsonicon);
+    }
+  }
+  shuffleitems();
+}
 /***************************************************************************************************************
 Buttons
 ***************************************************************************************************************/
@@ -43,8 +60,6 @@ scoreitem.addEventListener('click', function(){
 /***************************************************************************************************************
 Start Game
 ***************************************************************************************************************/
-shuffleitems();
-
 function shuffleitems() {
   for(item of items) {
     let icon = icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0];
@@ -76,8 +91,7 @@ function gamestart() {
         //Remove old Icon
         field.firstChild.classList.remove(field.firstChild.classList[1]);
       }
-      icons.push('fa-air-freshener', 'fa-dragon', 'fa-cookie', 'fa-at', 'fa-bahai', 'fa-bacterium', 'fa-paw', 'fa-feather', 'fa-air-freshener', 'fa-dragon', 'fa-cookie', 'fa-at', 'fa-bahai', 'fa-bacterium', 'fa-paw', 'fa-feather');
-      shuffleitems();
+      makeIcon();
     }
     isrunning = true;
     time();
