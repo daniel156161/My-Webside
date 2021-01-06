@@ -84,6 +84,7 @@ function getScore() {
 function gamestart() {
   if(isrunning == false) {
     if(stopgame == 8) {
+      gametime.innerHTML = 'Time: 00:00';
       min = 0;
       sec = 0;
       stopgame = 0;
@@ -96,7 +97,7 @@ function gamestart() {
       makeIcon();
     }
     isrunning = true;
-    time();
+    time = setInterval(myTimeer, 1000)
     getScore();
     if(itemopen) {
       for(item of itemopen) {
@@ -108,7 +109,8 @@ function gamestart() {
 /***************************************************************************************************************
 Timer
 ***************************************************************************************************************/
-function time() {
+let time;
+function myTimeer() {
   if(sec < 59) {
     sec ++;
   } else {
@@ -138,15 +140,14 @@ function time() {
     gametime.style.backgroundColor = gamerun;
   }
   if(stopgame != 8) {
-    if(isrunning == true) {
-      setTimeout(time, 1000);
-    } else {
-      isrunning = false;
+    if(isrunning == false) {
+      clearInterval(time);
       gametime.innerHTML = 'Time: ' + minsmall10 + min + ':' + secsmall10 + sec + '<br>Pause';
       gametime.style.backgroundColor = gamepause;
     }
   } else {
     //Level Done
+    clearInterval(time);
     isrunning = false;
     navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + minsmall10 + min + ':' + secsmall10 + sec);
     itemclosetime = itemclosetime - 100;
@@ -253,6 +254,7 @@ function checkCookie(cname) {
         }
       }
     }
+    gametime.innerHTML = 'Time: 00:00';
     getScore();
     if(score != 0) {
       level++;
