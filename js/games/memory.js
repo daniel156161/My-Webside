@@ -205,8 +205,8 @@ for(field of fields){
 /***************************************************************************************************************
 Cookie [SET, GET, Check]
 ***************************************************************************************************************/
-let cookiename = 'Memory - daniel156161';
-let cookieexdays = 14;
+const cookiename = 'Memory - daniel156161';
+const cookieexdays = 14;
 checkCookie(cookiename);
 
 function setCookie(cname, cvalue, exdays) {
