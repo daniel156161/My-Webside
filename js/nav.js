@@ -7,7 +7,6 @@ const submenuyes2 = document.querySelectorAll('.submenuyes2');
 const icon = document.querySelector('.hamburger');
 
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-  menu();
   window.addEventListener("orientationchange", function(event) {
     if(event.target.screen.orientation.angle == 0) {
       nav.style.display = 'none';
@@ -17,6 +16,7 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
   });
 }
 
+menu();
 function menu() {
   icon.addEventListener('click', function() {
     if(nav.style.display != 'block') {
