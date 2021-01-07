@@ -168,15 +168,24 @@ for(field of fields){
   field.addEventListener('click', function(e) {
     gamestart();
     if (e.target.classList[1] != 'open' && e.target.style.display != 'block' && itemopen.length < 2) {
-      //Show Item and add to Itemopen Array
-      if(e.target.firstChild) {
-        e.target.firstChild.style.display = 'block';
-        e.target.classList.add('open');
-        itemopen.push(e.target);
+      //Show Item and add to Itemopen Array with Anti Cheat function
+      if(e.target.firstChild.classList[1] != undefined) {
+        if(e.target.firstChild) {
+          e.target.firstChild.style.display = 'block';
+          e.target.classList.add('open');
+          itemopen.push(e.target);
+        } else {
+          e.target.style.display = 'block';
+          e.target.parentElement.classList.add('open');
+          itemopen.push(e.target.parentElement);
+        }
       } else {
-        e.target.style.display = 'block';
-        e.target.parentElement.classList.add('open');
-        itemopen.push(e.target.parentElement);
+        clearInterval(time);
+        scoreitem.innerHTML = 'Stop'
+        gametime.innerHTML = "You can't cheating me >:3";
+        for(databox of databoxs) {
+          databox.style.backgroundColor = gamepause;
+        }
       }
       //Check Item Classes
       if(itemopen.length == 2){
