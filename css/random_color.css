@@ -78,6 +78,7 @@ Click Divs
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  text-align: center;
   color: white;
   font-size: 2em;
   background-color: black;
