@@ -1,4 +1,5 @@
 const items = document.querySelector('#game').querySelectorAll('.fas');
+const oicons = ["fa-air-freshener","fa-dragon","fa-cookie","fa-at","fa-bahai","fa-bacterium","fa-paw","fa-feather"];
 const icons = [];
 //Data-boxs
 const databoxs = document.querySelectorAll('.data-box');
@@ -25,16 +26,11 @@ let level;
 /***************************************************************************************************************
 Icons
 ***************************************************************************************************************/
-makeIcon();
-function makeIcon() {
-  fetch("../../json/memory.json")
-  .then(response => response.json())
-  .then(json => makeIconArray(json));
-}
-function makeIconArray(json) {
+makeIconArray();
+function makeIconArray() {
   for (let i = 0; i < 2; i++) {
-    for(jsonicon of json.icons) {
-      icons.push(jsonicon);
+    for(newicons of oicons) {
+      icons.push(newicons);
     }
   }
   shuffleitems();
@@ -94,7 +90,7 @@ function gamestart() {
         //Remove old Icon
         field.firstChild.classList.remove(field.firstChild.classList[1]);
       }
-      makeIcon();
+      makeIconArray();
     }
     isrunning = true;
     time = setInterval(myTimeer, 1000)
@@ -169,23 +165,14 @@ for(field of fields){
     gamestart();
     if (e.target.classList[1] != 'open' && e.target.style.display != 'block' && itemopen.length < 2) {
       //Show Item and add to Itemopen Array with Anti Cheat function
-      if(e.target.firstChild.classList[1] != undefined) {
-        if(e.target.firstChild) {
-          e.target.firstChild.style.display = 'block';
-          e.target.classList.add('open');
-          itemopen.push(e.target);
-        } else {
-          e.target.style.display = 'block';
-          e.target.parentElement.classList.add('open');
-          itemopen.push(e.target.parentElement);
-        }
+      if(e.target.firstChild) {
+        e.target.firstChild.style.display = 'block';
+        e.target.classList.add('open');
+        itemopen.push(e.target);
       } else {
-        clearInterval(time);
-        scoreitem.innerHTML = 'Stop'
-        gametime.innerHTML = "You can't cheating me >:3";
-        for(databox of databoxs) {
-          databox.style.backgroundColor = gamepause;
-        }
+        e.target.style.display = 'block';
+        e.target.parentElement.classList.add('open');
+        itemopen.push(e.target.parentElement);
       }
       //Check Item Classes
       if(itemopen.length == 2){
@@ -301,7 +288,11 @@ function shufflefun() {
   }
   scoreitem.innerHTML = 'Score';
   gametime.innerHTML = 'Time';
-  icons.push('fa-air-freshener', 'fa-dragon', 'fa-cookie', 'fa-at', 'fa-bahai', 'fa-bacterium', 'fa-paw', 'fa-feather', 'fa-air-freshener', 'fa-dragon', 'fa-cookie', 'fa-at', 'fa-bahai', 'fa-bacterium', 'fa-paw', 'fa-feather');
+  for (let i = 0; i < 2; i++) {
+    for(newicons of oicons) {
+      icons.push(newicons);
+    }
+  }
   for (item of items) {
     let icon = icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0];
     item.classList.add(icon);
