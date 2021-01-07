@@ -3,24 +3,15 @@ const codediv = document.querySelector('#d20');
 const header = document.querySelector('header');
 const headeritems = document.querySelectorAll('.bakground');
 
-function random_color() {
-  var x = Math.floor(Math.random() * 256);
-  var y = Math.floor(Math.random() * 256);
-  var z = Math.floor(Math.random() * 256);
-  var bgColor = "rgb(" + x + "," + y + "," + z + ")";
-  return bgColor
-}
-
 for(div of divs) {
   if(div.classList[0] != 'hamburger') {
     if(div.classList[0] != 'grid') {
-      div.style.backgroundColor = random_color();
+      div.style.backgroundColor = 'rgb(' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ', ' + Math.floor(Math.random() * 256) + ')';
     }
   }
 }
 
-const random = document.querySelector('.random');
-random.addEventListener('click', function() {
+document.querySelector('.random').addEventListener('click', function() {
   let randnum = Math.floor(Math.random() * 2);
   if (randnum == 0) {
     var letters = '0123456789ABCDEF';
