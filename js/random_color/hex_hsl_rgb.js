@@ -38,6 +38,4 @@ switch (window.location.pathname) {
       });
     }
     break;
-  default:
-    break;
 }
