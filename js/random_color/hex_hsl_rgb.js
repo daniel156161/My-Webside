@@ -1,5 +1,15 @@
+//Make Divs
+const grid = document.querySelector('.gridclickdiv').querySelectorAll('div');
+let i = 0
+for(div of grid) {
+  div.classList.add('clickdiv');
+  if(i == 12) {
+    div.innerHTML = 'just click anywhere';
+  }
+  i++;
+}
+//Clickdivs
 const divs = document.querySelectorAll('.clickdiv');
-
 switch (window.location.pathname) {
   //HEX
   case '/html/random_color/hex.htm':
