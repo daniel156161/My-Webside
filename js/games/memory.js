@@ -1,5 +1,5 @@
 const items = document.querySelector('#game').querySelectorAll('.fas');
-const oicons = ["fa-air-freshener","fa-dragon","fa-cookie","fa-at","fa-bahai","fa-bacterium","fa-paw","fa-feather"];
+const myicons = ['fa-air-freshener','fa-dragon','fa-cookie','fa-at','fa-bahai','fa-bacterium','fa-paw','fa-feather'];
 const icons = [];
 //Data-boxs
 const databoxs = document.querySelectorAll('.data-box');
@@ -16,7 +16,7 @@ let sec = 0;
 const scoreitem = document.querySelector('#score');
 let scoreswitch = 0;
 //Game Items
-const fields = document.querySelectorAll('.iconscenter');
+const fields = document.querySelector('#main').querySelectorAll('div');
 const itemopen = [];
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
 const gamepause = '#E23D2F';
@@ -29,11 +29,11 @@ Icons
 makeIconArray();
 function makeIconArray() {
   for (let i = 0; i < 2; i++) {
-    for(newicons of oicons) {
+    for(newicons of myicons) {
       icons.push(newicons);
     }
   }
-  shuffleitems();
+  shuffleItems();
 }
 /***************************************************************************************************************
 Buttons
@@ -58,10 +58,9 @@ scoreitem.addEventListener('click', function(){
 /***************************************************************************************************************
 Start Game
 ***************************************************************************************************************/
-function shuffleitems() {
+function shuffleItems() {
   for(item of items) {
-    let icon = icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0];
-    item.classList.add(icon);
+    item.classList.add(icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]);
     item.style.display = 'none';
   }
 }
@@ -85,7 +84,7 @@ function gamestart() {
       sec = 0;
       stopgame = 0;
       for(field of fields) {
-        field.classList.remove('correct');
+        field.classList.remove('match');
         field.classList.remove('open');
         //Remove old Icon
         field.firstChild.classList.remove(field.firstChild.classList[1]);
@@ -163,8 +162,8 @@ Game Items
 for(field of fields){
   field.addEventListener('click', function(e) {
     gamestart();
-    if (e.target.classList[1] != 'open' && e.target.style.display != 'block' && itemopen.length < 2) {
-      //Show Item and add to Itemopen Array with Anti Cheat function
+    if (e.target.classList[1] != 'open' && e.target.classList[1] != 'match' && e.target.style.display != 'block' && itemopen.length < 2) {
+      //Show Item and add to Itemopen Array
       if(e.target.firstChild) {
         e.target.firstChild.style.display = 'block';
         e.target.classList.add('open');
@@ -183,7 +182,8 @@ for(field of fields){
           //Remove Items from Check list
           for(let i = 0; i < 2; i++) {
             item = itemopen.splice(0,1)[0];
-            item.classList.add('correct');
+            item.classList.remove('open');
+            item.classList.add('match');
           }
         } else {
           //Close Items
@@ -281,26 +281,29 @@ function saveCookie() {
 Fun
 ***************************************************************************************************************/
 function shufflefun() {
+  for (let i = 0; i < 2; i++) {
+    itemopen.pop();
+  }
   for(field of fields) {
     field.firstChild.classList.remove(field.firstChild.classList[1]);
     field.classList.remove('open');
+    field.classList.remove('match');
     field.firstChild.style.display = 'block';
   }
   scoreitem.innerHTML = 'Score';
   gametime.innerHTML = 'Time';
   for (let i = 0; i < 2; i++) {
-    for(newicons of oicons) {
+    for(newicons of myicons) {
       icons.push(newicons);
     }
   }
   for (item of items) {
-    let icon = icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0];
-    item.classList.add(icon);
+    item.classList.add(icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]);
   }
   if(isrunning == false) {
     setTimeout(shufflefun, 200);
   } else {
-    shuffleitems();
+    shuffleItems();
     getScore();
   }
   return true;
