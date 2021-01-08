@@ -3,23 +3,23 @@ const myicons = ['fa-air-freshener','fa-dragon','fa-cookie','fa-at','fa-bahai','
 const icons = [];
 //Data-boxs
 const databoxs = document.querySelectorAll('.data-box');
-const hardcorecolor = '#21518f';
-//Stats
-let isrunning = false;
-let stopgame = 0;
-let score = 0;
+const hardcorecolor = '#21518F';
 //Time
 const gametime = document.querySelector('#time');
-let gameSec = 0;
+let playTime = 0;
 //Score
 const scoreitem = document.querySelector('#score');
 let scoreswitch = 0;
 //Game Items
 const fields = document.querySelector('#main').querySelectorAll('div');
-const itemopen = [];
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
 const gamepause = '#E23D2F';
 let itemclosetime = 2000;
+//Stats
+const itemopen = [];
+let isrunning = false;
+let stopgame = 0;
+let score = 0;
 //Cookie
 let level;
 let gameTime;
@@ -58,6 +58,7 @@ scoreitem.addEventListener('click', function(){
 /***************************************************************************************************************
 Start Game
 ***************************************************************************************************************/
+let time;
 function shuffleItems() {
   for(item of items) {
     item.classList.add(icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]);
@@ -80,7 +81,7 @@ function gamestart() {
   if(isrunning == false) {
     if(stopgame == 8) {
       gametime.innerHTML = 'Time: 00:00';
-      gameSec = 0;
+      playTime = 0;
       stopgame = 0;
       for(field of fields) {
         field.classList.remove('match');
@@ -127,11 +128,10 @@ function toHHMMSS(sec) {
 /***************************************************************************************************************
 Timer
 ***************************************************************************************************************/
-let time;
 function myTimeer() {
   gameTime ++;
-  gameSec ++;
-  gametime.innerHTML = 'Time: ' + toHHMMSS(gameSec) + '<br>Played: ' + toHHMMSS(gameTime);
+  playTime ++;
+  gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Played: ' + toHHMMSS(gameTime);
   if(itemclosetime == 100) {
     for(databox of databoxs) {
       databox.style.backgroundColor = hardcorecolor;
@@ -142,14 +142,14 @@ function myTimeer() {
   if(stopgame != 8) {
     if(isrunning == false) {
       clearInterval(time);
-      gametime.innerHTML = 'Time: ' + toHHMMSS(gameSec) + '<br>Pause';
+      gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Pause';
       gametime.style.backgroundColor = gamepause;
     }
   } else {
     //Level Done
     clearInterval(time);
     isrunning = false;
-    navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + toHHMMSS(gameSec));
+    navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + toHHMMSS(playTime));
     itemclosetime = itemclosetime - 100;
     if(itemclosetime == 0) {
       itemclosetime = 100;
