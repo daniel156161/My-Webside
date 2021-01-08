@@ -10,7 +10,7 @@ let stopgame = 0;
 let score = 0;
 //Time
 const gametime = document.querySelector('#time');
-let gamesec = 0;
+let gameSec = 0;
 //Score
 const scoreitem = document.querySelector('#score');
 let scoreswitch = 0;
@@ -80,8 +80,7 @@ function gamestart() {
   if(isrunning == false) {
     if(stopgame == 8) {
       gametime.innerHTML = 'Time: 00:00';
-      min = 0;
-      sec = 0;
+      gameSec = 0;
       stopgame = 0;
       for(field of fields) {
         field.classList.remove('match');
@@ -131,8 +130,8 @@ Timer
 let time;
 function myTimeer() {
   gameTime ++;
-  gamesec ++;
-  gametime.innerHTML = 'Time: ' + toHHMMSS(gamesec) + '<br>Played: ' + toHHMMSS(gameTime);
+  gameSec ++;
+  gametime.innerHTML = 'Time: ' + toHHMMSS(gameSec) + '<br>Played: ' + toHHMMSS(gameTime);
   if(itemclosetime == 100) {
     for(databox of databoxs) {
       databox.style.backgroundColor = hardcorecolor;
@@ -143,14 +142,14 @@ function myTimeer() {
   if(stopgame != 8) {
     if(isrunning == false) {
       clearInterval(time);
-      gametime.innerHTML = 'Time: ' + toHHMMSS(gamesec) + '<br>Pause';
+      gametime.innerHTML = 'Time: ' + toHHMMSS(gameSec) + '<br>Pause';
       gametime.style.backgroundColor = gamepause;
     }
   } else {
     //Level Done
     clearInterval(time);
     isrunning = false;
-    navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + toHHMMSS(gamesec));
+    navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + toHHMMSS(gameSec));
     itemclosetime = itemclosetime - 100;
     if(itemclosetime == 0) {
       itemclosetime = 100;
