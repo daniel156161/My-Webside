@@ -14,7 +14,7 @@ let scoreswitch = 0;
 const fields = document.querySelector('#main').querySelectorAll('div');
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
 const gamepause = '#E23D2F';
-let itemclosetime = 2000;
+let itemCloseTime = 2000;
 //Stats
 const itemopen = [];
 let isrunning = false;
@@ -132,7 +132,7 @@ function myTimeer() {
   gameTime ++;
   playTime ++;
   gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Played: ' + toHHMMSS(gameTime);
-  if(itemclosetime == 100) {
+  if(itemCloseTime == 100) {
     for(databox of databoxs) {
       databox.style.backgroundColor = hardcorecolor;
     }
@@ -150,9 +150,9 @@ function myTimeer() {
     clearInterval(time);
     isrunning = false;
     navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + toHHMMSS(playTime));
-    itemclosetime = itemclosetime - 100;
-    if(itemclosetime == 0) {
-      itemclosetime = 100;
+    itemCloseTime = itemCloseTime - 100;
+    if(itemCloseTime == 0) {
+      itemCloseTime = 100;
       for(databox of databoxs) {
         databox.style.backgroundColor = hardcorecolor;
       }
@@ -199,7 +199,7 @@ for(field of fields){
               item.firstChild.style.display = 'none';
               item.classList.remove('open');
             }
-          }, itemclosetime);
+          }, itemCloseTime);
         }
       }
     }
@@ -250,13 +250,13 @@ function checkCookieGame(cname) {
       level = 1;
       score = 0;
     }
-    if(itemclosetime == undefined) {
-      itemclosetime = 2000;
+    if(itemCloseTime == undefined) {
+      itemCloseTime = 2000;
     } else {
       for (let i = 0; i < level; i++) {
-        itemclosetime = itemclosetime - 100;
-        if(itemclosetime == 0) {
-          itemclosetime = 100;
+        itemCloseTime = itemCloseTime - 100;
+        if(itemCloseTime == 0) {
+          itemCloseTime = 100;
           for(databox of databoxs) {
             databox.style.backgroundColor = hardcorecolor;
           }
@@ -271,7 +271,7 @@ function checkCookieGame(cname) {
   } else {
     level = 1;
     score = 0;
-    itemclosetime = 2000;
+    itemCloseTime = 2000;
     gameTime = 0;
   }
 }
@@ -303,7 +303,7 @@ function getLevel() {
 /***************************************************************************************************************
 Fun
 ***************************************************************************************************************/
-function shufflefun() {
+function shuffleFun() {
   for (let i = 0; i < 2; i++) {
     itemopen.pop();
   }
@@ -324,7 +324,7 @@ function shufflefun() {
     item.classList.add(icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]);
   }
   if(isrunning == false) {
-    setTimeout(shufflefun, 200);
+    setTimeout(shuffleFun, 200);
   } else {
     shuffleItems();
     getScore();
