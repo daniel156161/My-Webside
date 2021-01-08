@@ -293,12 +293,11 @@ function saveCookie() {
   } else {
     cookieval = prompt("Please enter your Level:", "");
   }
-  setCookie(cookiename, `${cookieval}, ${gameTime}`, cookieexdays);
+  setCookie(cookiename, `${cookieval},${gameTime}`, cookieexdays);
   location.reload(); 
 }
 function getLevel() {
-  const cookiearray = getCookie(cookiename).split(',');
-  const level = cookiearray[0];
+  const level = getCookie(cookiename).split(',')[0];
   return level
 }
 /***************************************************************************************************************
