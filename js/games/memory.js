@@ -10,8 +10,7 @@ let stopgame = 0;
 let score = 0;
 //Time
 const gametime = document.querySelector('#time');
-let min = 0;
-let sec = 0;
+let gamesec = 0;
 //Score
 const scoreitem = document.querySelector('#score');
 let scoreswitch = 0;
@@ -102,31 +101,38 @@ function gamestart() {
   }
 }
 /***************************************************************************************************************
+Game Time Played [Level Time, Full Time]
+***************************************************************************************************************/
+let gameTime;
+function toHHMMSS(sec) {
+  var sec_num = parseInt(sec, 10);
+  var hours   = Math.floor(sec_num / 3600);
+  var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+  var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+  if (hours < 10) {
+    hours = '0' + hours;
+  }
+  if (minutes < 10) {
+    minutes = '0' + minutes;
+  }
+  if (seconds < 10) {
+    seconds = '0' + seconds;
+  }
+  if (hours == '00') {
+    return minutes + ':' + seconds;
+  } else {
+    return hours + ':' + minutes + ':' + seconds;
+  }
+}
+/***************************************************************************************************************
 Timer
 ***************************************************************************************************************/
 let time;
 function myTimeer() {
-  if(sec < 59) {
-    sec ++;
-  } else {
-    sec = 0;
-    min ++;
-    if(min > 59) {
-      min = 0;
-    }
-  }
-  //Better Time look 00:00
-  if(sec < 10) {
-    var secsmall10 = '0';
-  } else {
-    var secsmall10 = '';
-  }
-  if(min < 10) {
-    var minsmall10 = '0';
-  } else {
-    var minsmall10 = '';
-  }
-  gametime.innerHTML = 'Time: ' + minsmall10 + min + ":" + secsmall10 + sec;
+  gameTime ++;
+  gamesec ++;
+  gametime.innerHTML = 'Time: ' + toHHMMSS(gamesec) + '<br>Played: ' + toHHMMSS(gameTime);
   if(itemclosetime == 100) {
     for(databox of databoxs) {
       databox.style.backgroundColor = hardcorecolor;
@@ -137,14 +143,14 @@ function myTimeer() {
   if(stopgame != 8) {
     if(isrunning == false) {
       clearInterval(time);
-      gametime.innerHTML = 'Time: ' + minsmall10 + min + ':' + secsmall10 + sec + '<br>Pause';
+      gametime.innerHTML = 'Time: ' + toHHMMSS(gamesec) + '<br>Pause';
       gametime.style.backgroundColor = gamepause;
     }
   } else {
     //Level Done
     clearInterval(time);
     isrunning = false;
-    navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + minsmall10 + min + ':' + secsmall10 + sec);
+    navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + toHHMMSS(gamesec));
     itemclosetime = itemclosetime - 100;
     if(itemclosetime == 0) {
       itemclosetime = 100;
@@ -152,7 +158,8 @@ function myTimeer() {
         databox.style.backgroundColor = hardcorecolor;
       }
     }
-    setCookie(cookiename, `${level}`, cookieexdays);
+    setCookie(cookiename, `${level},${gameTime}`, cookieexdays);
+    setCookie(cookienamegametime, gameTime, 365);
     level++;
   }
 }
@@ -203,8 +210,9 @@ for(field of fields){
 Cookie [SET, GET, Check]
 ***************************************************************************************************************/
 const cookiename = 'Memory - daniel156161';
+const cookienamegametime = 'Memory [GameTime] - daniel156161';
 const cookieexdays = 14;
-checkCookie(cookiename);
+checkCookieGame(cookiename);
 
 function setCookie(cname, cvalue, exdays) {
   var d = new Date();
@@ -227,11 +235,17 @@ function getCookie(cname) {
   }
   return "";
 }
-function checkCookie(cname) {
+function checkCookieGame(cname) {
   var cookieval=getCookie(cname);
   if (cookieval != "" && cookieval != "undefined") {
     const cookiearray = cookieval.split(',');
     level = cookiearray[0];
+    gameTime = cookiearray[1];
+    if (gameTime != "" || gameTime != undefined) {
+      gameTime = getCookie(cookienamegametime);
+    } else {
+      gameTime = 0;
+    }
     score = level * 8;
     if(level == 'null') {
       level = 1;
@@ -259,7 +273,12 @@ function checkCookie(cname) {
     level = 1;
     score = 0;
     itemclosetime = 2000;
+    gameTime = 0;
   }
+}
+function resetCookie() {
+  setCookie(cookiename)
+  return true;
 }
 /***************************************************************************************************************
 Cookie [LOAD, SAVE]
@@ -270,12 +289,17 @@ gametime.addEventListener('click', function () {
 
 function saveCookie() {
   if(getCookie(cookiename) != 'null') {
-    cookieval = prompt("Please enter your Level:", `${getCookie(cookiename)}`);
+    cookieval = prompt("Please enter your Level:", `${getLevel()}`);
   } else {
     cookieval = prompt("Please enter your Level:", "");
   }
-  setCookie(cookiename, cookieval, cookieexdays);
+  setCookie(cookiename, `${cookieval}, ${gameTime}`, cookieexdays);
   location.reload(); 
+}
+function getLevel() {
+  const cookiearray = getCookie(cookiename).split(',');
+  const level = cookiearray[0];
+  return level
 }
 /***************************************************************************************************************
 Fun
