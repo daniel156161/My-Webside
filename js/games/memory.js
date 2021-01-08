@@ -1,4 +1,5 @@
-const items = document.querySelector('#game').querySelectorAll('.fas');
+const game = document.querySelector('#game');
+const items = game.querySelectorAll('.fas');
 const myicons = ['fa-air-freshener','fa-dragon','fa-cookie','fa-at','fa-bahai','fa-bacterium','fa-paw','fa-feather'];
 const icons = [];
 //Data-boxs
@@ -337,7 +338,6 @@ Phone Screen Orientation
 const databoxcsssize = window.getComputedStyle(databoxs[0]).fontSize;
 const fieldcsssize = window.getComputedStyle(fields[0]).fontSize;
 const footer = document.querySelector('footer');
-const game = document.querySelector('#game');
 const GamePaddingBottom = window.getComputedStyle(game).paddingBottom;
 
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
