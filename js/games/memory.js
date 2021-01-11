@@ -1,6 +1,7 @@
 const game = document.querySelector('#game');
-const items = game.querySelectorAll('.fas');
-const myicons = ['fa-air-freshener','fa-dragon','fa-cookie','fa-at','fa-bahai','fa-bacterium','fa-paw','fa-feather'];
+const items = game.querySelectorAll('i');
+//const myicons = ['fas fa-air-freshener','fas fa-dragon','fas fa-cookie','fas fa-at','fas fa-bahai','fas fa-bacterium','fas fa-paw','fas fa-feather'];
+const myicons = [];
 const icons = [];
 //Data-boxs
 const databoxs = document.querySelectorAll('.data-box');
@@ -21,13 +22,26 @@ const itemopen = [];
 let isrunning = false;
 let stopgame = 0;
 let score = 0;
+let pageLoaded = 0;
 //Cookie
 let level;
 let gameTime;
 /***************************************************************************************************************
-Icons
+Icons Json ( Random Icons --> myicons = [8x] )
 ***************************************************************************************************************/
-makeIconArray();
+fetch("../../json/FontAwesome_Icons.json")
+  .then(response => response.json())
+  .then(json => makeIconFromJson(json));
+
+function makeIconFromJson(json) {
+  for (let i = 0; i < 8; i++) {
+    myicons.push(`fas fa-${json.Icons.solid.splice(Math.floor(Math.random() * (json.Icons.solid.length)), 1)[0]}`);
+  }
+  makeIconArray();
+}
+/***************************************************************************************************************
+Icons ( myicons = [8x] --> icons = [16x] )
+***************************************************************************************************************/
 function makeIconArray() {
   for (let i = 0; i < 2; i++) {
     for(newicons of myicons) {
@@ -37,7 +51,7 @@ function makeIconArray() {
   shuffleItems();
 }
 /***************************************************************************************************************
-Buttons
+Buttons [start] [pause] [scoreswitch]
 ***************************************************************************************************************/
 const start = document.querySelector('#start').addEventListener('click', gamestart);
 const pause = document.querySelector('#pause').addEventListener('click', function(){
@@ -54,19 +68,19 @@ scoreitem.addEventListener('click', function(){
   } else {
     scoreswitch ++;
   }
-  getScore();
+  outScore();
 });
 /***************************************************************************************************************
-Start Game
+Start Game [shuffleItems] [outScore] [gamestart]
 ***************************************************************************************************************/
 let time;
 function shuffleItems() {
   for(item of items) {
-    item.classList.add(icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]);
+    item.className = icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0];
     item.style.display = 'none';
   }
 }
-function getScore() {
+function outScore() {
   switch (scoreswitch) {
     case 0:
       scoreitem.innerHTML = 'Level: ' + level + '<br>' + 'Score: ' + score;
@@ -81,9 +95,10 @@ function getScore() {
 function gamestart() {
   if(isrunning == false) {
     if(stopgame == 8) {
-      gametime.innerHTML = 'Time: 00:00';
       playTime = 0;
       stopgame = 0;
+      pageLoaded = 0;
+      outTime();
       for(field of fields) {
         field.classList.remove('match');
         field.classList.remove('open');
@@ -94,7 +109,7 @@ function gamestart() {
     }
     isrunning = true;
     time = setInterval(myTimeer, 1000)
-    getScore();
+    outScore();
     if(itemopen) {
       for(item of itemopen) {
         item.firstChild.style.display = 'block';
@@ -103,7 +118,7 @@ function gamestart() {
   }
 }
 /***************************************************************************************************************
-Game Time Played [Level Time, Full Time]
+Game Time Played [toHHMMSS] [Level Time, Full Time]
 ***************************************************************************************************************/
 function toHHMMSS(sec) {
   var sec_num = parseInt(sec, 10);
@@ -127,12 +142,26 @@ function toHHMMSS(sec) {
   }
 }
 /***************************************************************************************************************
-Timer
+Timer [outTime] [myTimeer]
 ***************************************************************************************************************/
+function outTime() {
+  switch (isrunning) {
+    case false:
+      gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Pause';
+      if (pageLoaded  == 0) {
+        gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Played: ' + toHHMMSS(gameTime);
+        pageLoaded = 1;
+      }
+      break;
+    case true:
+      gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Played: ' + toHHMMSS(gameTime);
+      break;
+  }
+}
 function myTimeer() {
   gameTime ++;
   playTime ++;
-  gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Played: ' + toHHMMSS(gameTime);
+  outTime();
   if(itemCloseTime == 100) {
     for(databox of databoxs) {
       databox.style.backgroundColor = hardcorecolor;
@@ -143,7 +172,7 @@ function myTimeer() {
   if(stopgame != 8) {
     if(isrunning == false) {
       clearInterval(time);
-      gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Pause';
+      outTime();
       gametime.style.backgroundColor = gamepause;
     }
   } else {
@@ -185,7 +214,7 @@ for(field of fields){
         if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
           score++;
           stopgame++;
-          getScore();
+          outScore();
           //Remove Items from Check list
           for(let i = 0; i < 2; i++) {
             item = itemopen.splice(0,1)[0];
@@ -264,8 +293,8 @@ function checkCookieGame(cname) {
         }
       }
     }
-    gametime.innerHTML = 'Time: 00:00';
-    getScore();
+    outTime();
+    outScore();
     if(score != 0) {
       level++;
     }
@@ -299,37 +328,6 @@ function saveCookie() {
 function getLevel() {
   const level = getCookie(cookiename).split(',')[0];
   return level
-}
-/***************************************************************************************************************
-Fun
-***************************************************************************************************************/
-function shuffleFun() {
-  for (let i = 0; i < 2; i++) {
-    itemopen.pop();
-  }
-  for(field of fields) {
-    field.firstChild.classList.remove(field.firstChild.classList[1]);
-    field.classList.remove('open');
-    field.classList.remove('match');
-    field.firstChild.style.display = 'block';
-  }
-  scoreitem.innerHTML = 'Score';
-  gametime.innerHTML = 'Time';
-  for (let i = 0; i < 2; i++) {
-    for(newicons of myicons) {
-      icons.push(newicons);
-    }
-  }
-  for (item of items) {
-    item.classList.add(icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]);
-  }
-  if(isrunning == false) {
-    setTimeout(shuffleFun, 200);
-  } else {
-    shuffleItems();
-    getScore();
-  }
-  return true;
 }
 /***************************************************************************************************************
 Phone Screen Orientation

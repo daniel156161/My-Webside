@@ -73,7 +73,7 @@ Icons
   cursor: pointer;
   background-color: #c9b9b9;
 }
-#game .fas {
+#game .fas, #game .fab, #game .far {
   color: #FFF;
   font-size: 4em;
 }
@@ -159,7 +159,7 @@ Phone and iPad
   #header, #footer {
     font-size: 0.8em;
   }
-  #game .fas {
+  #game .fas, #game .fab, #game .far {
     font-size: 3em;
   }
 }
