@@ -1,7 +1,5 @@
 const game = document.querySelector('#game');
-const items = game.querySelectorAll('i');
-//const myicons = ['fas fa-air-freshener','fas fa-dragon','fas fa-cookie','fas fa-at','fas fa-bahai','fas fa-bacterium','fas fa-paw','fas fa-feather'];
-const myicons = [];
+const myicons = []; // 'fas fa-dragon','fas fa-cookie','fas fa-paw','fas fa-feather','fas fa-toilet-paper', 'fas fa-gem'
 const icons = [];
 //Data-boxs
 const databoxs = document.querySelectorAll('.data-box');
@@ -25,7 +23,7 @@ let score = 0;
 let pageLoaded = 0;
 //Cookie
 let level;
-let gameTime;
+let gameTime = undefined;
 /***************************************************************************************************************
 Icons Json ( Random Icons --> myicons = [8x] )
 ***************************************************************************************************************/
@@ -75,9 +73,9 @@ Start Game [shuffleItems] [outScore] [gamestart]
 ***************************************************************************************************************/
 let time;
 function shuffleItems() {
-  for(item of items) {
-    item.className = icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0];
-    item.style.display = 'none';
+  for(field of fields) {
+    field.innerHTML = '<i class="' + icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0] + '"></i>';
+    field.firstChild.style.display = 'none';
   }
 }
 function outScore() {
@@ -210,38 +208,41 @@ for(field of fields){
         itemopen.push(e.target.parentElement);
       }
       //Check Item Classes
-      if(itemopen.length == 2){
-        if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
-          score++;
-          stopgame++;
-          outScore();
-          //Remove Items from Check list
-          for(let i = 0; i < 2; i++) {
-            item = itemopen.splice(0,1)[0];
-            item.classList.remove('open');
-            item.classList.add('match');
-          }
-        } else {
-          //Close Items
-          setTimeout(function () {
-            for (let i = 0; i < 2; i++) {
-              item = itemopen.splice(0,1)[0];
-              item.firstChild.style.display = 'none';
-              item.classList.remove('open');
-            }
-          }, itemCloseTime);
-        }
-      }
+      checkItems();
     }
   })
 }
+function checkItems() {
+  if(itemopen.length == 2){
+    if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
+      score++;
+      stopgame++;
+      outScore();
+      //Remove Items from Check list
+      for(let i = 0; i < 2; i++) {
+        item = itemopen.splice(0,1)[0];
+        item.classList.remove('open');
+        item.classList.add('match');
+      }
+    } else {
+      //Close Items
+      setTimeout(function () {
+        for (let i = 0; i < 2; i++) {
+          item = itemopen.splice(0,1)[0];
+          item.firstChild.style.display = 'none';
+          item.classList.remove('open');
+        }
+      }, itemCloseTime);
+    }
+  }
+}
 /***************************************************************************************************************
-Cookie [SET, GET, Check]
+Cookie [SET, GET, Check, Reset]
 ***************************************************************************************************************/
 const cookiename = 'Memory - daniel156161';
 const cookienamegametime = 'Memory [GameTime] - daniel156161';
 const cookieexdays = 14;
-checkCookieGame(cookiename);
+getGamedataFromCookie();
 
 function setCookie(cname, cvalue, exdays) {
   var d = new Date();
@@ -264,12 +265,26 @@ function getCookie(cname) {
   }
   return "";
 }
-function checkCookieGame(cname) {
-  var cookieval=getCookie(cname);
+function checkCookie(cname) {
+  const cookieval=getCookie(cname);
   if (cookieval != "" && cookieval != "undefined") {
-    const cookiearray = cookieval.split(',');
-    level = cookiearray[0];
-    gameTime = cookiearray[1];
+    var cookiearray = cookieval.split(',');
+  }
+  return cookiearray
+}
+function resetCookie() {
+  setCookie(cookiename);
+  location.reload();
+  return true;
+}
+/***************************************************************************************************************
+Cookie [getGameDataFromCookie] Data from Cookie to right Variables
+***************************************************************************************************************/
+function getGamedataFromCookie() {
+  const data = checkCookie(cookiename);
+  if (data != "" && data != undefined) {
+    level = data[0];
+    gameTime = data[1];
     if (gameTime != "" || gameTime != undefined) {
       gameTime = getCookie(cookienamegametime);
     } else {
@@ -302,12 +317,12 @@ function checkCookieGame(cname) {
     level = 1;
     score = 0;
     itemCloseTime = 2000;
-    gameTime = 0;
+    if (gameTime != "" || gameTime != undefined) {
+      gameTime = getCookie(cookienamegametime);
+    } else {
+      gameTime = 0;
+    }
   }
-}
-function resetCookie() {
-  setCookie(cookiename)
-  return true;
 }
 /***************************************************************************************************************
 Cookie [LOAD, SAVE]
@@ -318,16 +333,12 @@ gametime.addEventListener('click', function () {
 
 function saveCookie() {
   if(getCookie(cookiename) != 'null') {
-    cookieval = prompt("Please enter your Level:", `${getLevel()}`);
+    cookieval = prompt("Please enter your Level:", `${getCookie(cookiename).split(',')[0]}`);
   } else {
     cookieval = prompt("Please enter your Level:", "");
   }
   setCookie(cookiename, `${cookieval},${gameTime}`, cookieexdays);
   location.reload(); 
-}
-function getLevel() {
-  const level = getCookie(cookiename).split(',')[0];
-  return level
 }
 /***************************************************************************************************************
 Phone Screen Orientation
