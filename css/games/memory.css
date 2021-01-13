@@ -38,7 +38,7 @@ Statisticen of Gamesplay
 	font: 2em/1em Arial, sans-serif;
 	background-color: #555;
   width: 49%;
-  border: 2px solid #000;
+  border: 3px solid #000;
 }
 .button, #score {
   cursor: pointer;
@@ -47,92 +47,45 @@ Statisticen of Gamesplay
 Game Play
 **********************************************************/
 #main {
-  margin: 0 auto;
-	height: 30vw;
-	width: 30vw;
-	display: grid;
-	background-color: #000;
-  grid-row-gap: 2px;
-  grid-column-gap: 2px;
-	grid-template-rows: repeat(4, 1fr);
-	grid-template-columns: repeat(4, 1fr);
-	grid-template-areas: 
-    "d01 d02 d03 d04" 
-    "d05 d06 d07 d08"
-    "d09 d10 d11 d12"
-    "d13 d14 d15 d16";
+  height: 30vw;
+  width: 30vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   border: 2px solid #000;
+  background-color: #000;
 }
 /*********************************************************
 Icons
 **********************************************************/
 .iconscenter {
+  width: 25%;
+  height: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   background-color: #c9b9b9;
+  border: 1px solid #000;
+  cursor: pointer;
 }
 #game .fas, #game .fab, #game .far {
   color: #FFF;
   font-size: 4em;
+  display: none;
 }
-.open {
+.opened {
   background-color: #adad24;
 }
 .match {
   background-color: #72B14D;
 }
-/**********************************************************
-Grid Area
-**********************************************************/
-#d01 {
-	grid-area: d01;
+.opened > i, .match > i {
+  display: inline-block !important;
 }
-#d02 {
-	grid-area: d02;	
-}
-#d03 {
-	grid-area: d03;
-}
-#d04 {
-	grid-area: d04;
-}
-#d05 {
-	grid-area: d05;
-}
-#d06 {
-	grid-area: d06;
-}
-#d07 {
-	grid-area: d07;
-}
-#d08 {
-	grid-area: d08;
-}
-#d09 {
-	grid-area: d09;
-}
-#d10 {
-	grid-area: d10;
-}
-#d11 {
-	grid-area: d11;
-}
-#d12 {
-	grid-area: d12;
-}
-#d13 {
-	grid-area: d13;
-}
-#d14 {
-	grid-area: d14;
-}
-#d15 {
-	grid-area: d15;
-}
-#d16 {
-	grid-area: d16;
+@media (min-width: 1101px) {
+  #main .hover:hover {
+    background-color: rgba(140, 240, 240, 0.705);
+  }
 }
 /**********************************************************
 Phone and iPad
