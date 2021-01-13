@@ -9,7 +9,6 @@ const gametime = document.querySelector('#time');
 let playTime = 0;
 //Score
 const scoreitem = document.querySelector('#score');
-let scoreswitch = 0;
 //Game Items
 const cards = document.querySelector('#main').querySelectorAll('div');
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
@@ -25,22 +24,25 @@ let pageLoaded = 0;
 //Cookie
 let level;
 let gameTime = undefined;
+let scoreswitch;
 /***************************************************************************************************************
-Icons Json ( Random Icons --> myicons = [8x] )
+Icons Json ( Random Icons --> icons = [16x] )
 ***************************************************************************************************************/
 fetch("../../json/FontAwesome_Icons.json")
   .then(response => response.json())
   .then(json => makeIconFromJson(json));
 
 function makeIconFromJson(json) {
+  //Random Icons --> myicons = [8x]
   for (let i = 0; i < 8; i++) {
     myicons.push(`fas fa-${json.Icons.solid.splice(Math.floor(Math.random() * (json.Icons.solid.length)), 1)[0]}`);
   }
+  for (card of cards) {
+    cardAddEventListener(card);
+  }
   makeIconArray();
 }
-/***************************************************************************************************************
-Icons ( myicons = [8x] --> icons = [16x] )
-***************************************************************************************************************/
+//myicons = [8x] --> icons = [16x]
 function makeIconArray() {
   for (let i = 0; i < 2; i++) {
     for(newicons of myicons) {
@@ -60,6 +62,7 @@ scoreitem.addEventListener('click', () => {
   } else {
     scoreswitch ++;
   }
+  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch}`, cookieexdays);
   outScore();
 });
 /***************************************************************************************************************
@@ -69,16 +72,23 @@ let time;
 function shuffleItems() {
   for(card of cards) {
     card.innerHTML = `<i class="${icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]}"></i>`;
-    cardAddEventListener(card);
   }
 }
 function outScore() {
   switch (scoreswitch) {
     case 0:
-      scoreitem.innerHTML = `Level: ${level}<br>Score: ${score}<br>Moves: ${moves}`;
+      if(isrunning == false) {
+        scoreitem.innerHTML = `Level: ${level-1}<br>Score: ${score}<br>Moves: ${moves}`;
+      } else {
+        scoreitem.innerHTML = `Level: ${level}<br>Score: ${score}<br>Moves: ${moves}`;
+      }
       break;
     case 1:
-      scoreitem.innerHTML = `Level: ${level}`;
+      if(isrunning == false) {
+        scoreitem.innerHTML = `Level: ${level-1}`;
+      } else {
+        scoreitem.innerHTML = `Level: ${level}`;
+      }
       break;
     case 2:
       scoreitem.innerHTML = `Score: ${score}`;
@@ -167,21 +177,6 @@ function myTimeer() {
       outTime();
       gametime.style.backgroundColor = gamepause;
     }
-  } else {
-    //Level Done
-    clearInterval(time);
-    isrunning = false;
-    navigator.clipboard.writeText(`Level: ${level} | Moves: ${moves} | Score: ${score} | Time: ${toHHMMSS(playTime)}`);
-    itemCloseTime = itemCloseTime - 100;
-    if(itemCloseTime == 0) {
-      itemCloseTime = 100;
-      for(databox of databoxs) {
-        databox.style.backgroundColor = hardcorecolor;
-      }
-    }
-    setCookie(cookiename, `${level},${gameTime}`, cookieexdays);
-    setCookie(cookienamegametime, gameTime, 365);
-    level++;
   }
 }
 /***************************************************************************************************************
@@ -195,6 +190,7 @@ function cardAddEventListener(c) {
       e.currentTarget.classList.add('opened');
       e.currentTarget.classList.remove('hover');
       itemopen.push(e.currentTarget);
+      setCookie(cookiename, `${level-1},${gameTime},${scoreswitch}`, cookieexdays);
       moves++;
       outScore();
       //Check Item Classes
@@ -209,6 +205,22 @@ function cardAddEventListener(c) {
             item.classList.remove('opened');
             item.classList.remove('hover');
             item.classList.add('match');
+          }
+          if (stopgame == 8) {
+            //Level Done
+            clearInterval(time);
+            isrunning = false;
+            navigator.clipboard.writeText(`Level: ${level} | Moves: ${moves} | Score: ${score} | Time: ${toHHMMSS(playTime)}`);
+            itemCloseTime = itemCloseTime - 100;
+            if(itemCloseTime == 0) {
+              itemCloseTime = 100;
+              for(databox of databoxs) {
+                databox.style.backgroundColor = hardcorecolor;
+              }
+            }
+            setCookie(cookiename, `${level},${gameTime},${scoreswitch}`, cookieexdays);
+            setCookie(cookienamegametime, gameTime, 365);
+            level++;
           }
         } else {
           //Close Items
@@ -273,17 +285,16 @@ function getGamedataFromCookie() {
   if (data != "" && data != undefined) {
     level = data[0];
     gameTime = data[1];
+    scoreswitch = data[2];
     if (gameTime != "" || gameTime != undefined) {
       gameTime = getCookie(cookienamegametime);
     } else {
       gameTime = 0;
     }
     score = level * 8;
-    if(level == 'null') {
+    if(level == 'null' || level == '0') {
       level = 1;
       score = 0;
-    }
-    if(itemCloseTime == undefined) {
       itemCloseTime = 2000;
     } else {
       for (let i = 0; i < level; i++) {
@@ -296,15 +307,21 @@ function getGamedataFromCookie() {
         }
       }
     }
-    outTime();
-    outScore();
+    if(scoreswitch == undefined) {
+      scoreswitch = 0;
+    } else {
+      scoreswitch = parseInt(scoreswitch, 10);
+    }
     if(score != 0) {
       level++;
     }
+    outTime();
+    outScore();
   } else {
     level = 1;
     score = 0;
     itemCloseTime = 2000;
+    scoreswitch = 0;
     if (gameTime != "" || gameTime != undefined) {
       gameTime = getCookie(cookienamegametime);
     } else {
@@ -364,7 +381,11 @@ function portraitScreenOrientation() {
 //Screen 90°
 function landscapeScreenOrientation() {
   for(databox of databoxs) {
-    databox.style.fontSize = '1em';
+    if(databox.attributes[1].nodeValue === 'score' && scoreswitch == 0) {
+      databox.style.fontSize = '0.7em';
+    } else {
+      databox.style.fontSize = '1em';
+    }
   }
   for(card of cards) {
     card.style.fontSize = '0.5em';
