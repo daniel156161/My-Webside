@@ -11,7 +11,7 @@ let playTime = 0;
 const scoreitem = document.querySelector('#score');
 let scoreswitch = 0;
 //Game Items
-const fields = document.querySelector('#main').querySelectorAll('div');
+const cards = document.querySelector('#main').querySelectorAll('div');
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
 const gamepause = '#E23D2F';
 let itemCloseTime = 2000;
@@ -20,6 +20,7 @@ const itemopen = [];
 let isrunning = false;
 let stopgame = 0;
 let score = 0;
+let moves = 0;
 let pageLoaded = 0;
 //Cookie
 let level;
@@ -52,16 +53,9 @@ function makeIconArray() {
 Buttons [start] [pause] [scoreswitch]
 ***************************************************************************************************************/
 const start = document.querySelector('#start').addEventListener('click', gamestart);
-const pause = document.querySelector('#pause').addEventListener('click', function(){
-  isrunning = false;
-  if(itemopen) {
-    for(item of itemopen) {
-      item.firstChild.style.display = 'none';
-    }
-  }
-});
-scoreitem.addEventListener('click', function(){
-  if(scoreswitch == 2) {
+const pause = document.querySelector('#pause').addEventListener('click', () => isrunning = false);
+scoreitem.addEventListener('click', () => {
+  if(scoreswitch == 3) {
     scoreswitch = 0;
   } else {
     scoreswitch ++;
@@ -73,21 +67,24 @@ Start Game [shuffleItems] [outScore] [gamestart]
 ***************************************************************************************************************/
 let time;
 function shuffleItems() {
-  for(field of fields) {
-    field.innerHTML = '<i class="' + icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0] + '"></i>';
-    field.firstChild.style.display = 'none';
+  for(card of cards) {
+    card.innerHTML = `<i class="${icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]}"></i>`;
+    cardAddEventListener(card);
   }
 }
 function outScore() {
   switch (scoreswitch) {
     case 0:
-      scoreitem.innerHTML = 'Level: ' + level + '<br>' + 'Score: ' + score;
+      scoreitem.innerHTML = `Level: ${level}<br>Score: ${score}<br>Moves: ${moves}`;
       break;
     case 1:
-      scoreitem.innerHTML = 'Level: ' + level;
+      scoreitem.innerHTML = `Level: ${level}`;
+      break;
+    case 2:
+      scoreitem.innerHTML = `Score: ${score}`;
       break;
     default:
-      scoreitem.innerHTML = 'Score: ' + score;
+      scoreitem.innerHTML = `Moves: ${moves}`;
   }
 }
 function gamestart() {
@@ -96,23 +93,20 @@ function gamestart() {
       playTime = 0;
       stopgame = 0;
       pageLoaded = 0;
+      moves = 0;
       outTime();
-      for(field of fields) {
-        field.classList.remove('match');
-        field.classList.remove('open');
+      for(card of cards) {
+        card.classList.remove('match');
+        card.classList.remove('opened');
+        card.classList.add('hover');
         //Remove old Icon
-        field.firstChild.classList.remove(field.firstChild.classList[1]);
+        card.firstChild.classList.remove(card.firstChild.classList[1]);
       }
       makeIconArray();
     }
     isrunning = true;
     time = setInterval(myTimeer, 1000)
     outScore();
-    if(itemopen) {
-      for(item of itemopen) {
-        item.firstChild.style.display = 'block';
-      }
-    }
   }
 }
 /***************************************************************************************************************
@@ -145,14 +139,14 @@ Timer [outTime] [myTimeer]
 function outTime() {
   switch (isrunning) {
     case false:
-      gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Pause';
+      gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Pause`;
       if (pageLoaded  == 0) {
-        gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Played: ' + toHHMMSS(gameTime);
+        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}`;
         pageLoaded = 1;
       }
       break;
     case true:
-      gametime.innerHTML = 'Time: ' + toHHMMSS(playTime) + '<br>Played: ' + toHHMMSS(gameTime);
+      gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}`;
       break;
   }
 }
@@ -177,7 +171,7 @@ function myTimeer() {
     //Level Done
     clearInterval(time);
     isrunning = false;
-    navigator.clipboard.writeText('Level: ' + level + ' | Score: ' + score + ' | Time: ' + toHHMMSS(playTime));
+    navigator.clipboard.writeText(`Level: ${level} | Moves: ${moves} | Score: ${score} | Time: ${toHHMMSS(playTime)}`);
     itemCloseTime = itemCloseTime - 100;
     if(itemCloseTime == 0) {
       itemCloseTime = 100;
@@ -193,48 +187,42 @@ function myTimeer() {
 /***************************************************************************************************************
 Game Items
 ***************************************************************************************************************/
-for(field of fields){
-  field.addEventListener('click', function(e) {
+function cardAddEventListener(c) {
+  c.addEventListener('click', e=> {
     gamestart();
-    if (e.target.classList[1] != 'open' && e.target.classList[1] != 'match' && e.target.style.display != 'block' && itemopen.length < 2) {
+    if (e.currentTarget.classList[1] == 'hover' && itemopen.length < 2) {
       //Show Item and add to Itemopen Array
-      if(e.target.firstChild) {
-        e.target.firstChild.style.display = 'block';
-        e.target.classList.add('open');
-        itemopen.push(e.target);
-      } else {
-        e.target.style.display = 'block';
-        e.target.parentElement.classList.add('open');
-        itemopen.push(e.target.parentElement);
-      }
+      e.currentTarget.classList.add('opened');
+      e.currentTarget.classList.remove('hover');
+      itemopen.push(e.currentTarget);
+      moves++;
+      outScore();
       //Check Item Classes
-      checkItems();
+      if(itemopen.length == 2){
+        if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
+          score++;
+          stopgame++;
+          outScore();
+          //Remove Items from Check list
+          for(let i = 0; i < 2; i++) {
+            item = itemopen.splice(0,1)[0];
+            item.classList.remove('opened');
+            item.classList.remove('hover');
+            item.classList.add('match');
+          }
+        } else {
+          //Close Items
+          setTimeout(() => {
+            for (let i = 0; i < 2; i++) {
+              item = itemopen.splice(0,1)[0];
+              item.classList.remove('opened');
+              item.classList.add('hover');
+            }
+          }, itemCloseTime);
+        }
+      }
     }
   })
-}
-function checkItems() {
-  if(itemopen.length == 2){
-    if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
-      score++;
-      stopgame++;
-      outScore();
-      //Remove Items from Check list
-      for(let i = 0; i < 2; i++) {
-        item = itemopen.splice(0,1)[0];
-        item.classList.remove('open');
-        item.classList.add('match');
-      }
-    } else {
-      //Close Items
-      setTimeout(function () {
-        for (let i = 0; i < 2; i++) {
-          item = itemopen.splice(0,1)[0];
-          item.firstChild.style.display = 'none';
-          item.classList.remove('open');
-        }
-      }, itemCloseTime);
-    }
-  }
 }
 /***************************************************************************************************************
 Cookie [SET, GET, Check, Reset]
@@ -327,9 +315,7 @@ function getGamedataFromCookie() {
 /***************************************************************************************************************
 Cookie [LOAD, SAVE]
 ***************************************************************************************************************/
-gametime.addEventListener('click', function () {
-  saveCookie();
-});
+gametime.addEventListener('click', () => saveCookie());
 
 function saveCookie() {
   if(getCookie(cookiename) != 'null') {
@@ -344,7 +330,7 @@ function saveCookie() {
 Phone Screen Orientation
 ***************************************************************************************************************/
 const databoxcsssize = window.getComputedStyle(databoxs[0]).fontSize;
-const fieldcsssize = window.getComputedStyle(fields[0]).fontSize;
+const cardcsssize = window.getComputedStyle(cards[0]).fontSize;
 const footer = document.querySelector('footer');
 const GamePaddingBottom = window.getComputedStyle(game).paddingBottom;
 
@@ -356,7 +342,7 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
     landscapeScreenOrientation();
   }
   //Screen Orientation Changing
-  window.addEventListener("orientationchange", function(e) {
+  window.addEventListener("orientationchange", (e) => {
     if(e.target.screen.orientation.angle == 0) {
       portraitScreenOrientation();
     } else {
@@ -369,8 +355,8 @@ function portraitScreenOrientation() {
   for(databox of databoxs) {
     databox.style.fontSize = '2em';
   }
-  for(field of fields) {
-    field.style.fontSize = fieldcsssize;
+  for(card of cards) {
+    card.style.fontSize = cardcsssize;
   }
   footer.style.display = 'block';
   game.style.paddingBottom = GamePaddingBottom;
@@ -380,8 +366,8 @@ function landscapeScreenOrientation() {
   for(databox of databoxs) {
     databox.style.fontSize = '1em';
   }
-  for(field of fields) {
-    field.style.fontSize = '0.5em';
+  for(card of cards) {
+    card.style.fontSize = '0.5em';
   }
   footer.style.display = 'none';
   game.style.paddingBottom = '0';
