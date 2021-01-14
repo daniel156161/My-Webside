@@ -2,15 +2,15 @@ const game = document.querySelector('#game');
 const myicons = []; // 'fas fa-dragon','fas fa-cookie','fas fa-paw','fas fa-feather','fas fa-toilet-paper', 'fas fa-gem'
 const icons = [];
 //Data-boxs
-const databoxs = document.querySelectorAll('.data-box');
+const databoxs = game.querySelectorAll('.data-box');
 const hardcorecolor = '#21518F';
 //Time
-const gametime = document.querySelector('#time');
+const gametime = game.querySelector('#time');
 let playTime = 0;
 //Score
-const scoreitem = document.querySelector('#score');
+const scoreitem = game.querySelector('#score');
 //Game Items
-const cards = document.querySelector('#main').querySelectorAll('div');
+const cards = game.querySelector('#main').querySelectorAll('div');
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
 const gamepause = '#E23D2F';
 let itemCloseTime = 2000;
@@ -52,10 +52,38 @@ function makeIconArray() {
   shuffleItems();
 }
 /***************************************************************************************************************
-Buttons [start] [pause] [scoreswitch]
+Buttons [reset] [pause] [scoreswitch]
 ***************************************************************************************************************/
-const start = document.querySelector('#start').addEventListener('click', gamestart);
-const pause = document.querySelector('#pause').addEventListener('click', () => isrunning = false);
+const restart = document.querySelector('#restart').addEventListener('click', () => {
+  for(card of cards) {
+    if(card.classList[0] != 'hover') {
+      card.classList.replace(card.classList[1], 'hover');
+    }
+  }
+  for (let i = 0; i < 2; i++) {
+    itemopen.splice(0,1)[0];
+  }
+  clearInterval(time);
+  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch}`, cookieexdays);
+  setCookie(cookienamegametime, gameTime, 365);
+  isrunning = false;
+  playTime = 0;
+  stopgame = 0;
+  pageLoaded = 0;
+  moves = 0;
+  outTime();
+  outScore();
+  makeIconArray();
+});
+const pause = document.querySelector('#pause').addEventListener('click', () => {
+  isrunning = false;
+  if(itemopen) {
+    for(item of itemopen) {
+      item.classList.remove('opened');
+      item.classList.add('pause');
+    }
+  }
+});
 scoreitem.addEventListener('click', () => {
   if(scoreswitch == 3) {
     scoreswitch = 0;
@@ -106,17 +134,21 @@ function gamestart() {
       moves = 0;
       outTime();
       for(card of cards) {
-        card.classList.remove('match');
-        card.classList.remove('opened');
-        card.classList.add('hover');
+        card.classList.replace(card.classList[1], 'hover');
         //Remove old Icon
         card.firstChild.classList.remove(card.firstChild.classList[1]);
       }
       makeIconArray();
     }
     isrunning = true;
-    time = setInterval(myTimeer, 1000)
+    time = setInterval(myTimeer, 1000);
     outScore();
+    if(itemopen) {
+      for(item of itemopen) {
+        item.classList.add('opened');
+        item.classList.remove('pause');
+      }
+    }
   }
 }
 /***************************************************************************************************************
@@ -187,8 +219,7 @@ function cardAddEventListener(c) {
     gamestart();
     if (e.currentTarget.classList[1] == 'hover' && itemopen.length < 2) {
       //Show Item and add to Itemopen Array
-      e.currentTarget.classList.add('opened');
-      e.currentTarget.classList.remove('hover');
+      e.currentTarget.classList.replace(e.currentTarget.classList[1], 'opened');
       itemopen.push(e.currentTarget);
       setCookie(cookiename, `${level-1},${gameTime},${scoreswitch}`, cookieexdays);
       moves++;
@@ -202,9 +233,7 @@ function cardAddEventListener(c) {
           //Remove Items from Check list
           for(let i = 0; i < 2; i++) {
             item = itemopen.splice(0,1)[0];
-            item.classList.remove('opened');
-            item.classList.remove('hover');
-            item.classList.add('match');
+            item.classList.replace(item.classList[1], 'match');
           }
           if (stopgame == 8) {
             //Level Done
@@ -220,6 +249,7 @@ function cardAddEventListener(c) {
             }
             setCookie(cookiename, `${level},${gameTime},${scoreswitch}`, cookieexdays);
             setCookie(cookienamegametime, gameTime, 365);
+            alert(`You Win\nLevel: ${level}\nMoves: ${moves}\nScore: ${score}`);
             level++;
           }
         } else {
@@ -227,14 +257,13 @@ function cardAddEventListener(c) {
           setTimeout(() => {
             for (let i = 0; i < 2; i++) {
               item = itemopen.splice(0,1)[0];
-              item.classList.remove('opened');
-              item.classList.add('hover');
+              item.classList.replace(item.classList[1], 'hover');
             }
           }, itemCloseTime);
         }
       }
     }
-  })
+  });
 }
 /***************************************************************************************************************
 Cookie [SET, GET, Check, Reset]
@@ -340,7 +369,7 @@ function saveCookie() {
   } else {
     cookieval = prompt("Please enter your Level:", "");
   }
-  setCookie(cookiename, `${cookieval},${gameTime}`, cookieexdays);
+  setCookie(cookiename, `${cookieval},${gameTime},${scoreswitch}`, cookieexdays);
   location.reload(); 
 }
 /***************************************************************************************************************

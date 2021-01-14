@@ -82,7 +82,13 @@ Icons
 .opened > i, .match > i {
   display: inline-block !important;
 }
-@media (min-width: 1101px) {
+.pause {
+  background-color: #adad24;
+}
+.pause > i {
+  display: none !important;
+}
+@media (min-width: 716px) {
   #main .hover:hover {
     background-color: rgba(140, 240, 240, 0.705);
   }
