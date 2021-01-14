@@ -50,12 +50,14 @@ h2 {
 .indexcode {
   text-shadow: 1px 1px 2px black;
 }
-#nojavascript {
+.gridclickdiv div {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   background-color: black;
+}
+#nojavascript {
   color: white;
   font-size: 2em;
 }
@@ -76,9 +78,6 @@ Click Divs
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
   color: white;
   font-size: 2em;
   background-color: black;
