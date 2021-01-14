@@ -56,7 +56,7 @@ Buttons [reset] [pause] [scoreswitch]
 ***************************************************************************************************************/
 const restart = document.querySelector('#restart').addEventListener('click', () => {
   for(card of cards) {
-    if(card.classList[0] != 'hover') {
+    if(card.classList[1] != 'hover') {
       card.classList.replace(card.classList[1], 'hover');
     }
   }
@@ -71,6 +71,7 @@ const restart = document.querySelector('#restart').addEventListener('click', () 
   stopgame = 0;
   pageLoaded = 0;
   moves = 0;
+  score = (level-1)*8
   outTime();
   outScore();
   makeIconArray();
