@@ -8,17 +8,55 @@ body {
   height: 100%;
   color: #FFF;
 }
-#game {
+#game, #welcome, #win {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
   align-items: center;
   width: 100%;
   height: 100%;
   padding-bottom: 39px;
 }
+.hidden {
+  display: none !important;
+}
 #size {
   width: 30vw;
+}
+/**********************************************************
+Welcome Msg and Win Msg
+**********************************************************/
+#welcome div, #win div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  width: 30vw;
+  height: 87vh;
+  background-color: #555;
+  border: 3px solid #000;
+  font-size: 3em;
+  min-width: 400px;
+  min-height: 500px;
+}
+#win div {
+  min-height: 570px;
+}
+#welcome div h2, #win div h2 {
+  font-weight: bold;
+  color: #f4d03f;
+  font-family: 'Castoro', serif;
+  padding-bottom: 1vh;
+}
+#welcome div p, #win div p {
+  font-size: 0.8em;
+  padding-bottom: 3vh;
+}
+#welcome div i, #win div i {
+  font-size: 3.5em;
+  cursor: pointer;
 }
 /**********************************************************
 Statisticen of Gamesplay
@@ -29,6 +67,8 @@ Statisticen of Gamesplay
 	height: 11vh;
 	width: 30vw;
   justify-content: space-between;
+  min-width: 363px;
+  min-height: 100px;
 }
 .data-box {
   display: flex;
@@ -54,6 +94,8 @@ Game Play
   justify-content: space-between;
   border: 2px solid #000;
   background-color: #000;
+  min-height: 364px;
+  min-width: 364px;
 }
 /*********************************************************
 Icons
@@ -97,19 +139,55 @@ Icons
 Phone and iPad
 **********************************************************/
 @media (max-width: 1100px) {
+  #welcome div, #win div {
+    min-width: 0;
+    min-height: 0;
+  }
   #main, #header, #footer {
     width: 60vh;
+    min-height: 0;
+    min-width: 0;
   }
   #main {
     height: 60vh;
   }
-  #game {
+  #game, #welcome, #win {
     width: 100vw;
     height: 90vh;
   }
+  #welcome div, #win div {
+    width: 61.8vw;
+    height: 72vh;
+  }
+  #welcome div i, #win div i{
+    font-size: 2em;
+  }
+  @media screen and (orientation: landscape) {
+    #welcome div, #win div {
+      margin: 10px auto;
+      font-size: 3em;
+      width: 42.9vw;
+      height: 85vh;
+    }
+    #welcome div i, #win div i{
+      font-size: 2em;
+    }
+    footer {
+      display: none !important;
+    }
+    #main div {
+      font-size: 1em;
+    }
+    #game, #welcome, #win {
+      padding-bottom: 0;
+    }
+    .data-box {
+      font-size: 1.5em;
+    }
+  }
 }
-@media (max-width: 574px) {
-  #main, #header, #footer {
+@media (max-width: 900px) {
+  #main, #header, #footer, #welcome div, #win div {
     width: 48vh;
   }
   #main {
@@ -120,5 +198,41 @@ Phone and iPad
   }
   #game .fas, #game .fab, #game .far {
     font-size: 3em;
+  }
+  @media screen and (orientation: landscape) {
+    #welcome div, #win div {
+      margin: 10px auto;
+      font-size: 1em;
+      height: 75vh;
+    }
+    #welcome div i, #win div i{
+      font-size: 2em;
+    }
+    footer {
+      display: none !important;
+    }
+    #main div {
+      font-size: 0.5em;
+    }
+    #game, #welcome, #win {
+      padding-bottom: 0;
+    }
+    .data-box {
+      font-size: 0.7em;
+    }
+  }
+}
+@media (max-width: 375px) {
+  #main, #header, #footer, #welcome div, #win div {
+    width: 45vh;
+  }
+  #main {
+    height: 48vh;
+  }
+  #header, #footer {
+    font-size: 0.8em;
+  }
+  #game .fas, #game .fab, #game .far {
+    font-size: 4em;
   }
 }

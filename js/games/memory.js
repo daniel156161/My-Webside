@@ -54,7 +54,8 @@ function makeIconArray() {
 /***************************************************************************************************************
 Buttons [reset] [pause] [scoreswitch]
 ***************************************************************************************************************/
-const restart = document.querySelector('#restart').addEventListener('click', () => {
+const restart = document.querySelector('#restart').addEventListener('click', resetGame);
+function resetGame() {
   for(card of cards) {
     if(card.classList[1] != 'hover') {
       card.classList.replace(card.classList[1], 'hover');
@@ -75,7 +76,7 @@ const restart = document.querySelector('#restart').addEventListener('click', () 
   outTime();
   outScore();
   makeIconArray();
-});
+}
 const pause = document.querySelector('#pause').addEventListener('click', () => {
   isrunning = false;
   if(itemopen) {
@@ -250,7 +251,9 @@ function cardAddEventListener(c) {
             }
             setCookie(cookiename, `${level},${gameTime},${scoreswitch}`, cookieexdays);
             setCookie(cookienamegametime, gameTime, 365);
-            alert(`You Win\nLevel: ${level}\nMoves: ${moves}\nScore: ${score}`);
+            game.classList.add('hidden');
+            winmsg.classList.remove(winmsg.classList[0]);
+            winData.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Moves: ${moves}<br>Tries: ${moves/2}`
             level++;
           }
         } else {
@@ -266,6 +269,25 @@ function cardAddEventListener(c) {
     }
   });
 }
+/***************************************************************************************************************
+Welcome Msg
+***************************************************************************************************************/
+const welcomemsg = document.querySelector('#welcome');
+const playbtn = welcomemsg.querySelector('#playbtn');
+playbtn.addEventListener('click', () => {
+  welcomemsg.classList.add('hidden');
+  game.classList.remove(game.classList[0]);
+});
+/***************************************************************************************************************
+Win Msg
+***************************************************************************************************************/
+const winmsg = document.querySelector('#win');
+const winData = winmsg.querySelector('#winData');
+const playagainbtn = win.querySelector('#playagainbtn').addEventListener('click', () => {
+  winmsg.classList.add('hidden');
+  game.classList.remove(game.classList[0]);
+  resetGame();
+})
 /***************************************************************************************************************
 Cookie [SET, GET, Check, Reset]
 ***************************************************************************************************************/
@@ -372,54 +394,4 @@ function saveCookie() {
   }
   setCookie(cookiename, `${cookieval},${gameTime},${scoreswitch}`, cookieexdays);
   location.reload(); 
-}
-/***************************************************************************************************************
-Phone Screen Orientation
-***************************************************************************************************************/
-const databoxcsssize = window.getComputedStyle(databoxs[0]).fontSize;
-const cardcsssize = window.getComputedStyle(cards[0]).fontSize;
-const footer = document.querySelector('footer');
-const GamePaddingBottom = window.getComputedStyle(game).paddingBottom;
-
-if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-  //On load
-  if (window.screen.orientation.angle == 0) {
-    portraitScreenOrientation();
-  } else {
-    landscapeScreenOrientation();
-  }
-  //Screen Orientation Changing
-  window.addEventListener("orientationchange", (e) => {
-    if(e.target.screen.orientation.angle == 0) {
-      portraitScreenOrientation();
-    } else {
-      landscapeScreenOrientation();
-    }
-  });
-}
-//Screen 0°
-function portraitScreenOrientation() {
-  for(databox of databoxs) {
-    databox.style.fontSize = '2em';
-  }
-  for(card of cards) {
-    card.style.fontSize = cardcsssize;
-  }
-  footer.style.display = 'block';
-  game.style.paddingBottom = GamePaddingBottom;
-}
-//Screen 90°
-function landscapeScreenOrientation() {
-  for(databox of databoxs) {
-    if(databox.attributes[1].nodeValue === 'score' && scoreswitch == 0) {
-      databox.style.fontSize = '0.7em';
-    } else {
-      databox.style.fontSize = '1em';
-    }
-  }
-  for(card of cards) {
-    card.style.fontSize = '0.5em';
-  }
-  footer.style.display = 'none';
-  game.style.paddingBottom = '0';
 }
