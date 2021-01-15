@@ -33,7 +33,8 @@ Welcome Msg and Win Msg
   align-items: center;
   text-align: center;
   flex-direction: column;
-  width: 30vw;
+  margin: 10px auto;
+  width: 29vw;
   height: 87vh;
   background-color: #555;
   border: 3px solid #000;
@@ -49,14 +50,17 @@ Welcome Msg and Win Msg
   color: #f4d03f;
   font-family: 'Castoro', serif;
   padding-bottom: 1vh;
+  width: 100%;
 }
 #welcome div p, #win div p {
   font-size: 0.8em;
   padding-bottom: 3vh;
+  width: 100%;
 }
 #welcome div i, #win div i {
   font-size: 3.5em;
   cursor: pointer;
+  width: 100%;
 }
 /**********************************************************
 Statisticen of Gamesplay
@@ -65,10 +69,10 @@ Statisticen of Gamesplay
   margin: 10px auto;
 	display: flex;
 	height: 11vh;
-	width: 30vw;
+	width: 29vw;
   justify-content: space-between;
-  min-width: 363px;
-  min-height: 100px;
+  min-width: 370px;
+  min-height: 114px;
 }
 .data-box {
   display: flex;
@@ -87,15 +91,15 @@ Statisticen of Gamesplay
 Game Play
 **********************************************************/
 #main {
-  height: 30vw;
-  width: 30vw;
+  height: 29vw;
+  width: 29vw;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   border: 2px solid #000;
   background-color: #000;
-  min-height: 364px;
-  min-width: 364px;
+  min-height: 370px;
+  min-width: 370px;
 }
 /*********************************************************
 Icons
@@ -130,7 +134,7 @@ Icons
 .pause > i {
   display: none !important;
 }
-@media (min-width: 716px) {
+@media (min-width: 1025px) {
   #main .hover:hover {
     background-color: rgba(140, 240, 240, 0.705);
   }
@@ -153,7 +157,7 @@ Phone and iPad
   }
   #game, #welcome, #win {
     width: 100vw;
-    height: 90vh;
+    height: 100vh;
   }
   #welcome div, #win div {
     width: 61.8vw;
@@ -164,7 +168,6 @@ Phone and iPad
   }
   @media screen and (orientation: landscape) {
     #welcome div, #win div {
-      margin: 10px auto;
       font-size: 3em;
       width: 42.9vw;
       height: 85vh;
@@ -201,7 +204,6 @@ Phone and iPad
   }
   @media screen and (orientation: landscape) {
     #welcome div, #win div {
-      margin: 10px auto;
       font-size: 1em;
       height: 75vh;
     }
