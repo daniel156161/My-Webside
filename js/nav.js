@@ -18,26 +18,6 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
     }
   });
 }
-//Small view for Computer
-setInterval(() => {
-  if(mq.matches == true) {
-    if(navswitch == 0) {
-      for (let i = 0; i < submenuyes.length; i++) {
-        if(submenu[i].classList[1] == 'display-block'){
-          submenu[i].classList.toggle('display-block');
-        }
-      }
-      for (let i = 0; i < submenuyes2.length; i++) {
-        if(submenu2[i].classList[1] == 'display-block'){
-          submenu2[i].classList.toggle('display-block');
-        }
-      }
-    }
-    navswitch = 1;
-  } else {
-    navswitch = 0;
-  }
-}, 100);
 //Function
 function menu() {
   icon.addEventListener('click', function() {
