@@ -27,8 +27,15 @@ h3 {
 /**************************************************************************************
 Navigation Bar
 **************************************************************************************/
-nav, .hamburger {
+.hamburger {
   display: flex;
+}
+@media (min-width: 576px) {
+  nav {
+    display: flex !important;
+  }
+}
+nav, .hamburger {
   flex-direction: row;
   width: 100%;
   background-color: #333;

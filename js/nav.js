@@ -22,7 +22,6 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 setInterval(() => {
   if(mq.matches == true) {
     if(navswitch == 0) {
-      nav.style.display = 'none';
       for (let i = 0; i < submenuyes.length; i++) {
         if(submenu[i].classList[1] == 'display-block'){
           submenu[i].classList.toggle('display-block');
@@ -36,7 +35,6 @@ setInterval(() => {
     }
     navswitch = 1;
   } else {
-    nav.style.display = 'block';
     navswitch = 0;
   }
 }, 100);
