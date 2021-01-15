@@ -253,7 +253,7 @@ function cardAddEventListener(c) {
             setCookie(cookienamegametime, gameTime, 365);
             game.classList.add('hidden');
             winmsg.classList.remove(winmsg.classList[0]);
-            winData.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Moves: ${moves}<br>Tries: ${moves/2}`
+            winData.innerHTML = `Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Moves: ${moves}<br>Tries: ${moves/2}`
             level++;
           }
         } else {
