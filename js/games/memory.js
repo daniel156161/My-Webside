@@ -25,6 +25,7 @@ let pageLoaded = 0;
 let level;
 let gameTime = undefined;
 let scoreswitch;
+let timerswitch;
 /***************************************************************************************************************
 Icons Json ( Random Icons --> icons = [16x] )
 ***************************************************************************************************************/
@@ -52,10 +53,11 @@ function makeIconArray() {
   shuffleItems();
 }
 /***************************************************************************************************************
-Buttons [reset] [pause] [scoreswitch]
+Buttons [reset, pause, scoreswitch, timerswitch]
 ***************************************************************************************************************/
 const restart = document.querySelector('#restart').addEventListener('click', resetGame);
 function resetGame() {
+  gametime.style.backgroundColor = gamerun;
   for(card of cards) {
     if(card.classList[1] != 'hover') {
       card.classList.replace(card.classList[1], 'hover');
@@ -65,7 +67,7 @@ function resetGame() {
     itemopen.splice(0,1)[0];
   }
   clearInterval(time);
-  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch}`, cookieexdays);
+  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
   setCookie(cookienamegametime, gameTime, 365);
   isrunning = false;
   playTime = 0;
@@ -92,11 +94,20 @@ scoreitem.addEventListener('click', () => {
   } else {
     scoreswitch ++;
   }
-  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch}`, cookieexdays);
+  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
   outScore();
 });
+gametime.addEventListener('click', () => {
+  if(timerswitch == 2) {
+    timerswitch = 0;
+  } else {
+    timerswitch ++;
+  }
+  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
+  outTime();
+});
 /***************************************************************************************************************
-Start Game [shuffleItems] [outScore] [gamestart]
+Start Game [shuffleItems, outScore, gamestart]
 ***************************************************************************************************************/
 let time;
 function shuffleItems() {
@@ -143,6 +154,7 @@ function gamestart() {
       makeIconArray();
     }
     isrunning = true;
+    pageLoaded = 1;
     time = setInterval(myTimeer, 1000);
     outScore();
     if(itemopen) {
@@ -178,20 +190,33 @@ function toHHMMSS(sec) {
   }
 }
 /***************************************************************************************************************
-Timer [outTime] [myTimeer]
+Timer [outTime, myTimeer]
 ***************************************************************************************************************/
 function outTime() {
-  switch (isrunning) {
-    case false:
-      gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Pause`;
-      if (pageLoaded  == 0) {
+  switch (timerswitch) {
+    case 0:
+      if(isrunning == false && pageLoaded == 1) {
+        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}<br>Pause`;
+      } else {
         gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}`;
-        pageLoaded = 1;
       }
       break;
-    case true:
-      gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}`;
+    case 1:
+      if(isrunning == false && pageLoaded == 1) {
+        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Pause`;
+      } else {
+        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}`
+      }
+      break
+    case 2:
+      if(isrunning == false && pageLoaded == 1) {
+        gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}<br>Pause`;
+      } else {
+        gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}`
+      }
       break;
+    default:
+      
   }
 }
 function myTimeer() {
@@ -223,7 +248,7 @@ function cardAddEventListener(c) {
       //Show Item and add to Itemopen Array
       e.currentTarget.classList.replace(e.currentTarget.classList[1], 'opened');
       itemopen.push(e.currentTarget);
-      setCookie(cookiename, `${level-1},${gameTime},${scoreswitch}`, cookieexdays);
+      setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
       moves++;
       outScore();
       //Check Item Classes
@@ -249,7 +274,7 @@ function cardAddEventListener(c) {
                 databox.style.backgroundColor = hardcorecolor;
               }
             }
-            setCookie(cookiename, `${level},${gameTime},${scoreswitch}`, cookieexdays);
+            setCookie(cookiename, `${level},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
             setCookie(cookienamegametime, gameTime, 365);
             game.classList.add('hidden');
             winmsg.classList.remove(winmsg.classList[0]);
@@ -289,7 +314,7 @@ const playagainbtn = win.querySelector('#playagainbtn').addEventListener('click'
   resetGame();
 })
 /***************************************************************************************************************
-Cookie [SET, GET, Check, Reset]
+Cookie [SET, GET, Check]
 ***************************************************************************************************************/
 const cookiename = 'Memory - daniel156161';
 const cookienamegametime = 'Memory [GameTime] - daniel156161';
@@ -324,11 +349,6 @@ function checkCookie(cname) {
   }
   return cookiearray
 }
-function resetCookie() {
-  setCookie(cookiename);
-  location.reload();
-  return true;
-}
 /***************************************************************************************************************
 Cookie [getGameDataFromCookie] Data from Cookie to right Variables
 ***************************************************************************************************************/
@@ -338,6 +358,7 @@ function getGamedataFromCookie() {
     level = data[0];
     gameTime = data[1];
     scoreswitch = data[2];
+    timerswitch = data[3];
     if (gameTime != "" || gameTime != undefined) {
       gameTime = getCookie(cookienamegametime);
     } else {
@@ -364,6 +385,11 @@ function getGamedataFromCookie() {
     } else {
       scoreswitch = parseInt(scoreswitch, 10);
     }
+    if(timerswitch == undefined) {
+      timerswitch = 0;
+    } else {
+      timerswitch = parseInt(timerswitch, 10);
+    }
     if(score != 0) {
       level++;
     }
@@ -382,16 +408,19 @@ function getGamedataFromCookie() {
   }
 }
 /***************************************************************************************************************
-Cookie [LOAD, SAVE]
+Cookie [SAVE, RESET] Test Functions!!!!
 ***************************************************************************************************************/
-gametime.addEventListener('click', () => saveCookie());
-
 function saveCookie() {
   if(getCookie(cookiename) != 'null') {
     cookieval = prompt("Please enter your Level:", `${getCookie(cookiename).split(',')[0]}`);
   } else {
     cookieval = prompt("Please enter your Level:", "");
   }
-  setCookie(cookiename, `${cookieval},${gameTime},${scoreswitch}`, cookieexdays);
-  location.reload(); 
+  setCookie(cookiename, `${cookieval},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
+  location.reload();
+}
+function resetCookie() {
+  setCookie(cookiename);
+  location.reload();
+  return true;
 }
