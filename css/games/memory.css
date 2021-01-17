@@ -78,7 +78,7 @@ Statisticen of Gamesplay
   min-width: 370px;
   min-height: 114px;
 }
-.data-box {
+.data-box, .data-box-pause, .data-box-hardcore {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,6 +90,12 @@ Statisticen of Gamesplay
 }
 .button, #score {
   cursor: pointer;
+}
+.data-box-pause {
+  background-color: #E23D2F;
+}
+.data-box-hardcore {
+  background-color: #21518F;
 }
 /**********************************************************
 Game Play

@@ -3,7 +3,6 @@ const myicons = []; // 'fas fa-dragon','fas fa-cookie','fas fa-paw','fas fa-feat
 const icons = [];
 //Data-boxs
 const databoxs = game.querySelectorAll('.data-box');
-const hardcorecolor = '#21518F';
 //Time
 const gametime = game.querySelector('#time');
 let playTime = 0;
@@ -12,7 +11,6 @@ const scoreitem = game.querySelector('#score');
 //Game Items
 const cards = game.querySelector('#main').querySelectorAll('div');
 const gamerun = window.getComputedStyle(gametime).backgroundColor;
-const gamepause = '#E23D2F';
 let itemCloseTime = 2000;
 //Stats
 const itemopen = [];
@@ -57,7 +55,6 @@ Buttons [reset, pause, scoreswitch, timerswitch]
 ***************************************************************************************************************/
 const restart = document.querySelector('#restart').addEventListener('click', resetGame);
 function resetGame() {
-  gametime.style.backgroundColor = gamerun;
   for(card of cards) {
     if(card.classList[1] != 'hover') {
       card.classList.replace(card.classList[1], 'hover');
@@ -78,6 +75,9 @@ function resetGame() {
   outTime();
   outScore();
   makeIconArray();
+  for(databox of databoxs) {
+    databox.classList.replace(databox.classList[0], databoxcolor());
+  }
 }
 const pause = document.querySelector('#pause').addEventListener('click', () => {
   isrunning = false;
@@ -223,20 +223,32 @@ function myTimeer() {
   gameTime ++;
   playTime ++;
   outTime();
-  if(itemCloseTime == 100) {
-    for(databox of databoxs) {
-      databox.style.backgroundColor = hardcorecolor;
-    }
-  } else {
-    gametime.style.backgroundColor = gamerun;
-  }
   if(stopgame != 8) {
     if(isrunning == false) {
       clearInterval(time);
       outTime();
-      gametime.style.backgroundColor = gamepause;
     }
   }
+  for(databox of databoxs) {
+    databox.classList.replace(databox.classList[0], databoxcolor());
+  }
+}
+function databoxcolor() {
+  if (isrunning == false){
+    var databoxclass = 'data-box-pause';
+    if(itemCloseTime != 100 && pageLoaded == 0) {
+      var databoxclass = 'data-box';
+    }
+    if(itemCloseTime == 100 && pageLoaded == 0) {
+      var databoxclass = 'data-box-hardcore';
+    }
+  } else if (isrunning == true) {
+    var databoxclass = 'data-box';
+    if(itemCloseTime == 100) {
+      var databoxclass = 'data-box-hardcore';
+    }
+  }
+  return databoxclass
 }
 /***************************************************************************************************************
 Game Items
@@ -271,7 +283,7 @@ function cardAddEventListener(c) {
             if(itemCloseTime == 0) {
               itemCloseTime = 100;
               for(databox of databoxs) {
-                databox.style.backgroundColor = hardcorecolor;
+                databox.classList.replace(databox.classList[0], databoxcolor());
               }
             }
             setCookie(cookiename, `${level},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
@@ -375,7 +387,7 @@ function getGamedataFromCookie() {
         if(itemCloseTime == 0) {
           itemCloseTime = 100;
           for(databox of databoxs) {
-            databox.style.backgroundColor = hardcorecolor;
+            databox.classList.replace(databox.classList[0], databoxcolor());
           }
         }
       }
