@@ -10,7 +10,6 @@ let playTime = 0;
 const scoreitem = game.querySelector('#score');
 //Game Items
 const cards = game.querySelector('#main').querySelectorAll('div');
-const gamerun = window.getComputedStyle(gametime).backgroundColor;
 let itemCloseTime = 2000;
 //Stats
 const itemopen = [];
