@@ -18,6 +18,7 @@ let stopgame = 0;
 let score = 0;
 let moves = 0;
 let pageLoaded = 0;
+let gameLoaded = 0;
 //Cookie
 let level;
 let gameTime = undefined;
@@ -68,7 +69,7 @@ function resetGame() {
   isrunning = false;
   playTime = 0;
   stopgame = 0;
-  pageLoaded = 0;
+  gameLoaded = 0;
   moves = 0;
   score = (level-1)*8
   outTime();
@@ -142,7 +143,7 @@ function gamestart() {
     if(stopgame == 8) {
       playTime = 0;
       stopgame = 0;
-      pageLoaded = 0;
+      gameLoaded = 0;
       moves = 0;
       outTime();
       for(card of cards) {
@@ -153,7 +154,7 @@ function gamestart() {
       makeIconArray();
     }
     isrunning = true;
-    pageLoaded = 1;
+    gameLoaded = 1;
     time = setInterval(myTimeer, 1000);
     outScore();
     if(itemopen) {
@@ -194,21 +195,21 @@ Timer [outTime, myTimeer]
 function outTime() {
   switch (timerswitch) {
     case 0:
-      if(isrunning == false && pageLoaded == 1) {
+      if(isrunning == false && gameLoaded == 1) {
         gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}<br>Pause`;
       } else {
         gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}`;
       }
       break;
     case 1:
-      if(isrunning == false && pageLoaded == 1) {
+      if(isrunning == false && gameLoaded == 1) {
         gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Pause`;
       } else {
         gametime.innerHTML = `Time: ${toHHMMSS(playTime)}`
       }
       break
     case 2:
-      if(isrunning == false && pageLoaded == 1) {
+      if(isrunning == false && gameLoaded == 1) {
         gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}<br>Pause`;
       } else {
         gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}`
@@ -235,10 +236,10 @@ function myTimeer() {
 function databoxcolor() {
   if (isrunning == false){
     var databoxclass = 'data-box-pause';
-    if(itemCloseTime != 100 && pageLoaded == 0) {
+    if(itemCloseTime != 100 && gameLoaded == 0) {
       var databoxclass = 'data-box';
     }
-    if(itemCloseTime == 100 && pageLoaded == 0) {
+    if(itemCloseTime == 100 && gameLoaded == 0) {
       var databoxclass = 'data-box-hardcore';
     }
   } else if (isrunning == true) {
@@ -288,8 +289,7 @@ function cardAddEventListener(c) {
             setCookie(cookiename, `${level},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
             setCookie(cookienamegametime, gameTime, 365);
             game.classList.add('hidden');
-            winmsg.classList.remove(winmsg.classList[0]);
-            winData.innerHTML = `Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Moves: ${moves}<br>Tries: ${moves/2}`
+            msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Moves: ${moves}<br>Tries: ${moves/2}</p><p>Play again?</p><i id="playbtn" class="fas fa-play"></i></div>`)
             level++;
           }
         } else {
@@ -306,24 +306,25 @@ function cardAddEventListener(c) {
   });
 }
 /***************************************************************************************************************
-Welcome Msg
+Msg [msgs] Welcome and Win Msg
 ***************************************************************************************************************/
-const welcomemsg = document.querySelector('#welcome');
-const playbtn = welcomemsg.querySelector('#playbtn');
-playbtn.addEventListener('click', () => {
-  welcomemsg.classList.add('hidden');
-  game.classList.remove(game.classList[0]);
-});
-/***************************************************************************************************************
-Win Msg
-***************************************************************************************************************/
-const winmsg = document.querySelector('#win');
-const winData = winmsg.querySelector('#winData');
-const playagainbtn = win.querySelector('#playagainbtn').addEventListener('click', () => {
-  winmsg.classList.add('hidden');
-  game.classList.remove(game.classList[0]);
-  resetGame();
-})
+const msg = document.querySelector('#gamemsg');
+msgs('<div><h2>Welcome</h2><p>Memory Coded by me</p><p>Play?</p><i id="playbtn" class="fas fa-play"></i></div>')
+function msgs(text) {
+  msg.classList.remove('hidden')
+  msg.innerHTML = text
+
+  const playbtn = msg.querySelector('#playbtn');
+  playbtn.addEventListener('click', () => {
+    msg.classList.add('hidden');
+    game.classList.remove(game.classList[0]);
+    if(pageLoaded == 1) {
+      resetGame();
+    } else {
+      pageLoaded = 1;
+    }
+  });
+}
 /***************************************************************************************************************
 Cookie [SET, GET, Check]
 ***************************************************************************************************************/

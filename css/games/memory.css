@@ -7,8 +7,10 @@ body {
 	width: 100%;
   height: 100%;
   color: #FFF;
+  background-image: url(../../img/space.jpg);
+  background-position: center;
 }
-#game, #welcome, #win {
+#game, #gamemsg {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,7 +29,7 @@ body {
 /**********************************************************
 Welcome Msg and Win Msg
 **********************************************************/
-#welcome div, #win div {
+#gamemsg div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,8 +37,8 @@ Welcome Msg and Win Msg
   flex-direction: column;
   margin: 10px auto;
   width: 29vw;
-  height: 87vh;
-  background-color: #555;
+  height: calc(14vh + 29vw + 13vh);
+  background-color: rgba(85, 85, 85, 0.733);
   border: 3px solid #000;
   font-size: 3em;
   min-width: 400px;
@@ -45,19 +47,19 @@ Welcome Msg and Win Msg
 #win div {
   min-height: 570px;
 }
-#welcome div h2, #win div h2 {
+#gamemsg div h2 {
   font-weight: bold;
   color: #f4d03f;
   font-family: 'Castoro', serif;
   padding-bottom: 1vh;
   width: 100%;
 }
-#welcome div p, #win div p {
+#gamemsg div p {
   font-size: 0.8em;
   padding-bottom: 3vh;
   width: 100%;
 }
-#welcome div i, #win div i {
+#gamemsg div i {
   font-size: 3.5em;
   cursor: pointer;
   width: 100%;
@@ -118,7 +120,7 @@ Icons
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #c9b9b9;
+  background-color: #c9b9b98a;
   border: 1px solid #000;
   cursor: pointer;
 }
@@ -128,10 +130,10 @@ Icons
   display: none;
 }
 .opened {
-  background-color: #adad24;
+  background-color: #adad24de;
 }
 .match {
-  background-color: #72B14D;
+  background-color: #72b14dde;
 }
 .opened > i, .match > i {
   display: inline-block !important;
@@ -151,7 +153,7 @@ Icons
 Phone and iPad
 **********************************************************/
 @media (max-width: 1100px) {
-  #welcome div, #win div {
+  #gamemsg div {
     min-width: 0;
     min-height: 0;
   }
@@ -163,24 +165,24 @@ Phone and iPad
   #main {
     height: 60vh;
   }
-  #game, #welcome, #win {
+  #game, #gamemsg {
     width: 100vw;
     height: 100vh;
   }
-  #welcome div, #win div {
+  #gamemsg div {
     width: 61.8vw;
     height: 72vh;
   }
-  #welcome div i, #win div i{
+  #gamemsg div i {
     font-size: 2em;
   }
   @media screen and (orientation: landscape) {
-    #welcome div, #win div {
+    #gamemsg div {
       font-size: 3em;
       width: 42.9vw;
       height: 85vh;
     }
-    #welcome div i, #win div i{
+    #gamemsg div i {
       font-size: 2em;
     }
     footer {
@@ -189,7 +191,7 @@ Phone and iPad
     #main div {
       font-size: 1em;
     }
-    #game, #welcome, #win {
+    #game, #gamemsg {
       padding-bottom: 0;
     }
     .data-box {
@@ -198,7 +200,7 @@ Phone and iPad
   }
 }
 @media (max-width: 900px) {
-  #main, #header, #footer, #welcome div, #win div {
+  #main, #header, #footer, #gamemsg div {
     width: 48vh;
   }
   #main {
@@ -211,11 +213,11 @@ Phone and iPad
     font-size: 3em;
   }
   @media screen and (orientation: landscape) {
-    #welcome div, #win div {
+    #gamemsg div {
       font-size: 1em;
       height: 75vh;
     }
-    #welcome div i, #win div i{
+    #gamemsg div i {
       font-size: 2em;
     }
     footer {
@@ -224,7 +226,7 @@ Phone and iPad
     #main div {
       font-size: 0.5em;
     }
-    #game, #welcome, #win {
+    #game, #gamemsg {
       padding-bottom: 0;
     }
     .data-box {
@@ -233,7 +235,7 @@ Phone and iPad
   }
 }
 @media (max-width: 375px) {
-  #main, #header, #footer, #welcome div, #win div {
+  #main, #header, #footer, #gamemsg div {
     width: 45vh;
   }
   #main {
