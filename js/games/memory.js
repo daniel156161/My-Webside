@@ -1,5 +1,5 @@
 const game = document.querySelector('#game');
-const myicons = []; // 'fas fa-dragon,fas fa-satellite,fas fa-satellite-dish,fas fa-meteor,fas fa-toilet-paper,fas fa-gem,fas fa-space-shuttle,fas fa-user-astronaut
+const myicons = []; // 'fas fa-dragon,fas fa-satellite,fas fa-satellite-dish,fas fa-meteor,fas fa-toilet-paper,fas fa-gem,fas fa-space-shuttle,fas fa-user-astronaut'
 const icons = [];
 //Data-boxs
 const databoxs = game.querySelectorAll('.data-box');
