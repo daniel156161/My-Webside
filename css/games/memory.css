@@ -9,6 +9,8 @@ body {
   color: #FFF;
   background-image: url(../../img/space.jpg);
   background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 #game, #gamemsg {
   display: flex;
