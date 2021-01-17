@@ -1,5 +1,5 @@
 const game = document.querySelector('#game');
-const myicons = []; // 'fas fa-dragon','fas fa-cookie','fas fa-paw','fas fa-feather','fas fa-toilet-paper', 'fas fa-gem'
+const myicons = []; // 'fas fa-dragon,fas fa-satellite,fas fa-satellite-dish,fas fa-meteor,fas fa-toilet-paper,fas fa-gem,fas fa-space-shuttle,fas fa-user-astronaut
 const icons = [];
 //Data-boxs
 const databoxs = game.querySelectorAll('.data-box');
@@ -32,14 +32,14 @@ fetch("../../json/FontAwesome_Icons.json")
   .then(json => makeIconFromJson(json));
 
 function makeIconFromJson(json) {
+  let savedicons = myicons.length
   //Random Icons --> myicons = [8x]
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 8 - savedicons; i++) {
     myicons.push(`fas fa-${json.Icons.solid.splice(Math.floor(Math.random() * (json.Icons.solid.length)), 1)[0]}`);
   }
   for (card of cards) {
     cardAddEventListener(card);
   }
-  makeIconArray();
 }
 //myicons = [8x] --> icons = [16x]
 function makeIconArray() {
@@ -313,9 +313,8 @@ msgs('<div><h2>Welcome</h2><p>Memory Coded by me</p><p>Play?</p><i id="playbtn" 
 function msgs(text) {
   msg.classList.remove('hidden')
   msg.innerHTML = text
-
-  const playbtn = msg.querySelector('#playbtn');
-  playbtn.addEventListener('click', () => {
+  //Play Button
+  msg.querySelector('#playbtn').addEventListener('click', () => {
     msg.classList.add('hidden');
     game.classList.remove(game.classList[0]);
     if(pageLoaded == 1) {
@@ -323,6 +322,7 @@ function msgs(text) {
     } else {
       pageLoaded = 1;
     }
+    makeIconArray();
   });
 }
 /***************************************************************************************************************
@@ -434,5 +434,17 @@ function saveCookie() {
 function resetCookie() {
   setCookie(cookiename);
   location.reload();
-  return true;
+}
+function replaceIcons(Icons) {
+  let Icon = Icons.split(',')
+  if (Icon.length == 8) {
+    for (let i = 0; i < 8; i++) {
+      myicons.splice(0,1)[0];
+    }
+    for (let i = 0; i < 8; i++) {
+      myicons.push(Icon[i])
+    }
+  } else {
+    return "You don't have 8 Icons or to much"
+  }
 }
