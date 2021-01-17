@@ -37,12 +37,12 @@ Welcome Msg and Win Msg
   flex-direction: column;
   margin: 10px auto;
   width: 29vw;
-  height: calc(14vh + 29vw + 13vh);
+  height: calc(13.2vh + 29vw + 13vh);
   background-color: rgba(85, 85, 85, 0.733);
   border: 3px solid #000;
   font-size: 3em;
-  min-width: 400px;
-  min-height: 500px;
+  min-width: 406px;
+  min-height: 655px;
 }
 #win div {
   min-height: 570px;
@@ -170,6 +170,8 @@ Phone and iPad
     height: 100vh;
   }
   #gamemsg div {
+    min-height: 0;
+    min-width: 0;
     width: 61.8vw;
     height: 72vh;
   }
@@ -179,8 +181,10 @@ Phone and iPad
   @media screen and (orientation: landscape) {
     #gamemsg div {
       font-size: 3em;
-      width: 42.9vw;
-      height: 85vh;
+      width: 42.7vw;
+      height: 83vh;
+      min-width: 0;
+      min-height: 0;
     }
     #gamemsg div i {
       font-size: 2em;
@@ -194,7 +198,7 @@ Phone and iPad
     #game, #gamemsg {
       padding-bottom: 0;
     }
-    .data-box {
+    .data-box, .data-box-pause, .data-box-hardcore {
       font-size: 1.5em;
     }
   }
@@ -202,6 +206,9 @@ Phone and iPad
 @media (max-width: 900px) {
   #main, #header, #footer, #gamemsg div {
     width: 48vh;
+  }
+  #gamemsg div {
+    height: 72vh;
   }
   #main {
     height: 48vh;
@@ -215,7 +222,6 @@ Phone and iPad
   @media screen and (orientation: landscape) {
     #gamemsg div {
       font-size: 1em;
-      height: 75vh;
     }
     #gamemsg div i {
       font-size: 2em;
@@ -229,7 +235,7 @@ Phone and iPad
     #game, #gamemsg {
       padding-bottom: 0;
     }
-    .data-box {
+    .data-box, .data-box-pause, .data-box-hardcore {
       font-size: 0.7em;
     }
   }
