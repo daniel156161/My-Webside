@@ -46,9 +46,6 @@ Welcome Msg and Win Msg
   min-width: 406px;
   min-height: 655px;
 }
-#win div {
-  min-height: 570px;
-}
 #gamemsg div h2 {
   font-weight: bold;
   color: #f4d03f;
@@ -245,6 +242,9 @@ Phone and iPad
 @media (max-width: 375px) {
   #main, #header, #footer, #gamemsg div {
     width: 45vh;
+  }
+  #gamemsg div {
+    font-size: 2.5em;
   }
   #main {
     height: 48vh;
