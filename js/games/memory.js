@@ -16,7 +16,7 @@ const itemopen = [];
 let isrunning = false;
 let stopgame = 0;
 let score = 0;
-let moves = 0;
+let trys = 0;
 let pageLoaded = 0;
 let gameLoaded = 0;
 //Cookie
@@ -32,7 +32,7 @@ fetch("../../json/FontAwesome_Icons.json")
   .then(json => makeIconFromJson(json));
 
 function makeIconFromJson(json) {
-  let savedicons = myicons.length
+  let savedicons = myicons.length;
   //Random Icons --> myicons = [8x]
   for (let i = 0; i < 8 - savedicons; i++) {
     myicons.push(`fas fa-${json.Icons.solid.splice(Math.floor(Math.random() * (json.Icons.solid.length)), 1)[0]}`);
@@ -70,8 +70,10 @@ function resetGame() {
   playTime = 0;
   stopgame = 0;
   gameLoaded = 0;
-  moves = 0;
-  score = (level-1)*8
+  trys = 0;
+  score = (level-1)*8;
+  /*backgroundMusic = 0;
+  myMusic.stop()*/
   outTime();
   outScore();
   makeIconArray();
@@ -119,9 +121,9 @@ function outScore() {
   switch (scoreswitch) {
     case 0:
       if(isrunning == false) {
-        scoreitem.innerHTML = `Level: ${level-1}<br>Score: ${score}<br>Moves: ${moves}`;
+        scoreitem.innerHTML = `Level: ${level-1}<br>Score: ${score}<br>Trys: ${trys}`;
       } else {
-        scoreitem.innerHTML = `Level: ${level}<br>Score: ${score}<br>Moves: ${moves}`;
+        scoreitem.innerHTML = `Level: ${level}<br>Score: ${score}<br>Trys: ${trys}`;
       }
       break;
     case 1:
@@ -135,7 +137,7 @@ function outScore() {
       scoreitem.innerHTML = `Score: ${score}`;
       break;
     default:
-      scoreitem.innerHTML = `Moves: ${moves}`;
+      scoreitem.innerHTML = `Trys: ${trys}`;
   }
 }
 function gamestart() {
@@ -144,7 +146,7 @@ function gamestart() {
       playTime = 0;
       stopgame = 0;
       gameLoaded = 0;
-      moves = 0;
+      trys = 0;
       outTime();
       for(card of cards) {
         card.classList.replace(card.classList[1], 'hover');
@@ -163,6 +165,8 @@ function gamestart() {
         item.classList.remove('pause');
       }
     }
+    /*myMusic = new sound("../../sounds/Memory/POL-galactic-trek-short.wav");
+    myMusic.play();*/
   }
 }
 /***************************************************************************************************************
@@ -215,11 +219,15 @@ function outTime() {
         gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}`
       }
       break;
-    default:
-      
   }
 }
 function myTimeer() {
+  /*if(backgroundMusic == 12) {
+    myMusic = new sound("../../sounds/Memory/POL-galactic-trek-short.wav");
+    myMusic.play();
+    backgroundMusic = 0;
+  }
+  backgroundMusic ++;*/
   gameTime ++;
   playTime ++;
   outTime();
@@ -227,6 +235,8 @@ function myTimeer() {
     if(isrunning == false) {
       clearInterval(time);
       outTime();
+      myMusic.stop()
+      backgroundMusic = 1;
     }
   }
   for(databox of databoxs) {
@@ -248,7 +258,7 @@ function databoxcolor() {
       var databoxclass = 'data-box-hardcore';
     }
   }
-  return databoxclass
+  return databoxclass;
 }
 /***************************************************************************************************************
 Game Items
@@ -261,10 +271,10 @@ function cardAddEventListener(c) {
       e.currentTarget.classList.replace(e.currentTarget.classList[1], 'opened');
       itemopen.push(e.currentTarget);
       setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
-      moves++;
-      outScore();
       //Check Item Classes
       if(itemopen.length == 2){
+        trys++;
+        outScore();
         if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
           score++;
           stopgame++;
@@ -276,9 +286,12 @@ function cardAddEventListener(c) {
           }
           if (stopgame == 8) {
             //Level Done
+            //myMusic.stop()
+            myMusic = new sound("../../sounds/Memory/game-win-sound-effect.mp3")
+            myMusic.play();
             clearInterval(time);
             isrunning = false;
-            navigator.clipboard.writeText(`Level: ${level} | Moves: ${moves} | Score: ${score} | Time: ${toHHMMSS(playTime)}`);
+            navigator.clipboard.writeText(`Level: ${level} | Trys: ${trys} | Score: ${score} | Time: ${toHHMMSS(playTime)}`);
             itemCloseTime = itemCloseTime - 100;
             if(itemCloseTime == 0) {
               itemCloseTime = 100;
@@ -289,7 +302,7 @@ function cardAddEventListener(c) {
             setCookie(cookiename, `${level},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
             setCookie(cookienamegametime, gameTime, 365);
             game.classList.add('hidden');
-            msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Moves: ${moves}<br>Tries: ${moves/2}</p><p>Play again?</p><i id="playbtn" class="fas fa-play"></i></div>`)
+            msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Trys: ${trys}</p><p>Play again?</p><i id="playbtn" class="fas fa-play"></i></div>`);
             level++;
           }
         } else {
@@ -309,21 +322,43 @@ function cardAddEventListener(c) {
 Msg [msgs] Welcome and Win Msg
 ***************************************************************************************************************/
 const msg = document.querySelector('#gamemsg');
-msgs('<div><h2>Welcome</h2><p>Memory Coded by me</p><p>Play?</p><i id="playbtn" class="fas fa-play"></i></div>')
+msgs('<div><h2>Welcome</h2><p>Memory Coded by me</p><p>Play?</p><i id="playbtn" class="fas fa-play"></i></div>');
 function msgs(text) {
-  msg.classList.remove('hidden')
-  msg.innerHTML = text
+  msg.classList.remove('hidden');
+  msg.innerHTML = text;
   //Play Button
   msg.querySelector('#playbtn').addEventListener('click', () => {
     msg.classList.add('hidden');
     game.classList.remove(game.classList[0]);
     if(pageLoaded == 1) {
+      if (myMusic) {
+        myMusic.stop();
+      }
       resetGame();
     } else {
       pageLoaded = 1;
     }
     makeIconArray();
   });
+}
+/***************************************************************************************************************
+Sound
+***************************************************************************************************************/
+var myMusic;
+let backgroundMusic = 1;
+function sound(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  this.play = function() {
+      this.sound.play();
+  }
+  this.stop = function() {
+      this.sound.pause();
+  }
 }
 /***************************************************************************************************************
 Cookie [SET, GET, Check]
@@ -359,7 +394,7 @@ function checkCookie(cname) {
   if (cookieval != "" && cookieval != "undefined") {
     var cookiearray = cookieval.split(',');
   }
-  return cookiearray
+  return cookiearray;
 }
 /***************************************************************************************************************
 Cookie [getGameDataFromCookie] Data from Cookie to right Variables
@@ -436,15 +471,15 @@ function resetCookie() {
   location.reload();
 }
 function replaceIcons(Icons) {
-  let Icon = Icons.split(',')
+  let Icon = Icons.split(',');
   if (Icon.length == 8) {
     for (let i = 0; i < 8; i++) {
       myicons.splice(0,1)[0];
     }
     for (let i = 0; i < 8; i++) {
-      myicons.push(Icon[i])
+      myicons.push(Icon[i]);
     }
   } else {
-    return "You don't have 8 Icons or to much"
+    return "You don't have 8 Icons or to much";
   }
 }
