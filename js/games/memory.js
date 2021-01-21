@@ -207,7 +207,7 @@ function outTime() {
   switch (timerswitch) {
     case 0:
       if(isrunning == false && gameLoaded == 1) {
-        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}<br>Pause`;
+        gametime.innerHTML = 'Pause';
       } else {
         gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}`;
       }
