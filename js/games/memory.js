@@ -22,8 +22,8 @@ let gameLoaded = 0;
 //Cookie
 let level;
 let gameTime = undefined;
-let scoreswitch;
-let timerswitch;
+let scoreswitch = undefined;
+let timerswitch = undefined;
 /***************************************************************************************************************
 Icons Json ( Random Icons --> icons = [16x] )
 ***************************************************************************************************************/
@@ -81,13 +81,20 @@ function resetGame() {
     databox.classList.replace(databox.classList[0], databoxcolor());
   }
 }
-const pause = document.querySelector('#pause').addEventListener('click', () => {
-  isrunning = false;
-  if(itemopen) {
-    for(item of itemopen) {
-      item.classList.remove('opened');
-      item.classList.add('pause');
+const pause = document.querySelector('#pause');
+pause.addEventListener('click', () => {
+  if (isrunning == true) {
+    isrunning = false;
+    if(itemopen) {
+      for(item of itemopen) {
+        item.classList.remove('opened');
+        item.classList.add('pause');
+      }
     }
+    pause.innerHTML = '<i class="fas fa-play"></i>';
+  } else {
+    pause.innerHTML = '<i class="fas fa-pause"></i>';
+    gamestart();
   }
 });
 scoreitem.addEventListener('click', () => {
@@ -219,6 +226,8 @@ function outTime() {
         gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}`
       }
       break;
+    default:
+      timerswitch = 0;
   }
 }
 function myTimeer() {
@@ -302,7 +311,7 @@ function cardAddEventListener(c) {
             setCookie(cookiename, `${level},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
             setCookie(cookienamegametime, gameTime, 365);
             game.classList.add('hidden');
-            msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Trys: ${trys}</p><p>Play again?</p><i id="playbtn" class="fas fa-play"></i></div>`);
+            msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
             level++;
           }
         } else {
@@ -322,13 +331,14 @@ function cardAddEventListener(c) {
 Msg [msgs] Welcome and Win Msg
 ***************************************************************************************************************/
 const msg = document.querySelector('#gamemsg');
-msgs('<div><h2>Welcome</h2><p>Memory Coded by me</p><p>Play?</p><i id="playbtn" class="fas fa-play"></i></div>');
+msgs('<div><h2>Welcome</h2><p>Memory Coded by me</p><p>Play?</p><i class="fas fa-play"></i></div>');
 function msgs(text) {
   msg.classList.remove('hidden');
   msg.innerHTML = text;
   //Play Button
-  msg.querySelector('#playbtn').addEventListener('click', () => {
+  msg.addEventListener('click', () => {
     msg.classList.add('hidden');
+    msg.classList.remove('win');
     game.classList.remove(game.classList[0]);
     if(pageLoaded == 1) {
       if (myMusic) {
@@ -447,6 +457,7 @@ function getGamedataFromCookie() {
     score = 0;
     itemCloseTime = 2000;
     scoreswitch = 0;
+    timerswitch = 0;
     if (gameTime != "" || gameTime != undefined) {
       gameTime = getCookie(cookienamegametime);
     } else {
