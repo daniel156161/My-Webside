@@ -235,8 +235,8 @@ function myTimeer() {
     if(isrunning == false) {
       clearInterval(time);
       outTime();
-      myMusic.stop()
-      backgroundMusic = 1;
+      /*myMusic.stop()
+      backgroundMusic = 1;*/
     }
   }
   for(databox of databoxs) {
@@ -337,8 +337,8 @@ function msgs(text) {
       resetGame();
     } else {
       pageLoaded = 1;
+      makeIconArray();
     }
-    makeIconArray();
   });
 }
 /***************************************************************************************************************
