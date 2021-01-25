@@ -19,6 +19,7 @@ let score = 0;
 let trys = 0;
 let pageLoaded = 0;
 let gameLoaded = 0;
+let time;
 //Cookie
 let level;
 let gameTime = undefined;
@@ -118,7 +119,6 @@ gametime.addEventListener('click', () => {
 /***************************************************************************************************************
 Start Game [shuffleItems, outScore, gamestart]
 ***************************************************************************************************************/
-let time;
 function shuffleItems() {
   for(card of cards) {
     card.innerHTML = `<i class="${icons.splice(Math.floor(Math.random() * (icons.length)), 1)[0]}"></i>`;

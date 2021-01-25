@@ -43,6 +43,7 @@ Welcome Msg and Win Msg
   border: 3px solid #000;
   font-size: 3em;
   min-width: 406px;
+  border-radius: 20px;
   /*min-height: 655px;*/
 }
 #gamemsg div h2 {

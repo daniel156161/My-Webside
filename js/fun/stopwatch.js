@@ -8,7 +8,7 @@ let timer;
 
 startbtn.addEventListener('click', () => {
   if (start == 0) {
-    startbtn.innerHTML = 'Stop Timer';
+    startbtn.innerHTML = 'Pause<br><i class="fas fa-pause"></i>'; //Pause
     timer = setInterval(() => {
       secs ++;
       //Get hour min and sec from secs
@@ -26,11 +26,10 @@ startbtn.addEventListener('click', () => {
         hour='0'+hour
       }
       time.innerHTML = `${hour}:${min}:${sec}`;
-      //time.innerHTML = hour+':'+min+':'+sec;
     }, 1000);
     start = 1;
   } else {
-    startbtn.innerHTML = 'Start Timer';
+    startbtn.innerHTML = 'Start<br><i class="fas fa-play"></i>'; //Play
     clearInterval(timer);
     start = 0;
   }
@@ -40,6 +39,6 @@ resetbtn.addEventListener('click', () => {
   clearInterval(timer);
   time.innerHTML = '00:00:00';
   secs = 0;
-  startbtn.innerHTML = 'Start Timer';
+  startbtn.innerHTML = 'Start<br><i class="fas fa-play"></i>'; //Play
   start = 0;
 });
