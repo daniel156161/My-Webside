@@ -80,6 +80,9 @@ Statisticen of Gamesplay
   min-height: 114px;
   cursor: pointer;
 }
+#header i, #footer i {
+  font-size: 2.5em;
+}
 .data-box, .data-box-pause, .data-box-hardcore {
   display: flex;
   justify-content: center;
@@ -88,7 +91,8 @@ Statisticen of Gamesplay
 	font: 2em/1em Arial, sans-serif;
 	background-color: #555;
   width: 49%;
-  border: 3px solid #000;
+  border: 2px solid #000;
+  border-radius: 20px;
 }
 .data-box-pause {
   background-color: #E23D2F;
@@ -102,24 +106,26 @@ Game Play
 #main {
   height: 29vw;
   width: 29vw;
-  display: flex;
-  flex-wrap: wrap;
-  border: 2px solid #000;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-row-gap: 5px;
+  grid-column-gap: 5px;
   min-width: 370px;
   min-height: 280px;
+  border-radius: 20px;
 }
 /*********************************************************
 Icons
 **********************************************************/
 .iconscenter {
-  width: 25%;
-  height: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 2px solid #000;
   background-color: #c9b9b98a;
-  border: 1px solid #000;
   cursor: pointer;
+  border-radius: 20px;
 }
 #game #main .fas, #game #main .fab, #game #main .far {
   color: #FFF;
@@ -213,8 +219,11 @@ Phone and iPad
   #header, #footer {
     font-size: 0.8em;
   }
-  #game .fas, #game .fab, #game .far {
-    font-size: 3em;
+  #header i, #footer i {
+    font-size: 2.5em;
+  }
+  #game #main .fas, #game #main .fab, #game #main .far {
+    font-size: 4em;
   }
   @media screen and (orientation: landscape) {
     #gamemsg div {
@@ -237,7 +246,7 @@ Phone and iPad
     }
   }
 }
-@media (max-width: 375px) {
+@media (max-width: 376px) {
   #main, #header, #footer, #gamemsg div {
     width: 45vh;
   }
@@ -250,8 +259,8 @@ Phone and iPad
   #header, #footer {
     font-size: 0.8em;
   }
-  #game .fas, #game .fab, #game .far {
-    font-size: 4em;
+  #game #main .fas, #game #main .fab, #game #main .far {
+    font-size: 3em;
   }
 }
 /***************************************************************/
