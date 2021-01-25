@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../../css/fontawesome/all.css">
-  <link rel="stylesheet" href="../../css/random_color.css">
+  <link rel="stylesheet" href="../../css/fun/stopwatch.css">
   <link rel="stylesheet" href="../../css/style.css">
-  <title>daniel156161 - Random Colors</title>
+  <link rel="stylesheet" href="../../css/fontawesome/all.css">
+  <title>daniel156161 - Stopwatch</title>
   <link rel="icon" type="image/svg+xml" href="../../img/favicon.svg" sizes="any">
 </head>
 <body>
@@ -36,7 +36,7 @@
             <ul class="submenu-2">
               <li><a href="https://daniel156161.keybase.pub/html/fun/rbody.htm">Blinking</a></li>
               <li><a href="https://daniel156161.keybase.pub/html/fun/jsdom.htm">JS DOM Manipulation</a></li>
-              <li><a href="https://daniel156161.keybase.pub/html/fun/stopwatch.htm">Stopwatch</a></li>
+              <li><a href="#">Stopwatch</a></li>
             </ul>
           </li>
         </ul>
@@ -45,7 +45,7 @@
         <ul class="submenu">
           <li><a href="https://daniel156161.keybase.pub/html/random_color/index.htm">Menu</a></li>
           <li><a href="https://daniel156161.keybase.pub/html/random_color/hex.htm">HEX</a></li>
-          <li><a href="#">HSL</a></li>
+          <li><a href="https://daniel156161.keybase.pub/html/random_color/hsl.htm">HSL</a></li>
           <li><a href="https://daniel156161.keybase.pub/html/random_color/rgb.htm">RGB</a></li>
         </ul>
       </li>
@@ -56,39 +56,21 @@
       </li>
     </ul>
   </nav>
-  <div class="gridclickdiv">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div><span id="nojavascript"><noscript>Please Turn on Javascript</noscript></span></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+  <main>
+    <div class="clock">
+      <p id="time">00:00:00</p>
+      <div>
+        <button id="startbtn">Start Timer</button>
+        <button id="resetbtn">Reset Timer</button>
+      </div>
+    </div>
+  </main>
   <footer>
     <ul>
       <li>&#169; <span id="copyright">2020</span> Daniel Dolezal</li>
     </ul>
   </footer>
+  <script src="../../js/fun/stopwatch.js"></script>
   <script src="../../js/nav.js"></script>
-  <script src="../../js/random_color/hex_hsl_rgb.js"></script>
 </body>
 </html>
