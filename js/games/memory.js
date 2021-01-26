@@ -456,23 +456,7 @@ function getGamedataFromCookie() {
   }
 }
 /***************************************************************************************************************
-Test Functions!!!! [replaceIcons]
-***************************************************************************************************************/
-function replaceIcons(Icons) {
-  let Icon = Icons.split(',');
-  if (Icon.length == 8) {
-    for (let i = 0; i < 8; i++) {
-      myicons.splice(0,1)[0];
-    }
-    for (let i = 0; i < 8; i++) {
-      myicons.push(Icon[i]);
-    }
-  } else {
-    return "You don't have 8 Icons or to much";
-  }
-}
-/***************************************************************************************************************
-Local Storage [SAVE, LOAD] Test Functions!!!!
+Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
 const myStorage = localStorage;
 localLoadGameData()
@@ -520,5 +504,21 @@ function localLoadGameData() {
     } else {
       gameTime = 0;
     }
+  }
+}
+/***************************************************************************************************************
+Test Functions!!!! [replaceIcons]
+***************************************************************************************************************/
+function replaceIcons(Icons) {
+  let Icon = Icons.split(',');
+  if (Icon.length == 8) {
+    for (let i = 0; i < 8; i++) {
+      myicons.splice(0,1)[0];
+    }
+    for (let i = 0; i < 8; i++) {
+      myicons.push(Icon[i]);
+    }
+  } else {
+    return "You don't have 8 Icons or to much";
   }
 }
