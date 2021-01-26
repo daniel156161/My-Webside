@@ -1,15 +1,15 @@
-const game = document.querySelector('#game');
+const gameField = document.querySelector('#game');
 const myicons = []; // 'fas fa-dragon,fas fa-satellite,fas fa-satellite-dish,fas fa-meteor,fas fa-toilet-paper,fas fa-gem,fas fa-space-shuttle,fas fa-user-astronaut'
 const icons = [];
 //Data-boxs
-const databoxs = game.querySelectorAll('.data-box');
+const databoxs = gameField.querySelectorAll('.data-box');
 //Time
-const gametime = game.querySelector('#time');
+const gametime = gameField.querySelector('#time');
 let playTime = 0;
 //Score
-const scoreitem = game.querySelector('#score');
+const scoreitem = gameField.querySelector('#score');
 //Game Items
-const cards = game.querySelector('#main').querySelectorAll('div');
+const cards = gameField.querySelector('#main').querySelectorAll('div');
 let itemCloseTime = 2000;
 //Stats
 const itemopen = [];
@@ -20,7 +20,7 @@ let pageLoaded = 0;
 let gameLoaded = 0;
 let time;
 //Cookie or localStorage
-var Game = {
+const Game = {
   "Level": 1,
   "Score": 0,
   "Time": undefined,
@@ -36,6 +36,20 @@ var Game = {
   },
   addScore: function() {
     this.Score ++;
+  },
+  setScoreSwitch: function() {
+    if(this.Switch.Score == 3) {
+      this.Switch.Score = 0;
+    } else {
+      this.Switch.Score ++;
+    }
+  },
+  setTimeSwitch: function() {
+    if(this.Switch.Time == 2) {
+      this.Switch.Time = 0;
+    } else {
+      this.Switch.Time ++;
+    }
   }
 }
 /***************************************************************************************************************
@@ -114,21 +128,13 @@ pause.addEventListener('click', () => {
 });
 //Score Button und Info
 scoreitem.addEventListener('click', () => {
-  if(Game.Switch.Score == 3) {
-    Game.Switch.Score = 0;
-  } else {
-    Game.Switch.Score ++;
-  }
+  Game.setScoreSwitch();
   localObject.set('Memory', Game);
   outScore();
 });
 //Time Button und Info
 gametime.addEventListener('click', () => {
-  if(Game.Switch.Time == 2) {
-    Game.Switch.Time = 0;
-  } else {
-    Game.Switch.Time ++;
-  }
+  Game.setTimeSwitch();
   localObject.set('Memory', Game);
   outTime();
 });
@@ -315,7 +321,7 @@ function cardAddEventListener(c) {
             }
             localObject.set('Memory', Game);
             setCookie(cookienamegametime, Game.Time, 365);
-            game.classList.add('hidden');
+            gameField.classList.add('hidden');
             msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(Game.Time)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${Game.Level}<br>Score: ${Game.Score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
             Game.addLevel();
           }
@@ -344,7 +350,7 @@ function msgs(text) {
   msg.addEventListener('click', () => {
     msg.classList.add('hidden');
     msg.classList.remove('win');
-    game.classList.remove(game.classList[0]);
+    gameField.classList.remove(gameField.classList[0]);
     if(pageLoaded == 1) {
       if (myMusic) {
         myMusic.stop();
