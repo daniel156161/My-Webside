@@ -23,7 +23,7 @@ let time;
 const Game = {
   "Level": 1,
   "Score": 0,
-  "Time": undefined,
+  "Time": 0,
   "Switch": {
     "Score": 0,
     "Time": 0
@@ -94,7 +94,6 @@ function resetGame() {
   }
   clearInterval(time);
   localObject.set('Memory', Game);
-  setCookie(cookienamegametime, Game.Time, 365);
   isrunning = false;
   playTime = 0;
   stopgame = 0;
@@ -320,7 +319,6 @@ function cardAddEventListener(c) {
               }
             }
             localObject.set('Memory', Game);
-            setCookie(cookienamegametime, Game.Time, 365);
             gameField.classList.add('hidden');
             msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(Game.Time)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${Game.Level}<br>Score: ${Game.Score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
             Game.addLevel();
@@ -382,68 +380,34 @@ function sound(src) {
   }
 }
 /***************************************************************************************************************
-Cookie [SET, GET, Check]
-***************************************************************************************************************/
-const cookienamegametime = 'Memory [GameTime] - daniel156161';
-
-function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  var expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/" + ';SameSite=None; Secure';
-}
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
-function checkCookie(cname) {
-  const cookieval=getCookie(cname);
-  if (cookieval != "" && cookieval != "undefined") {
-    var cookiearray = cookieval.split(',');
-  }
-  return cookiearray;
-}
-/***************************************************************************************************************
 Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
 function localLoadGameData() {
   if (localStorage.length == 0) {
     document.cookie = "Memory - daniel156161=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
+    document.cookie = "Memory [GameTime] - daniel156161=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
   }
-  if (localStorage.length != 0) { 
-    var localOut = localObject.get('Memory');
-    Game.Level = localOut.Level;
-    Game.Time = localOut.Time;
-    Game.Switch.Score = localOut.Switch.Score;
-    Game.Switch.Time = localOut.Switch.Time;
-    Game.Score = (localOut.Level-1)*8;
-    outTime();
-    outScore();
-    for (let i = 0; i < Game.Level; i++) {
-      itemCloseTime = itemCloseTime - 100;
-      if(itemCloseTime == 0) {
-        itemCloseTime = 100;
-        for(databox of databoxs) {
-          databox.classList.replace(databox.classList[0], databoxcolor());
+  if (localStorage.length != 0) {
+    for (let i = 0; i < localStorage.length; i++) {
+      if (localStorage.key(i) === 'Memory') {
+        var localOut = localObject.get('Memory');
+        Game.Level = localOut.Level;
+        Game.Time = localOut.Time;
+        Game.Switch.Score = localOut.Switch.Score;
+        Game.Switch.Time = localOut.Switch.Time;
+        Game.Score = (localOut.Level-1)*8;
+        outTime();
+        outScore();
+        for (let i = 0; i < Game.Level; i++) {
+          itemCloseTime = itemCloseTime - 100;
+          if(itemCloseTime == 0) {
+            itemCloseTime = 100;
+            for(databox of databoxs) {
+              databox.classList.replace(databox.classList[0], databoxcolor());
+            }
+          }
         }
       }
-    }
-  } else {
-    if (Game.Time != "" || Game.Time != undefined) {
-      Game.Time = getCookie(cookienamegametime);
-    } else {
-      Game.Time = 0;
     }
   }
 }
