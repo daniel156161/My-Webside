@@ -443,16 +443,20 @@ function localLoadGameData() {
 }
 let localObject = {
   set: function(key, Object) {
-    localStorage.setItem(key, JSON.stringify(Object));
+    if (typeof key == 'string') {
+      localStorage.setItem(key, JSON.stringify(Object));
+    }
   },
   get: function(key) {
-    var item = localStorage.getItem(key);
-    if (item != null) {
-      item = JSON.parse(localStorage.getItem(key));
-    } else {
-      item = undefined;
+    if (typeof key == 'string') {
+      var item = localStorage.getItem(key);
+      if (item != null) {
+        item = JSON.parse(localStorage.getItem(key));
+      } else {
+        item = undefined;
+      }
+      return item;
     }
-    return item;
   }
 }
 /***************************************************************************************************************
