@@ -65,7 +65,7 @@ function resetGame() {
     itemopen.splice(0,1)[0];
   }
   clearInterval(time);
-  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
+  localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`);
   setCookie(cookienamegametime, gameTime, 365);
   isrunning = false;
   playTime = 0;
@@ -73,8 +73,6 @@ function resetGame() {
   gameLoaded = 0;
   trys = 0;
   score = (level-1)*8;
-  /*backgroundMusic = 0;
-  myMusic.stop()*/
   outTime();
   outScore();
   makeIconArray();
@@ -105,7 +103,7 @@ scoreitem.addEventListener('click', () => {
   } else {
     scoreswitch ++;
   }
-  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
+  localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`)
   outScore();
 });
 gametime.addEventListener('click', () => {
@@ -114,7 +112,7 @@ gametime.addEventListener('click', () => {
   } else {
     timerswitch ++;
   }
-  setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
+  localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`)
   outTime();
 });
 /***************************************************************************************************************
@@ -174,8 +172,6 @@ function gamestart() {
         item.classList.remove('pause');
       }
     }
-    /*myMusic = new sound("../../sounds/Memory/POL-galactic-trek-short.wav");
-    myMusic.play();*/
   }
 }
 /***************************************************************************************************************
@@ -233,12 +229,6 @@ function outTime() {
   }
 }
 function myTimeer() {
-  /*if(backgroundMusic == 12) {
-    myMusic = new sound("../../sounds/Memory/POL-galactic-trek-short.wav");
-    myMusic.play();
-    backgroundMusic = 0;
-  }
-  backgroundMusic ++;*/
   gameTime ++;
   playTime ++;
   outTime();
@@ -246,8 +236,6 @@ function myTimeer() {
     if(isrunning == false) {
       clearInterval(time);
       outTime();
-      /*myMusic.stop()
-      backgroundMusic = 1;*/
     }
   }
   for(databox of databoxs) {
@@ -281,9 +269,9 @@ function cardAddEventListener(c) {
       //Show Item and add to Itemopen Array
       e.currentTarget.classList.replace(e.currentTarget.classList[1], 'opened');
       itemopen.push(e.currentTarget);
-      setCookie(cookiename, `${level-1},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
+      localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`);
       //Check Item Classes
-      if(itemopen.length == 2){
+      if(itemopen.length == 2) {
         trys++;
         outScore();
         if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
@@ -297,7 +285,6 @@ function cardAddEventListener(c) {
           }
           if (stopgame == 8) {
             //Level Done
-            //myMusic.stop()
             myMusic = new sound("../../sounds/Memory/game-win-sound-effect.mp3")
             myMusic.play();
             clearInterval(time);
@@ -310,7 +297,7 @@ function cardAddEventListener(c) {
                 databox.classList.replace(databox.classList[0], databoxcolor());
               }
             }
-            setCookie(cookiename, `${level},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
+            localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`)
             setCookie(cookienamegametime, gameTime, 365);
             game.classList.add('hidden');
             msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
@@ -378,7 +365,6 @@ Cookie [SET, GET, Check]
 const cookiename = 'Memory - daniel156161';
 const cookienamegametime = 'Memory [GameTime] - daniel156161';
 const cookieexdays = 14;
-getGamedataFromCookie();
 
 function setCookie(cname, cvalue, exdays) {
   var d = new Date();
@@ -454,6 +440,8 @@ function getGamedataFromCookie() {
     }
     outTime();
     outScore();
+    localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`);
+    document.cookie = cookiename + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
   } else {
     level = 1;
     score = 0;
@@ -468,21 +456,8 @@ function getGamedataFromCookie() {
   }
 }
 /***************************************************************************************************************
-Cookie [SAVE, RESET] Test Functions!!!!
+Test Functions!!!! [replaceIcons]
 ***************************************************************************************************************/
-function saveCookie() {
-  if(getCookie(cookiename) != 'null') {
-    cookieval = prompt("Please enter your Level:", `${getCookie(cookiename).split(',')[0]}`);
-  } else {
-    cookieval = prompt("Please enter your Level:", "");
-  }
-  setCookie(cookiename, `${cookieval},${gameTime},${scoreswitch},${timerswitch}`, cookieexdays);
-  location.reload();
-}
-function resetCookie() {
-  setCookie(cookiename);
-  location.reload();
-}
 function replaceIcons(Icons) {
   let Icon = Icons.split(',');
   if (Icon.length == 8) {
@@ -494,5 +469,56 @@ function replaceIcons(Icons) {
     }
   } else {
     return "You don't have 8 Icons or to much";
+  }
+}
+/***************************************************************************************************************
+Local Storage [SAVE, LOAD] Test Functions!!!!
+***************************************************************************************************************/
+const myStorage = localStorage;
+localLoadGameData()
+
+function localSaveGameData(data) {
+  var items = data.split(',');
+  var Objects = {
+    Level: items[0],
+    GameTime: items[1], 
+    ScoreSwitch: items[2], 
+    TimeSwitch: items[3]
+  };
+  localStorage.setItem('Memory', JSON.stringify(Objects));
+}
+function localLoadGameData() {
+  if (myStorage.length == 0) {
+    getGamedataFromCookie();
+  }
+  if (myStorage.length != 0) { 
+    var Objects = JSON.parse(localStorage.getItem('Memory'));
+    level = Objects.Level;
+    gameTime = Objects.GameTime;
+    scoreswitch = parseInt(Objects.ScoreSwitch, 10);
+    timerswitch = parseInt(Objects.TimeSwitch, 10);
+    score = (level - 1) * 8;
+    outTime();
+    outScore();
+    for (let i = 0; i < level; i++) {
+      itemCloseTime = itemCloseTime - 100;
+      if(itemCloseTime == 0) {
+        itemCloseTime = 100;
+        for(databox of databoxs) {
+          databox.classList.replace(databox.classList[0], databoxcolor());
+        }
+      }
+    }
+  } else {
+    level = 1;
+    score = 0;
+    itemCloseTime = 2000;
+    scoreswitch = 0;
+    timerswitch = 0;
+    if (gameTime != "" || gameTime != undefined) {
+      gameTime = getCookie(cookienamegametime);
+    } else {
+      gameTime = 0;
+    }
   }
 }
