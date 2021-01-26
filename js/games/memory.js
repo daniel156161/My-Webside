@@ -383,10 +383,8 @@ function sound(src) {
 Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
 function localLoadGameData() {
-  if (localStorage.length == 0) {
-    document.cookie = "Memory - daniel156161=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
-    document.cookie = "Memory [GameTime] - daniel156161=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
-  }
+  document.cookie = 'Memory - daniel156161' + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
+  document.cookie = 'Memory [GameTime] - daniel156161' + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
   if (localStorage.length != 0) {
     for (let i = 0; i < localStorage.length; i++) {
       if (localStorage.key(i) === 'Memory') {
