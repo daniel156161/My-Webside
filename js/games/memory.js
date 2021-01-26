@@ -149,6 +149,7 @@ function outScore() {
 }
 function gamestart() {
   if(isrunning == false) {
+    pause.innerHTML = '<i class="fas fa-pause"></i>';
     if(stopgame == 8) {
       playTime = 0;
       stopgame = 0;
@@ -312,6 +313,7 @@ function cardAddEventListener(c) {
             setCookie(cookienamegametime, gameTime, 365);
             game.classList.add('hidden');
             msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
+            pause.innerHTML = '<i class="fas fa-play"></i>';
             level++;
           }
         } else {
