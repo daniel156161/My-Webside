@@ -15,16 +15,29 @@ let itemCloseTime = 2000;
 const itemopen = [];
 let isrunning = false;
 let stopgame = 0;
-let score = 0;
 let trys = 0;
 let pageLoaded = 0;
 let gameLoaded = 0;
 let time;
-//Cookie
-let level;
-let gameTime = undefined;
-let scoreswitch = undefined;
-let timerswitch = undefined;
+//Cookie or localStorage
+var Game = {
+  "Level": 1,
+  "Score": 0,
+  "Time": undefined,
+  "Switch": {
+    "Score": 0,
+    "Time": 0
+  },
+  addLevel: function() {
+    this.Level ++;
+  },
+  addTime: function() {
+    this.Time ++;
+  },
+  addScore: function() {
+    this.Score ++;
+  }
+}
 /***************************************************************************************************************
 Icons Json ( Random Icons --> icons = [16x] )
 ***************************************************************************************************************/
@@ -54,6 +67,7 @@ function makeIconArray() {
 /***************************************************************************************************************
 Buttons [reset, pause, scoreswitch, timerswitch]
 ***************************************************************************************************************/
+//Reset Button
 const restart = document.querySelector('#restart').addEventListener('click', resetGame);
 function resetGame() {
   for(card of cards) {
@@ -65,14 +79,14 @@ function resetGame() {
     itemopen.splice(0,1)[0];
   }
   clearInterval(time);
-  localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`);
-  setCookie(cookienamegametime, gameTime, 365);
+  localObject.set('Memory', Game);
+  setCookie(cookienamegametime, Game.Time, 365);
   isrunning = false;
   playTime = 0;
   stopgame = 0;
   gameLoaded = 0;
   trys = 0;
-  score = (level-1)*8;
+  Game.Score = (Game.Level-1)*8;
   outTime();
   outScore();
   makeIconArray();
@@ -81,6 +95,7 @@ function resetGame() {
   }
   pause.innerHTML = '<i class="fas fa-play"></i>';
 }
+//Pause Button
 const pause = document.querySelector('#pause');
 pause.addEventListener('click', () => {
   if (isrunning == true) {
@@ -97,22 +112,24 @@ pause.addEventListener('click', () => {
     gamestart();
   }
 });
+//Score Button und Info
 scoreitem.addEventListener('click', () => {
-  if(scoreswitch == 3) {
-    scoreswitch = 0;
+  if(Game.Switch.Score == 3) {
+    Game.Switch.Score = 0;
   } else {
-    scoreswitch ++;
+    Game.Switch.Score ++;
   }
-  localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`)
+  localObject.set('Memory', Game);
   outScore();
 });
+//Time Button und Info
 gametime.addEventListener('click', () => {
-  if(timerswitch == 2) {
-    timerswitch = 0;
+  if(Game.Switch.Time == 2) {
+    Game.Switch.Time = 0;
   } else {
-    timerswitch ++;
+    Game.Switch.Time ++;
   }
-  localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`)
+  localObject.set('Memory', Game);
   outTime();
 });
 /***************************************************************************************************************
@@ -124,23 +141,23 @@ function shuffleItems() {
   }
 }
 function outScore() {
-  switch (scoreswitch) {
+  switch (Game.Switch.Score) {
     case 0:
       if(isrunning == false) {
-        scoreitem.innerHTML = `Level: ${level-1}<br>Score: ${score}<br>Trys: ${trys}`;
+        scoreitem.innerHTML = `Level: ${Game.Level-1}<br>Score: ${Game.Score}<br>Trys: ${trys}`;
       } else {
-        scoreitem.innerHTML = `Level: ${level}<br>Score: ${score}<br>Trys: ${trys}`;
+        scoreitem.innerHTML = `Level: ${Game.Level}<br>Score: ${Game.Score}<br>Trys: ${trys}`;
       }
       break;
     case 1:
       if(isrunning == false) {
-        scoreitem.innerHTML = `Level: ${level-1}`;
+        scoreitem.innerHTML = `Level: ${Game.Level-1}`;
       } else {
-        scoreitem.innerHTML = `Level: ${level}`;
+        scoreitem.innerHTML = `Level: ${Game.Level}`;
       }
       break;
     case 2:
-      scoreitem.innerHTML = `Score: ${score}`;
+      scoreitem.innerHTML = `Score: ${Game.Score}`;
       break;
     default:
       scoreitem.innerHTML = `Trys: ${trys}`;
@@ -182,7 +199,7 @@ function toHHMMSS(sec) {
   var hours   = Math.floor(sec_num / 3600);
   var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
   var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
+  //Better Timer look
   if (hours < 10) {
     hours = '0' + hours;
   }
@@ -202,34 +219,34 @@ function toHHMMSS(sec) {
 Timer [outTime, myTimeer]
 ***************************************************************************************************************/
 function outTime() {
-  switch (timerswitch) {
+  switch (Game.Switch.Time) {
     case 0:
       if(isrunning == false && gameLoaded == 1) {
         gametime.innerHTML = 'Pause';
       } else {
-        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(gameTime)}`;
+        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Played: ${toHHMMSS(Game.Time)}`;
       }
       break;
     case 1:
       if(isrunning == false && gameLoaded == 1) {
         gametime.innerHTML = `Time: ${toHHMMSS(playTime)}<br>Pause`;
       } else {
-        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}`
+        gametime.innerHTML = `Time: ${toHHMMSS(playTime)}`;
       }
       break
     case 2:
       if(isrunning == false && gameLoaded == 1) {
-        gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}<br>Pause`;
+        gametime.innerHTML = `Played: ${toHHMMSS(Game.Time)}<br>Pause`;
       } else {
-        gametime.innerHTML = `Played: ${toHHMMSS(gameTime)}`
+        gametime.innerHTML = `Played: ${toHHMMSS(Game.Time)}`;
       }
       break;
     default:
-      timerswitch = 0;
+      Game.Switch.Time = 0;
   }
 }
 function myTimeer() {
-  gameTime ++;
+  Game.addTime();
   playTime ++;
   outTime();
   if(stopgame != 8) {
@@ -269,13 +286,12 @@ function cardAddEventListener(c) {
       //Show Item and add to Itemopen Array
       e.currentTarget.classList.replace(e.currentTarget.classList[1], 'opened');
       itemopen.push(e.currentTarget);
-      localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`);
       //Check Item Classes
       if(itemopen.length == 2) {
         trys++;
         outScore();
         if(itemopen[0].firstChild.classList[1] === itemopen[1].firstChild.classList[1]) {
-          score++;
+          Game.addScore();
           stopgame++;
           outScore();
           //Remove Items from Check list
@@ -289,7 +305,7 @@ function cardAddEventListener(c) {
             myMusic.play();
             clearInterval(time);
             isrunning = false;
-            navigator.clipboard.writeText(`Level: ${level} | Trys: ${trys} | Score: ${score} | Time: ${toHHMMSS(playTime)}`);
+            navigator.clipboard.writeText(`Level: ${Game.Level} | Trys: ${trys} | Score: ${Game.Score} | Time: ${toHHMMSS(playTime)}`);
             itemCloseTime = itemCloseTime - 100;
             if(itemCloseTime == 0) {
               itemCloseTime = 100;
@@ -297,11 +313,11 @@ function cardAddEventListener(c) {
                 databox.classList.replace(databox.classList[0], databoxcolor());
               }
             }
-            localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`)
-            setCookie(cookienamegametime, gameTime, 365);
+            localObject.set('Memory', Game);
+            setCookie(cookienamegametime, Game.Time, 365);
             game.classList.add('hidden');
-            msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(gameTime)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${level}<br>Score: ${score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
-            level++;
+            msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(Game.Time)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${Game.Level}<br>Score: ${Game.Score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
+            Game.addLevel();
           }
         } else {
           //Close Items
@@ -362,9 +378,7 @@ function sound(src) {
 /***************************************************************************************************************
 Cookie [SET, GET, Check]
 ***************************************************************************************************************/
-const cookiename = 'Memory - daniel156161';
 const cookienamegametime = 'Memory [GameTime] - daniel156161';
-const cookieexdays = 14;
 
 function setCookie(cname, cvalue, exdays) {
   var d = new Date();
@@ -395,96 +409,22 @@ function checkCookie(cname) {
   return cookiearray;
 }
 /***************************************************************************************************************
-Cookie [getGameDataFromCookie] Data from Cookie to right Variables
-***************************************************************************************************************/
-function getGamedataFromCookie() {
-  const data = checkCookie(cookiename);
-  if (data != "" && data != undefined) {
-    level = data[0];
-    gameTime = data[1];
-    scoreswitch = data[2];
-    timerswitch = data[3];
-    if (gameTime != "" || gameTime != undefined) {
-      gameTime = getCookie(cookienamegametime);
-    } else {
-      gameTime = 0;
-    }
-    score = level * 8;
-    if(level == 'null' || level == '0') {
-      level = 1;
-      score = 0;
-      itemCloseTime = 2000;
-    } else {
-      for (let i = 0; i < level; i++) {
-        itemCloseTime = itemCloseTime - 100;
-        if(itemCloseTime == 0) {
-          itemCloseTime = 100;
-          for(databox of databoxs) {
-            databox.classList.replace(databox.classList[0], databoxcolor());
-          }
-        }
-      }
-    }
-    if(scoreswitch == undefined) {
-      scoreswitch = 0;
-    } else {
-      scoreswitch = parseInt(scoreswitch, 10);
-    }
-    if(timerswitch == undefined) {
-      timerswitch = 0;
-    } else {
-      timerswitch = parseInt(timerswitch, 10);
-    }
-    if(score != 0) {
-      level++;
-    }
-    outTime();
-    outScore();
-    localSaveGameData(`${level},${gameTime},${scoreswitch},${timerswitch}`);
-    document.cookie = cookiename + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
-  } else {
-    level = 1;
-    score = 0;
-    itemCloseTime = 2000;
-    scoreswitch = 0;
-    timerswitch = 0;
-    if (gameTime != "" || gameTime != undefined) {
-      gameTime = getCookie(cookienamegametime);
-    } else {
-      gameTime = 0;
-    }
-  }
-}
-/***************************************************************************************************************
 Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
-const myStorage = localStorage;
-localLoadGameData()
-
-function localSaveGameData(data) {
-  var items = data.split(',');
-  var Objects = {
-    Level: items[0],
-    GameTime: items[1], 
-    ScoreSwitch: items[2], 
-    TimeSwitch: items[3]
-  };
-  localStorage.setItem('Memory', JSON.stringify(Objects));
-}
 function localLoadGameData() {
-  if (myStorage.length == 0) {
-    getGamedataFromCookie();
+  if (localStorage.length == 0) {
+    document.cookie = "Memory - daniel156161=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
   }
-  if (myStorage.length != 0) { 
-    var Objects = JSON.parse(localStorage.getItem('Memory'));
-    level = Objects.Level;
-    gameTime = Objects.GameTime;
-    scoreswitch = parseInt(Objects.ScoreSwitch, 10);
-    timerswitch = parseInt(Objects.TimeSwitch, 10);
-    score = (level - 1) * 8;
+  if (localStorage.length != 0) { 
+    var localOut = localObject.get('Memory');
+    Game.Level = localOut.Level;
+    Game.Time = localOut.Time;
+    Game.Switch.Score = localOut.Switch.Score;
+    Game.Switch.Time = localOut.Switch.Time;
+    Game.Score = (localOut.Level-1)*8;
     outTime();
     outScore();
-    for (let i = 0; i < level; i++) {
+    for (let i = 0; i < Game.Level; i++) {
       itemCloseTime = itemCloseTime - 100;
       if(itemCloseTime == 0) {
         itemCloseTime = 100;
@@ -494,18 +434,31 @@ function localLoadGameData() {
       }
     }
   } else {
-    level = 1;
-    score = 0;
-    itemCloseTime = 2000;
-    scoreswitch = 0;
-    timerswitch = 0;
-    if (gameTime != "" || gameTime != undefined) {
-      gameTime = getCookie(cookienamegametime);
+    if (Game.Time != "" || Game.Time != undefined) {
+      Game.Time = getCookie(cookienamegametime);
     } else {
-      gameTime = 0;
+      Game.Time = 0;
     }
   }
 }
+let localObject = {
+  set: function(key, Object) {
+    localStorage.setItem(key, JSON.stringify(Object));
+  },
+  get: function(key) {
+    var item = localStorage.getItem(key);
+    if (item != null) {
+      item = JSON.parse(localStorage.getItem(key));
+    } else {
+      item = undefined;
+    }
+    return item;
+  }
+}
+/***************************************************************************************************************
+Page Load run Function
+***************************************************************************************************************/
+localLoadGameData()
 /***************************************************************************************************************
 Test Functions!!!! [replaceIcons]
 ***************************************************************************************************************/
