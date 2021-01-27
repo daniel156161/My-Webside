@@ -19,7 +19,7 @@ let trys = 0;
 let pageLoaded = 0;
 let gameLoaded = 0;
 let time;
-//Cookie or localStorage
+//Game Data
 const Game = {
   "Level": 1,
   "Score": 0,
@@ -364,7 +364,6 @@ function msgs(text) {
 Sound
 ***************************************************************************************************************/
 var myMusic;
-let backgroundMusic = 1;
 function sound(src) {
   this.sound = document.createElement("audio");
   this.sound.src = src;

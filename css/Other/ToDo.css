@@ -1,0 +1,96 @@
+#board {
+  padding-top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+/* Add Lists and .list */
+.list {
+  width: 14%;
+  height: 97%;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 10px;
+  color: black;
+  font-size: 1.5em;
+}
+/* Add Lists */
+#addlist form {
+  height: 100%;
+  width: 100%;
+  margin: 0 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+#addfield {
+  font-size: 1em;
+  width: 100%;
+  height: 50px;
+}
+#addbutton, .addItem, #addItemCard {
+  cursor: pointer;
+  width: 90%;
+  border-radius: 5px;
+  background-color: coral;
+  border: solid coral 1px;
+}
+#addbutton, #addItemCard, .addItem {
+  height: 37px;
+  font-size: 0.9em;
+}
+form i {
+  cursor: pointer;
+}
+/* Liste */
+.items {
+  background-color: white;
+  border-radius: 5px;
+}
+p {
+  padding: 3px 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  color: black;
+}
+.title {
+  font-size: 1.5em;
+  border-bottom: solid black 2px;
+  justify-content: space-between;
+}
+.title i {
+  cursor: pointer;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin: 5px 0;
+}
+.input {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 5px 0;
+  width: 100%;
+  background-color: rgba(42, 95, 165, 0.705);
+}
+.addCard {
+  border-top: solid black 1px;
+}
+.text {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.text i {
+  font-size: 1.2em;
+  margin: 0 5px;
+}
+/* Hidde Buttons */
+.hidden {
+  display: none;
+}
