@@ -1,3 +1,4 @@
+let pageLoad = 0;
 let addItemOnlyOnce = 0;
 const board = document.querySelector('#board');
 
@@ -152,7 +153,11 @@ if(localStorage.length != 0) {
       } else {
         changeBoard.addDiv();
       }
+      pageLoad = 1;
     }
+  }
+  if (pageLoad == 0) {
+    changeBoard.addDiv();
   }
 } else {
   changeBoard.addDiv();
