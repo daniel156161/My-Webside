@@ -73,12 +73,8 @@ p {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  padding: 5px 0;
   width: 100%;
   background-color: rgba(42, 95, 165, 0.705);
-}
-.addCard {
-  border-top: solid black 1px;
 }
 .text {
   margin-top: 10px;
@@ -89,6 +85,21 @@ p {
 .text i {
   font-size: 1.2em;
   margin: 0 5px;
+}
+.input div .itemButton {
+  margin-left: auto;
+  border-bottom: none;
+}
+.input div i {
+  cursor: pointer;
+}
+.input .done-true {
+  background-color: forestgreen;
+}
+.input .done-true, .input .done-false {
+  display: flex;
+  border-bottom: dotted black 2px;
+  padding: 3px;
 }
 /* Hidde Buttons */
 .hidden {

@@ -45,7 +45,7 @@ var changeBoard = {
     for (let i = 0; i < removeLists.length; i++) {
       removeLists[i].addEventListener('click', () => {
         lists.items.splice(i,1);
-        lists.update();
+        lists.updatelocal();
       });
       addItems[i].addEventListener('click', () => {
         if (addItemOnlyOnce == 0) {
@@ -77,7 +77,7 @@ function buttons(i) {
     if(Item != '') {
       addItemOnlyOnce = 0;
       ItemAddButtonList[i].classList.remove('hidden');
-      lists.addCarts(i, Item);
+      lists.addCard(i, Item);
       changeBoard.addList();
     }
   });
@@ -90,22 +90,26 @@ var lists = {
     var list = { 
       Title: title,
       count: 0,
-      Items: []
+      Cards: []
     };
     this.items.push(JSON.stringify(list));
     this.count ++;
     localObject.set('ToDo', this);
     changeBoard.addList();
   },
-  update: function() {
+  updatelocal: function() {
     lists.count = lists.count - 1;
     localObject.set('ToDo', this);
     changeBoard.addList();
   },
-  addCarts: function(i, item) {
+  addCard: function(i, item) {
     let object = JSON.parse(lists.items[i]);
     object.count ++;
-    object.Items.push(item);
+    Card = {
+      text: item,
+      isDone: false
+    }
+    object.Cards.push(Card);
     lists.items[i] = JSON.stringify(object);
     localObject.set('ToDo', this);
   },
@@ -114,11 +118,50 @@ var lists = {
     if (card.count > 0) {
       listInput[i].innerHTML = '';
       for (let i2 = 0; i2 < card.count; i2++) {
-        listInput[i].innerHTML += `<p>${card.Items[i2]}</p>`;
+        let removeCardid = `removeCard${i}${i2}`
+        listInput[i].innerHTML += `<div class="done-${card.Cards[i2].isDone}">${card.Cards[i2].text}<div class="itemButton"><i onclick="lists.doneItem(${i}, ${i2})" class="fas fa-${lists.isItemDone(i, i2)}"></i><i onclick="lists.removeItem(${i}, ${i2})" class="${removeCardid} fas fa-minus"></i></div></div>`;
+        //REMOVE Card - NOT ADD EventListener? //
+        /*
+        document.querySelector(`.${removeCardid}`).addEventListener('click', () => {
+          lists.removeItem(i, i2);
+        });
+        */
       }
       listInput[i].innerHTML += '<form id="ItemAddButtonList"><div class="buttons"><input class="addItem" type="button" value="Item Hinzufügen"></div></form>';
     } else {
       listInput[i].innerHTML = '<form id="ItemAddButtonList"><div class="buttons"><input class="addItem" type="button" value="Item Hinzufügen"></div></form>';
+    }
+  },
+  removeCard: function(item, i) {
+    var object = JSON.parse(lists.items[i]);
+    object.Cards = item;
+    object.count = object.count - 1;
+    lists.items[i] = JSON.stringify(object);
+    localObject.set('ToDo', this);
+    changeBoard.addList();
+  },
+  removeItem: function(i, i2) {
+    let item = JSON.parse(lists.items[i]);
+    item.Cards.splice([i2], 1);
+    lists.removeCard(item.Cards, i);
+  },
+  doneItem: function(i, i2) {
+    let object = JSON.parse(lists.items[i]);
+    if(object.Cards[i2].isDone == false) {
+      object.Cards[i2].isDone = true;
+    } else {
+      object.Cards[i2].isDone = false;
+    }
+    lists.items[i] = JSON.stringify(object);
+    localObject.set('ToDo', this);
+    changeBoard.addList();
+  },
+  isItemDone: function(i, i2) {
+    let object = JSON.parse(lists.items[i]);
+    if(object.Cards[i2].isDone == false) {
+      return 'check'
+    } else {
+      return 'times'
     }
   }
 }
@@ -145,7 +188,7 @@ let localObject = {
 if(localStorage.length != 0) {
   for (let i = 0; i < localStorage.length; i++) {
     if (localStorage.key(i) === 'ToDo') {
-      var localLists = localObject.get('ToDo');
+      let localLists = localObject.get('ToDo');
       lists.count = localLists.count;
       lists.items = localLists.items;
       if(lists.count > 0) {
