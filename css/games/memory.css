@@ -195,8 +195,8 @@ Phone and iPad
     footer {
       display: none !important;
     }
-    #main div {
-      font-size: 1em;
+    #game #main .fas, #game #main .fab, #game #main .far {
+      font-size: 1.5em;
     }
     #game, #gamemsg {
       padding-bottom: 0;
@@ -235,8 +235,8 @@ Phone and iPad
     footer {
       display: none !important;
     }
-    #main div {
-      font-size: 0.5em;
+    #game #main .fas, #game #main .fab, #game #main .far {
+      font-size: 1em;
     }
     #game, #gamemsg {
       padding-bottom: 0;
