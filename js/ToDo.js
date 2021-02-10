@@ -15,7 +15,7 @@ var changeBoard = {
   addDiv: function() {
     if (lists.count < 7) {
       //ADDlist to Boarder
-      board.innerHTML += '<div class="list"><div class="items"><form><div class="text"><input id="addfield" type="text" placeholder="Listentitle eingeben ..."><i id="cleanaddlist" class="fas fa-eraser"></i></div><div class="buttons"><input id="addbutton" type="button" value="Liste hinzufügen"></div></div></form></div>';
+      board.innerHTML += '<div class="list"><div class="items"><div class="text"><input id="addfield" type="text" placeholder="Listentitle eingeben ..."><i id="cleanaddlist" class="fas fa-eraser"></i></div><div class="buttons"><input id="addbutton" type="button" value="Liste hinzufügen"></div></div></div>';
       //ADD List
       var addListBtn = document.querySelector('#addbutton');
       var addfield = document.querySelector('#addfield');
@@ -33,7 +33,7 @@ var changeBoard = {
   addList: function() {
     board.innerHTML = "";
     for (let i = 0; i < lists.items.length; i++) {
-      var listObject = JSON.parse(lists.items[i]);
+      var listObject = lists.items[i];
       board.innerHTML += `<div class="list"><div class="items"><p class="title">${listObject.Title}<i class="removeList fas fa-trash"></i></p><div class="listitems"><div class="input"></div></div></div></div>`;
       lists.getCard(i, listObject);
     }
@@ -94,7 +94,7 @@ var lists = {
       count: 0,
       Cards: []
     };
-    this.items.push(JSON.stringify(list));
+    this.items.push(list);
     this.count ++;
     localObject.set(localKey, this);
     changeBoard.addList();
@@ -105,14 +105,14 @@ var lists = {
     changeBoard.addList();
   },
   addCard: function(i, item) {
-    let object = JSON.parse(lists.items[i]);
+    let object = lists.items[i];
     object.count ++;
     Card = {
       text: item,
       isDone: false
     }
     object.Cards.push(Card);
-    lists.items[i] = JSON.stringify(object);
+    lists.items[i] = object;
     localObject.set(localKey, this);
   },
   getCard: function(i, card) {
@@ -128,31 +128,31 @@ var lists = {
     }
   },
   removeCard: function(item, i) {
-    var object = JSON.parse(lists.items[i]);
+    var object = lists.items[i];
     object.Cards = item;
     object.count = object.count - 1;
-    lists.items[i] = JSON.stringify(object);
+    lists.items[i] = object;
     localObject.set(localKey, this);
     changeBoard.addList();
   },
   removeItem: function(i, i2) {
-    let item = JSON.parse(lists.items[i]);
+    let item = lists.items[i];
     item.Cards.splice([i2], 1);
     lists.removeCard(item.Cards, i);
   },
   doneItem: function(i, i2) {
-    let object = JSON.parse(lists.items[i]);
+    let object = lists.items[i];
     if(object.Cards[i2].isDone == false) {
       object.Cards[i2].isDone = true;
     } else {
       object.Cards[i2].isDone = false;
     }
-    lists.items[i] = JSON.stringify(object);
+    lists.items[i] = object;
     localObject.set(localKey, this);
     changeBoard.addList();
   },
   isItemDone: function(i, i2) {
-    let object = JSON.parse(lists.items[i]);
+    let object = lists.items[i];
     if(object.Cards[i2].isDone == false) {
       return 'check'
     } else {
@@ -163,8 +163,10 @@ var lists = {
 //Make Object into LocalStorage
 let localObject = {
   set: function(key, Object) {
-    if (typeof key == 'string') {
+    if (typeof key == 'string' && typeof Object == 'object') {
       localStorage.setItem(key, JSON.stringify(Object));
+    } else {
+      console.log('Key is not a String or Input Object is not a Object');
     }
   },
   get: function(key) {

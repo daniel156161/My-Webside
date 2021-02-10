@@ -410,8 +410,10 @@ function localLoadGameData() {
 }
 let localObject = {
   set: function(key, Object) {
-    if (typeof key == 'string') {
+    if (typeof key == 'string' && typeof Object == 'object') {
       localStorage.setItem(key, JSON.stringify(Object));
+    } else {
+      console.log('Key is not a String or Input Object is not a Object');
     }
   },
   get: function(key) {
