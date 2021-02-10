@@ -29,7 +29,7 @@ var changeBoard = {
       let addfield = document.createElement('input');
       addfield.setAttribute('id', 'addfield');
       addfield.setAttribute('type', 'text');
-      addfield.setAttribute('placeholder', 'Listentitle eingeben ...');
+      addfield.setAttribute('placeholder', 'Listentitle ...');
       addfield.addEventListener('keydown', e => {
         if (e.isComposing || e.key === 'Enter') {
           var listTitle = addfield.value;
@@ -49,7 +49,7 @@ var changeBoard = {
       let addbutton = document.createElement('input');
       addbutton.setAttribute('id', 'addbutton');
       addbutton.setAttribute('type', 'button');
-      addbutton.setAttribute('value', 'Liste hinzufügen');
+      addbutton.setAttribute('value', 'Add List');
       addbutton.addEventListener('click', () => {
         var listTitle = addfield.value;
         if(listTitle != '') {
@@ -124,7 +124,7 @@ var changeBoard = {
     let addfield = document.createElement('input');
     addfield.setAttribute('id', 'addfield');
     addfield.setAttribute('type', 'text');
-    addfield.setAttribute('placeholder', 'Item eingeben ...');
+    addfield.setAttribute('placeholder', 'Itemname ...');
     addfield.addEventListener('keydown', e => {
       if (e.isComposing || e.key === 'Enter') {
         let Item = addfield.value;
@@ -154,7 +154,7 @@ var changeBoard = {
     let addbutton = document.createElement('input');
     addbutton.setAttribute('id', 'addItemCard');
     addbutton.setAttribute('type', 'button');
-    addbutton.setAttribute('value', 'Item Hinzufügen');
+    addbutton.setAttribute('value', 'Add Item');
     addbutton.addEventListener('click', () => {
       let Item = addfield.value;
       if(Item != '') {
@@ -210,7 +210,7 @@ var lists = {
     let ibutton = document.createElement('input');
     ibutton.setAttribute('class', 'addItem');
     ibutton.setAttribute('type', 'button');
-    ibutton.setAttribute('value', 'Item Hinzufügen');
+    ibutton.setAttribute('value', 'Add Item');
     ibutton.addEventListener('click', () => {
       if (addItemOnlyOnce == 0) {
         addItemOnlyOnce = 1;
