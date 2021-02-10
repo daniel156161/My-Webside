@@ -2,135 +2,212 @@ let pageLoad = 0;
 let addItemOnlyOnce = 0;
 const board = document.querySelector('#board');
 
-const localKey = 'ToDo'
+const localKey = 'ToDo';
 
 document.querySelector('#removeall').addEventListener('click', () => {
   localStorage.removeItem(localKey);
-  lists.count = 0;
   lists.items = [];
   changeBoard.addList();
 });
 
 var changeBoard = {
+  makeInputAndItemsDiv: function() {
+    let addnewDiv = document.createElement('div');
+    addnewDiv.setAttribute('class', 'list');
+    let itemDiv = document.createElement('div');
+    itemDiv.setAttribute('class', 'items');
+
+    addnewDiv.appendChild(itemDiv);
+    board.appendChild(addnewDiv);
+    return itemDiv;
+  },
   addDiv: function() {
-    if (lists.count < 7) {
+    if (lists.items.length < 7) {
       //ADDlist to Boarder
-      board.innerHTML += '<div class="list"><div class="items"><div class="text"><input id="addfield" type="text" placeholder="Listentitle eingeben ..."><i id="cleanaddlist" class="fas fa-eraser"></i></div><div class="buttons"><input id="addbutton" type="button" value="Liste hinzufügen"></div></div></div>';
-      //ADD List
-      var addListBtn = document.querySelector('#addbutton');
-      var addfield = document.querySelector('#addfield');
-      addListBtn.addEventListener('click', () => {
+      let textDiv = document.createElement('div');
+      textDiv.setAttribute('class', 'text');
+      let addfield = document.createElement('input');
+      addfield.setAttribute('id', 'addfield');
+      addfield.setAttribute('type', 'text');
+      addfield.setAttribute('placeholder', 'Listentitle eingeben ...');
+
+      let cleanaddlist = document.createElement('i');
+      cleanaddlist.setAttribute('class', 'fas fa-eraser');
+      cleanaddlist.addEventListener('click', () => {
+        addfield.value = '';
+      });
+      let buttonDiv = document.createElement('div');
+      buttonDiv.setAttribute('class', 'buttons');
+      let addbutton = document.createElement('input');
+      addbutton.setAttribute('id', 'addbutton');
+      addbutton.setAttribute('type', 'button');
+      addbutton.setAttribute('value', 'Liste hinzufügen');
+      addbutton.addEventListener('click', () => {
         var listTitle = addfield.value;
         if(listTitle != '') {
           lists.add(listTitle);
         }
       });
-      document.querySelector('#cleanaddlist').addEventListener('click', () => {
-        addfield.value = '';
-      });
+
+      let itemDiv = this.makeInputAndItemsDiv();
+      buttonDiv.appendChild(addbutton);
+      textDiv.appendChild(addfield);
+      textDiv.appendChild(cleanaddlist);
+      itemDiv.appendChild(textDiv);
+      itemDiv.appendChild(buttonDiv);
     }
   },
   addList: function() {
     board.innerHTML = "";
     for (let i = 0; i < lists.items.length; i++) {
       var listObject = lists.items[i];
-      board.innerHTML += `<div class="list"><div class="items"><p class="title">${listObject.Title}<i class="removeList fas fa-trash"></i></p><div class="listitems"><div class="input"></div></div></div></div>`;
-      lists.getCard(i, listObject);
-    }
-    this.addDiv();
-    this.button();
-  },
-  button: function() {
-    //REMOVE List and ADD Item
-    const removeLists = document.querySelectorAll('.removeList');
-    const addItems = document.querySelectorAll('.addItem');
-    for (let i = 0; i < removeLists.length; i++) {
-      removeLists[i].addEventListener('click', () => {
+      let itemDiv = this.makeInputAndItemsDiv();
+      let title = document.createElement('p');
+      title.setAttribute('class', 'title');
+      title.innerHTML = listObject.Title;
+      let removeList = document.createElement('i');
+      removeList.setAttribute('class', 'fas fa-trash');
+      removeList.addEventListener('click', () => {
         lists.items.splice(i,1);
         lists.updatelocal();
       });
-      addItems[i].addEventListener('click', () => {
-        if (addItemOnlyOnce == 0) {
-          addItemOnlyOnce = 1;
-          buttons(i);
-        } else {
-          this.addList();
-          buttons(i);
+      let listitems = document.createElement('div');
+      listitems.setAttribute('class', 'listitems');
+      let inputDiv = document.createElement('div');
+      inputDiv.setAttribute('class', 'input');
+
+      title.appendChild(removeList);
+      itemDiv.appendChild(title);
+      itemDiv.appendChild(listitems);
+      listitems.appendChild(inputDiv);
+
+      if (listObject.Cards.length > 0) {
+        for (let i2 = 0; i2 < listObject.Cards.length; i2++) {
+          let itemDiv = document.createElement('div');
+          itemDiv.setAttribute('class', `done-${listObject.Cards[i2].isDone}`);
+          itemDiv.innerHTML = listObject.Cards[i2].text;
+          let itemButtons = document.createElement('div');
+          itemButtons.setAttribute('class', 'itemButton');
+          itemDiv.appendChild(itemButtons);
+          let itemDone = document.createElement('i');
+          itemDone.setAttribute('class', `fas fa-${lists.isItemDone(i, i2)}`);
+          itemDone.setAttribute('onclick', `lists.doneItem(${i}, ${i2})`);
+          let removeItem = document.createElement('i');
+          removeItem.setAttribute('class', 'fas fa-minus');
+          removeItem.setAttribute('onclick', `lists.removeItem(${i}, ${i2})`);
+  
+          itemButtons.appendChild(itemDone);
+          itemButtons.appendChild(removeItem);
+          inputDiv.appendChild(itemDiv);
         }
-      });
+        lists.addEintrag(inputDiv, i);
+      } else {
+        lists.addEintrag(inputDiv, i);
+      }
     }
-  }
-}
-function buttons(i) {
-  const listInput = document.querySelectorAll('.input');
-  const ItemAddButtonList = document.querySelectorAll('#ItemAddButtonList');
-  ItemAddButtonList[i].classList.add('hidden');
-  listInput[i].innerHTML += `<form class="addCard"><div class="text"><input id="addfield" type="text" placeholder="Item eingeben ..."><i id="up" class="fas fa-chevron-up"></i><i id="cleanaddfield" class="fas fa-eraser"></i></div><div class="buttons"><input id="addItemCard" type="button" value="Item Hinzufügen"></div></div></div></form>`;
-  document.querySelector('#up').addEventListener('click', () => {
-    addItemOnlyOnce = 0;
-    changeBoard.addList();
-  });
-  document.querySelector('#cleanaddfield').addEventListener('click', () => {
-    let textfeld = document.querySelector('#addfield')
-    textfeld.value = '';
-  });
-  document.querySelector('#addItemCard').addEventListener('click', () => {
-    var Item = addfield.value;
-    if(Item != '') {
+    this.addDiv();
+  },
+  addMoreItems: function(input, form, i) {
+    form.classList.add('hidden');
+    let newFormDiv = document.createElement('div');
+    newFormDiv.setAttribute('class', 'form addCard');
+    let textDiv = document.createElement('div');
+    textDiv.setAttribute('class', 'text');
+    let addfield = document.createElement('input');
+    addfield.setAttribute('id', 'addfield');
+    addfield.setAttribute('type', 'text');
+    addfield.setAttribute('placeholder', 'Item eingeben ...');
+
+    let upaddlist = document.createElement('i');
+    upaddlist.setAttribute('class', 'fas fa-chevron-up');
+    upaddlist.addEventListener('click', () => {
       addItemOnlyOnce = 0;
-      ItemAddButtonList[i].classList.remove('hidden');
-      lists.addCard(i, Item);
       changeBoard.addList();
-    }
-  });
+    });
+
+    let cleanaddlist = document.createElement('i');
+    cleanaddlist.setAttribute('class', 'fas fa-eraser');
+    cleanaddlist.addEventListener('click', () => {
+      addfield.value = '';
+    });
+    let buttonDiv = document.createElement('div');
+    buttonDiv.setAttribute('class', 'buttons');
+    let addbutton = document.createElement('input');
+    addbutton.setAttribute('id', 'addItemCard');
+    addbutton.setAttribute('type', 'button');
+    addbutton.setAttribute('value', 'Item Hinzufügen');
+    addbutton.addEventListener('click', () => {
+      let Item = addfield.value;
+      if(Item != '') {
+        addItemOnlyOnce = 0;
+        form.classList.remove('hidden');
+        lists.addCard(i, Item);
+        changeBoard.addList();
+      }
+    });
+
+    buttonDiv.appendChild(addbutton);
+    textDiv.appendChild(addfield);
+    textDiv.appendChild(upaddlist);
+    textDiv.appendChild(cleanaddlist);
+
+    newFormDiv.appendChild(textDiv);
+    newFormDiv.appendChild(buttonDiv);
+    input.appendChild(newFormDiv);
+  }
 }
 //Lists Storage and functions
 var lists = {
-  count: 0,
   items: [],
   add: function (title) {
     var list = { 
       Title: title,
-      count: 0,
       Cards: []
     };
     this.items.push(list);
-    this.count ++;
     localObject.set(localKey, this);
     changeBoard.addList();
   },
   updatelocal: function() {
-    lists.count = lists.count - 1;
     localObject.set(localKey, this);
     changeBoard.addList();
   },
   addCard: function(i, item) {
     let object = lists.items[i];
-    object.count ++;
     Card = {
       text: item,
       isDone: false
-    }
+    };
     object.Cards.push(Card);
     lists.items[i] = object;
     localObject.set(localKey, this);
   },
-  getCard: function(i, card) {
-    const listInput = document.querySelectorAll('.input');
-    if (card.count > 0) {
-      listInput[i].innerHTML = '';
-      for (let i2 = 0; i2 < card.count; i2++) {
-        listInput[i].innerHTML += `<div class="done-${card.Cards[i2].isDone}">${card.Cards[i2].text}<div class="itemButton"><i onclick="lists.doneItem(${i}, ${i2})" class="fas fa-${lists.isItemDone(i, i2)}"></i><i onclick="lists.removeItem(${i}, ${i2})" class="fas fa-minus"></i></div></div>`;
+  addEintrag: function(input, i) {
+    let form = document.createElement('div');
+    form.setAttribute('class', 'form');
+    form.setAttribute('id', 'ItemAddButtonList');
+    let button = document.createElement('div');
+    button.setAttribute('class', 'buttons');
+    let ibutton = document.createElement('input');
+    ibutton.setAttribute('class', 'addItem');
+    ibutton.setAttribute('type', 'button');
+    ibutton.setAttribute('value', 'Item Hinzufügen');
+    ibutton.addEventListener('click', () => {
+      if (addItemOnlyOnce == 0) {
+        addItemOnlyOnce = 1;
+      } else {
+        this.addList();
       }
-      listInput[i].innerHTML += '<form id="ItemAddButtonList"><div class="buttons"><input class="addItem" type="button" value="Item Hinzufügen"></div></form>';
-    } else {
-      listInput[i].innerHTML = '<form id="ItemAddButtonList"><div class="buttons"><input class="addItem" type="button" value="Item Hinzufügen"></div></form>';
-    }
+      changeBoard.addMoreItems(input, form, i);
+    });
+
+    button.appendChild(ibutton);
+    form.appendChild(button);
+    input.appendChild(form);
   },
   removeCard: function(item, i) {
     var object = lists.items[i];
     object.Cards = item;
-    object.count = object.count - 1;
     lists.items[i] = object;
     localObject.set(localKey, this);
     changeBoard.addList();
@@ -154,9 +231,9 @@ var lists = {
   isItemDone: function(i, i2) {
     let object = lists.items[i];
     if(object.Cards[i2].isDone == false) {
-      return 'check'
+      return 'check';
     } else {
-      return 'times'
+      return 'times';
     }
   }
 }
@@ -186,9 +263,8 @@ if(localStorage.length != 0) {
   for (let i = 0; i < localStorage.length; i++) {
     if (localStorage.key(i) === localKey) {
       let localLists = localObject.get(localKey);
-      lists.count = localLists.count;
       lists.items = localLists.items;
-      if(lists.count > 0) {
+      if(lists.items.length > 0) {
         changeBoard.addList();
       } else {
         changeBoard.addDiv();
