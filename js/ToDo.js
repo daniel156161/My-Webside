@@ -30,6 +30,14 @@ var changeBoard = {
       addfield.setAttribute('id', 'addfield');
       addfield.setAttribute('type', 'text');
       addfield.setAttribute('placeholder', 'Listentitle eingeben ...');
+      addfield.addEventListener('keydown', e => {
+        if (e.isComposing || e.key === 'Enter') {
+          var listTitle = addfield.value;
+          if(listTitle != '') {
+            lists.add(listTitle);
+          }
+        }
+      });
 
       let cleanaddlist = document.createElement('i');
       cleanaddlist.setAttribute('class', 'fas fa-eraser');
@@ -117,6 +125,17 @@ var changeBoard = {
     addfield.setAttribute('id', 'addfield');
     addfield.setAttribute('type', 'text');
     addfield.setAttribute('placeholder', 'Item eingeben ...');
+    addfield.addEventListener('keydown', e => {
+      if (e.isComposing || e.key === 'Enter') {
+        let Item = addfield.value;
+        if(Item != '') {
+          addItemOnlyOnce = 0;
+          form.classList.remove('hidden');
+          lists.addCard(i, Item);
+          this.addList();
+        }
+      }
+    });
 
     let upaddlist = document.createElement('i');
     upaddlist.setAttribute('class', 'fas fa-chevron-up');
@@ -142,7 +161,7 @@ var changeBoard = {
         addItemOnlyOnce = 0;
         form.classList.remove('hidden');
         lists.addCard(i, Item);
-        changeBoard.addList();
+        this.addList();
       }
     });
 
@@ -196,7 +215,8 @@ var lists = {
       if (addItemOnlyOnce == 0) {
         addItemOnlyOnce = 1;
       } else {
-        this.addList();
+        addItemOnlyOnce = 0;
+        changeBoard.addList();
       }
       changeBoard.addMoreItems(input, form, i);
     });
