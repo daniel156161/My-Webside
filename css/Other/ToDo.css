@@ -94,7 +94,7 @@ p {
   cursor: pointer;
 }
 .input .done-true {
-  background-color: forestgreen;
+  background-color: greenyellow;
 }
 .input .done-true, .input .done-false {
   display: flex;

@@ -2,8 +2,10 @@ let pageLoad = 0;
 let addItemOnlyOnce = 0;
 const board = document.querySelector('#board');
 
+const localKey = 'ToDo'
+
 document.querySelector('#removeall').addEventListener('click', () => {
-  localStorage.removeItem('ToDo');
+  localStorage.removeItem(localKey);
   lists.count = 0;
   lists.items = [];
   changeBoard.addList();
@@ -94,12 +96,12 @@ var lists = {
     };
     this.items.push(JSON.stringify(list));
     this.count ++;
-    localObject.set('ToDo', this);
+    localObject.set(localKey, this);
     changeBoard.addList();
   },
   updatelocal: function() {
     lists.count = lists.count - 1;
-    localObject.set('ToDo', this);
+    localObject.set(localKey, this);
     changeBoard.addList();
   },
   addCard: function(i, item) {
@@ -111,21 +113,14 @@ var lists = {
     }
     object.Cards.push(Card);
     lists.items[i] = JSON.stringify(object);
-    localObject.set('ToDo', this);
+    localObject.set(localKey, this);
   },
   getCard: function(i, card) {
     const listInput = document.querySelectorAll('.input');
     if (card.count > 0) {
       listInput[i].innerHTML = '';
       for (let i2 = 0; i2 < card.count; i2++) {
-        let removeCardid = `removeCard${i}${i2}`
-        listInput[i].innerHTML += `<div class="done-${card.Cards[i2].isDone}">${card.Cards[i2].text}<div class="itemButton"><i onclick="lists.doneItem(${i}, ${i2})" class="fas fa-${lists.isItemDone(i, i2)}"></i><i onclick="lists.removeItem(${i}, ${i2})" class="${removeCardid} fas fa-minus"></i></div></div>`;
-        //REMOVE Card - NOT ADD EventListener? //
-        /*
-        document.querySelector(`.${removeCardid}`).addEventListener('click', () => {
-          lists.removeItem(i, i2);
-        });
-        */
+        listInput[i].innerHTML += `<div class="done-${card.Cards[i2].isDone}">${card.Cards[i2].text}<div class="itemButton"><i onclick="lists.doneItem(${i}, ${i2})" class="fas fa-${lists.isItemDone(i, i2)}"></i><i onclick="lists.removeItem(${i}, ${i2})" class="fas fa-minus"></i></div></div>`;
       }
       listInput[i].innerHTML += '<form id="ItemAddButtonList"><div class="buttons"><input class="addItem" type="button" value="Item Hinzufügen"></div></form>';
     } else {
@@ -137,7 +132,7 @@ var lists = {
     object.Cards = item;
     object.count = object.count - 1;
     lists.items[i] = JSON.stringify(object);
-    localObject.set('ToDo', this);
+    localObject.set(localKey, this);
     changeBoard.addList();
   },
   removeItem: function(i, i2) {
@@ -153,7 +148,7 @@ var lists = {
       object.Cards[i2].isDone = false;
     }
     lists.items[i] = JSON.stringify(object);
-    localObject.set('ToDo', this);
+    localObject.set(localKey, this);
     changeBoard.addList();
   },
   isItemDone: function(i, i2) {
@@ -187,8 +182,8 @@ let localObject = {
 //Load LocalStorage
 if(localStorage.length != 0) {
   for (let i = 0; i < localStorage.length; i++) {
-    if (localStorage.key(i) === 'ToDo') {
-      let localLists = localObject.get('ToDo');
+    if (localStorage.key(i) === localKey) {
+      let localLists = localObject.get(localKey);
       lists.count = localLists.count;
       lists.items = localLists.items;
       if(lists.count > 0) {
