@@ -19,6 +19,8 @@ let trys = 0;
 let pageLoaded = 0;
 let gameLoaded = 0;
 let time;
+//LocalStorage
+const localKey = 'Memory';
 //Game Data
 const Game = {
   "Level": 1,
@@ -93,7 +95,7 @@ function resetGame() {
     itemopen.splice(0,1)[0];
   }
   clearInterval(time);
-  localObject.set('Memory', Game);
+  localObject.set(localKey, Game);
   isrunning = false;
   playTime = 0;
   stopgame = 0;
@@ -128,13 +130,13 @@ pause.addEventListener('click', () => {
 //Score Button und Info
 scoreitem.addEventListener('click', () => {
   Game.setScoreSwitch();
-  localObject.set('Memory', Game);
+  localObject.set(localKey, Game);
   outScore();
 });
 //Time Button und Info
 gametime.addEventListener('click', () => {
   Game.setTimeSwitch();
-  localObject.set('Memory', Game);
+  localObject.set(localKey, Game);
   outTime();
 });
 /***************************************************************************************************************
@@ -318,7 +320,7 @@ function cardAddEventListener(c) {
                 databox.classList.replace(databox.classList[0], databoxcolor());
               }
             }
-            localObject.set('Memory', Game);
+            localObject.set(localKey, Game);
             gameField.classList.add('hidden');
             msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(Game.Time)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${Game.Level}<br>Score: ${Game.Score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
             Game.addLevel();
@@ -382,12 +384,10 @@ function sound(src) {
 Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
 function localLoadGameData() {
-  document.cookie = 'Memory - daniel156161' + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
-  document.cookie = 'Memory [GameTime] - daniel156161' + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure"; //Delete Old Cookie
   if (localStorage.length != 0) {
     for (let i = 0; i < localStorage.length; i++) {
-      if (localStorage.key(i) === 'Memory') {
-        var localOut = localObject.get('Memory');
+      if (localStorage.key(i) === localKey) {
+        var localOut = localObject.get(localKey);
         Game.Level = localOut.Level;
         Game.Time = localOut.Time;
         Game.Switch.Score = localOut.Switch.Score;
