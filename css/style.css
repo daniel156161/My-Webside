@@ -58,6 +58,7 @@ nav ul {
   margin: 0;
   padding: 0;
   background-color: #333;
+  width: 100%;
 }
 nav li {
   position: relative;
@@ -65,10 +66,6 @@ nav li {
 .hamburger {
   display: none;
 }
-/* LAST ITEM */
-/* nav li:last-child {
-  margin-left: auto;
-} */
 nav li a:hover {
   background-color: #28b463;
   text-decoration: underline;
