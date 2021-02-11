@@ -4,6 +4,11 @@ Navigation Bar
 #navremoveall {
   margin-left: auto;
 }
+@media (max-width: 575px) {
+  #navremoveall {
+    margin-left: 0;
+  }
+}
 /**************************************************************************************
 Main
 **************************************************************************************/
@@ -24,6 +29,7 @@ Add Lists and .list
   margin: 15px 10px;
   color: black;
   font-size: 1.5em;
+  padding-bottom: 39px;
 }
 /**************************************************************************************
 Add Lists
@@ -109,6 +115,8 @@ p {
 }
 .input .done-true {
   background-color: greenyellow;
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
 }
 .input .done-true, .input .done-false {
   display: flex;

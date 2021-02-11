@@ -385,23 +385,21 @@ Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
 function localLoadGameData() {
   if (localStorage.length != 0) {
-    for (let i = 0; i < localStorage.length; i++) {
-      if (localStorage.key(i) === localKey) {
-        var localOut = localObject.get(localKey);
-        Game.Level = localOut.Level;
-        Game.Time = localOut.Time;
-        Game.Switch.Score = localOut.Switch.Score;
-        Game.Switch.Time = localOut.Switch.Time;
-        Game.Score = (localOut.Level-1)*8;
-        outTime();
-        outScore();
-        for (let i = 0; i < Game.Level; i++) {
-          itemCloseTime = itemCloseTime - 100;
-          if(itemCloseTime == 0) {
-            itemCloseTime = 100;
-            for(databox of databoxs) {
-              databox.classList.replace(databox.classList[0], databoxcolor());
-            }
+    const localOut = localObject.get(localKey);
+    if(localOut != null) {
+      Game.Level = localOut.Level;
+      Game.Time = localOut.Time;
+      Game.Switch.Score = localOut.Switch.Score;
+      Game.Switch.Time = localOut.Switch.Time;
+      Game.Score = (localOut.Level-1)*8;
+      outTime();
+      outScore();
+      for (let i = 0; i < Game.Level; i++) {
+        itemCloseTime = itemCloseTime - 100;
+        if(itemCloseTime == 0) {
+          itemCloseTime = 100;
+          for(databox of databoxs) {
+            databox.classList.replace(databox.classList[0], databoxcolor());
           }
         }
       }
@@ -410,10 +408,10 @@ function localLoadGameData() {
 }
 let localObject = {
   set: function(key, Object) {
-    if (typeof key == 'string' && typeof Object == 'object') {
+    if (typeof key == 'string') {
       localStorage.setItem(key, JSON.stringify(Object));
     } else {
-      console.log('Key is not a String or Input Object is not a Object');
+      console.log('Key is not a String');
     }
   },
   get: function(key) {

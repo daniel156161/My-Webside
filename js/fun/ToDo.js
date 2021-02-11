@@ -10,7 +10,7 @@ document.querySelector('#removeall').addEventListener('click', () => {
   changeBoard.addList();
 });
 
-var changeBoard = {
+const changeBoard = {
   makeInputAndItemsDiv: function() {
     let addnewDiv = document.createElement('div');
     addnewDiv.setAttribute('class', 'list');
@@ -176,7 +176,7 @@ var changeBoard = {
   }
 }
 //Lists Storage and functions
-var lists = {
+const lists = {
   items: [],
   add: function (title) {
     var list = { 
@@ -184,11 +184,11 @@ var lists = {
       Cards: []
     };
     this.items.push(list);
-    localObject.set(localKey, this);
+    localObject.set(localKey, this.items);
     changeBoard.addList();
   },
   updatelocal: function() {
-    localObject.set(localKey, this);
+    localObject.set(localKey, this.items);
     changeBoard.addList();
   },
   addCard: function(i, item) {
@@ -199,7 +199,7 @@ var lists = {
     };
     object.Cards.push(Card);
     lists.items[i] = object;
-    localObject.set(localKey, this);
+    localObject.set(localKey, this.items);
   },
   addEintrag: function(input, i) {
     let form = document.createElement('div');
@@ -229,7 +229,7 @@ var lists = {
     var object = lists.items[i];
     object.Cards = item;
     lists.items[i] = object;
-    localObject.set(localKey, this);
+    localObject.set(localKey, this.items);
     changeBoard.addList();
   },
   removeItem: function(i, i2) {
@@ -245,7 +245,7 @@ var lists = {
       object.Cards[i2].isDone = false;
     }
     lists.items[i] = object;
-    localObject.set(localKey, this);
+    localObject.set(localKey, this.items);
     changeBoard.addList();
   },
   isItemDone: function(i, i2) {
@@ -258,12 +258,12 @@ var lists = {
   }
 }
 //Make Object into LocalStorage
-let localObject = {
+const localObject = {
   set: function(key, Object) {
-    if (typeof key == 'string' && typeof Object == 'object') {
+    if (typeof key == 'string') {
       localStorage.setItem(key, JSON.stringify(Object));
     } else {
-      console.log('Key is not a String or Input Object is not a Object');
+      console.log('Key is not a String');
     }
   },
   get: function(key) {
@@ -280,20 +280,14 @@ let localObject = {
 }
 //Load LocalStorage
 if(localStorage.length != 0) {
-  for (let i = 0; i < localStorage.length; i++) {
-    if (localStorage.key(i) === localKey) {
-      let localLists = localObject.get(localKey);
-      lists.items = localLists.items;
-      if(lists.items.length > 0) {
-        changeBoard.addList();
-      } else {
-        changeBoard.addDiv();
-      }
-      pageLoad = 1;
+  const localOut = localObject.get(localKey);
+  if (localOut != null) {
+    lists.items = localOut;
+    if(lists.items.length > 0) {
+      changeBoard.addList();
+    } else {
+      changeBoard.addDiv();
     }
-  }
-  if (pageLoad == 0) {
-    changeBoard.addDiv();
   }
 } else {
   changeBoard.addDiv();
