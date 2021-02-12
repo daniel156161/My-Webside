@@ -408,20 +408,12 @@ function localLoadGameData() {
 }
 let localObject = {
   set: function(key, Object) {
-    if (typeof key == 'string') {
-      localStorage.setItem(key, JSON.stringify(Object));
-    } else {
-      console.log('Key is not a String');
-    }
+    typeof key == 'string' ? localStorage.setItem(key, JSON.stringify(Object)) : console.log('Key is not a String');
   },
   get: function(key) {
     if (typeof key == 'string') {
       var item = localStorage.getItem(key);
-      if (item != null) {
-        item = JSON.parse(localStorage.getItem(key));
-      } else {
-        item = undefined;
-      }
+      item != null ? item = JSON.parse(localStorage.getItem(key)) : item = undefined;
       return item;
     }
   }
