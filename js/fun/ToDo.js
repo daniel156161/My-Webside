@@ -7,7 +7,7 @@ const localKey = 'ToDo';
 document.querySelector('#removeall').addEventListener('click', () => {
   localStorage.removeItem(localKey);
   lists.items = [];
-  changeBoard.addList();
+  changeBoard.showList();
 });
 
 const changeBoard = {
@@ -23,18 +23,18 @@ const changeBoard = {
   },
   addDiv: function() {
     if (lists.items.length < 7) {
-      //ADDlist to Boarder
+      //AddList into the Boarder
       let textDiv = document.createElement('div');
       textDiv.setAttribute('class', 'text');
       let addfield = document.createElement('input');
       addfield.setAttribute('id', 'addfield');
       addfield.setAttribute('type', 'text');
-      addfield.setAttribute('placeholder', 'Listentitle ...');
+      addfield.setAttribute('placeholder', 'List Title...');
       addfield.addEventListener('keydown', e => {
         if (e.isComposing || e.key === 'Enter') {
           var listTitle = addfield.value;
           if(listTitle != '') {
-            lists.add(listTitle);
+            lists.addList(listTitle);
           }
         }
       });
@@ -53,7 +53,7 @@ const changeBoard = {
       addbutton.addEventListener('click', () => {
         var listTitle = addfield.value;
         if(listTitle != '') {
-          lists.add(listTitle);
+          lists.addList(listTitle);
         }
       });
 
@@ -65,7 +65,7 @@ const changeBoard = {
       itemDiv.appendChild(buttonDiv);
     }
   },
-  addList: function() {
+  showList: function() {
     board.innerHTML = "";
     for (let i = 0; i < lists.items.length; i++) {
       var listObject = lists.items[i];
@@ -77,7 +77,7 @@ const changeBoard = {
       removeList.setAttribute('class', 'fas fa-trash');
       removeList.addEventListener('click', () => {
         lists.items.splice(i,1);
-        lists.updatelocal();
+        lists.updateLists();
       });
       let listitems = document.createElement('div');
       listitems.setAttribute('class', 'listitems');
@@ -93,47 +93,101 @@ const changeBoard = {
         for (let i2 = 0; i2 < listObject.Cards.length; i2++) {
           let itemDiv = document.createElement('div');
           itemDiv.setAttribute('class', `done-${listObject.Cards[i2].isDone}`);
-          itemDiv.innerHTML = listObject.Cards[i2].text;
+          itemDiv.setAttribute('id', `item-${i}-${i2}`);
+          itemDiv.innerHTML = listObject.Cards[i2].title;
+          itemDiv.addEventListener('click', e => {
+            let id = e.currentTarget.id.split('-');
+            if (e.target.localName == 'div') {
+              this.showPopUp(id[1], id[2]);
+            } else {
+              if (e.target.classList[1] == 'fa-check' || e.target.classList[1] == 'fa-times') {
+                lists.makeItemDone(id[1], id[2]);
+              } else {
+                lists.removeCard(id[1], id[2]);
+              }
+            }
+          });
+          
           let itemButtons = document.createElement('div');
           itemButtons.setAttribute('class', 'itemButton');
+
           itemDiv.appendChild(itemButtons);
+          
           let itemDone = document.createElement('i');
           itemDone.setAttribute('class', `fas fa-${lists.isItemDone(i, i2)}`);
-          itemDone.setAttribute('onclick', `lists.doneItem(${i}, ${i2})`);
-          let removeItem = document.createElement('i');
-          removeItem.setAttribute('class', 'fas fa-minus');
-          removeItem.setAttribute('onclick', `lists.removeItem(${i}, ${i2})`);
+          
+          let removeCard = document.createElement('i');
+          removeCard.setAttribute('class', 'fas fa-minus');
   
           itemButtons.appendChild(itemDone);
-          itemButtons.appendChild(removeItem);
+          itemButtons.appendChild(removeCard);
           inputDiv.appendChild(itemDiv);
         }
-        lists.addEintrag(inputDiv, i);
-      } else {
-        lists.addEintrag(inputDiv, i);
       }
+      this.addCardButton(inputDiv, i);
     }
     this.addDiv();
   },
+  makeAddTaskBtn: function() {
+    let addbutton = document.createElement('input');
+    addbutton.setAttribute('class', 'addTask');
+    addbutton.setAttribute('type', 'button');
+    addbutton.setAttribute('value', 'Add Task');
+    return addbutton;
+  },
+  addCardButton: function(input, i) {
+    let form = document.createElement('div');
+    form.setAttribute('class', 'form');
+    form.setAttribute('id', 'ItemAddButtonList');
+    
+    let button = document.createElement('div');
+    button.setAttribute('class', 'buttons');
+
+    let addbutton = this.makeAddTaskBtn();
+    addbutton.addEventListener('click', () => {
+      console.log(addItemOnlyOnce);
+      if (addItemOnlyOnce == 0) {
+        addItemOnlyOnce = 1;
+      } else {
+        addItemOnlyOnce = 0;
+        this.showList();
+      }
+      this.addMoreItems(input, form, i);
+    });
+
+    button.appendChild(addbutton);
+    form.appendChild(button);
+    input.appendChild(form);
+  },
+  makeCardObjet: function(addfield, cardDiscr, form, i) {
+    if(addfield.value != '') {
+      Card = {
+        title: addfield.value,
+        descr: cardDiscr.value,
+        isDone: false,
+        timestemp: Date.now()
+      };
+      addItemOnlyOnce = 0;
+      form.classList.remove('hidden');
+      lists.addCard(i, Card);
+    }
+  },
   addMoreItems: function(input, form, i) {
     form.classList.add('hidden');
+    
     let newFormDiv = document.createElement('div');
     newFormDiv.setAttribute('class', 'form addCard');
+    
     let textDiv = document.createElement('div');
     textDiv.setAttribute('class', 'text');
+    
     let addfield = document.createElement('input');
     addfield.setAttribute('id', 'addfield');
     addfield.setAttribute('type', 'text');
-    addfield.setAttribute('placeholder', 'Itemname ...');
+    addfield.setAttribute('placeholder', 'Task Name...');
     addfield.addEventListener('keydown', e => {
       if (e.isComposing || e.key === 'Enter') {
-        let Item = addfield.value;
-        if(Item != '') {
-          addItemOnlyOnce = 0;
-          form.classList.remove('hidden');
-          lists.addCard(i, Item);
-          this.addList();
-        }
+        this.makeCardObjet(addfield, cardDiscr, form, i);
       }
     });
 
@@ -141,103 +195,86 @@ const changeBoard = {
     upaddlist.setAttribute('class', 'fas fa-chevron-up');
     upaddlist.addEventListener('click', () => {
       addItemOnlyOnce = 0;
-      changeBoard.addList();
+      changeBoard.showList();
     });
 
     let cleanaddlist = document.createElement('i');
     cleanaddlist.setAttribute('class', 'fas fa-eraser');
     cleanaddlist.addEventListener('click', () => {
       addfield.value = '';
+      cardDiscr.value = '';
     });
+    
     let buttonDiv = document.createElement('div');
     buttonDiv.setAttribute('class', 'buttons');
-    let addbutton = document.createElement('input');
-    addbutton.setAttribute('id', 'addItemCard');
-    addbutton.setAttribute('type', 'button');
-    addbutton.setAttribute('value', 'Add Item');
+    
+    let addbutton = this.makeAddTaskBtn();
     addbutton.addEventListener('click', () => {
-      let Item = addfield.value;
-      if(Item != '') {
-        addItemOnlyOnce = 0;
-        form.classList.remove('hidden');
-        lists.addCard(i, Item);
-        this.addList();
-      }
+      this.makeCardObjet(addfield, cardDiscr, form, i);
     });
+    let cardDiscr = document.createElement('textarea');
+    cardDiscr.setAttribute('id', 'CardDescription');
+    cardDiscr.setAttribute('name', 'CardDescription');
+    cardDiscr.setAttribute('placeholder', 'Task Description...')
 
     buttonDiv.appendChild(addbutton);
+
     textDiv.appendChild(addfield);
     textDiv.appendChild(upaddlist);
     textDiv.appendChild(cleanaddlist);
+    textDiv.appendChild(cardDiscr);
 
     newFormDiv.appendChild(textDiv);
     newFormDiv.appendChild(buttonDiv);
     input.appendChild(newFormDiv);
+  },
+  showPopUp: function(i, i2) {
+    let done;
+    let card = lists.items[i].Cards[i2];
+    ModalCont.innerHTML = `<h1>${card.title}</h1>`;
+    card.isDone == true ? done = 'DONE' : done = 'not Done';
+    ModalCont.innerHTML += `This Task is: ${done}<br>`;
+    if(card.descr != '') {
+      ModalCont.innerHTML += `<h3>Description</h3>${card.descr}<br>`
+    }
+    ModalCont.innerHTML += `<br>Task Createt: ${timeConverter(card.timestemp)}`
+    modal.style.display = "block";
   }
 }
 //Lists Storage and functions
 const lists = {
   items: [],
-  add: function (title) {
+  updateLists: function() {
+    localObject.set(localKey, this.items);
+    changeBoard.showList();
+  },
+  addList: function (title) {
     var list = { 
       Title: title,
       Cards: []
     };
     this.items.push(list);
-    localObject.set(localKey, this.items);
-    changeBoard.addList();
+    this.updateLists();
   },
-  updatelocal: function() {
-    localObject.set(localKey, this.items);
-    changeBoard.addList();
-  },
-  addCard: function(i, item) {
+  addCard: function(i, cardObj) {
     let object = lists.items[i];
-    Card = {
-      text: item,
-      isDone: false
-    };
-    object.Cards.push(Card);
+    object.Cards.push(cardObj);
     lists.items[i] = object;
-    localObject.set(localKey, this.items);
+    this.updateLists();
   },
-  addEintrag: function(input, i) {
-    let form = document.createElement('div');
-    form.setAttribute('class', 'form');
-    form.setAttribute('id', 'ItemAddButtonList');
-    let button = document.createElement('div');
-    button.setAttribute('class', 'buttons');
-    let ibutton = document.createElement('input');
-    ibutton.setAttribute('class', 'addItem');
-    ibutton.setAttribute('type', 'button');
-    ibutton.setAttribute('value', 'Add Item');
-    ibutton.addEventListener('click', () => {
-      if (addItemOnlyOnce == 0) {
-        addItemOnlyOnce = 1;
-      } else {
-        addItemOnlyOnce = 0;
-        changeBoard.addList();
-      }
-      changeBoard.addMoreItems(input, form, i);
-    });
-
-    button.appendChild(ibutton);
-    form.appendChild(button);
-    input.appendChild(form);
-  },
-  removeCard: function(item, i) {
-    var object = lists.items[i];
-    object.Cards = item;
-    lists.items[i] = object;
-    localObject.set(localKey, this.items);
-    changeBoard.addList();
-  },
-  removeItem: function(i, i2) {
+  removeCard: function(i, i2) {
     let item = lists.items[i];
     item.Cards.splice([i2], 1);
-    lists.removeCard(item.Cards, i);
+
+    //Get Endless Item Object
+    /*
+      var object = lists.items[i];
+      object.Cards = item;
+      lists.items[i] = object;
+    */
+    this.updateLists();
   },
-  doneItem: function(i, i2) {
+  makeItemDone: function(i, i2) {
     let object = lists.items[i];
     if(object.Cards[i2].isDone == false) {
       object.Cards[i2].isDone = true;
@@ -246,7 +283,7 @@ const lists = {
     }
     lists.items[i] = object;
     localObject.set(localKey, this.items);
-    changeBoard.addList();
+    changeBoard.showList();
   },
   isItemDone: function(i, i2) {
     let object = lists.items[i];
@@ -257,23 +294,32 @@ const lists = {
     }
   }
 }
+//Pop Up
+const modal = document.querySelector('#myModal');
+const Modalspan = document.querySelector('.close');
+const ModalCont = document.querySelector('#ModalCont');
+Modalspan.addEventListener('click', () => {
+  modal.style.display = "none";
+});
+window.addEventListener('click', e => {
+  if (e.target == modal) {
+    modal.style.display = "none";
+  }
+});
+//Converter Unix time to User Time
+function timeConverter(UNIX_timestamp){
+  var time = new Date(UNIX_timestamp).toLocaleString('de-AT');
+  return time;
+}
 //Make Object into LocalStorage
 const localObject = {
   set: function(key, Object) {
-    if (typeof key == 'string') {
-      localStorage.setItem(key, JSON.stringify(Object));
-    } else {
-      console.log('Key is not a String');
-    }
+    typeof key == 'string' ? localStorage.setItem(key, JSON.stringify(Object)) : console.log('Key is not a String');
   },
   get: function(key) {
     if (typeof key == 'string') {
       var item = localStorage.getItem(key);
-      if (item != null) {
-        item = JSON.parse(localStorage.getItem(key));
-      } else {
-        item = undefined;
-      }
+      item != null ? item = JSON.parse(localStorage.getItem(key)) : item = null;
       return item;
     }
   }
@@ -283,11 +329,9 @@ if(localStorage.length != 0) {
   const localOut = localObject.get(localKey);
   if (localOut != null) {
     lists.items = localOut;
-    if(lists.items.length > 0) {
-      changeBoard.addList();
-    } else {
-      changeBoard.addDiv();
-    }
+    lists.items.length > 0 ? changeBoard.showList() : changeBoard.addDiv();
+  } else {
+    changeBoard.addDiv();
   }
 } else {
   changeBoard.addDiv();
