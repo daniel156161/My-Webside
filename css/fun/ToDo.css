@@ -87,6 +87,7 @@ Liste
 }
 .title i {
   cursor: pointer;
+  margin-left: auto;
 }
 .buttons {
   display: flex;

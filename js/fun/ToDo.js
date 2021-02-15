@@ -70,8 +70,8 @@ const changeBoard = {
   },
   showList: function() {
     board.innerHTML = "";
-    for (let i = 0; i < lists.items.length; i++) {
-      var listObject = lists.items[i];
+    for (let i_list = 0; i_list < lists.items.length; i_list++) {
+      var listObject = lists.items[i_list];
       let itemDiv = this.makeInputAndItemsDiv();
       let title = document.createElement('p');
       title.setAttribute('class', 'title');
@@ -79,7 +79,7 @@ const changeBoard = {
       let removeList = document.createElement('i');
       removeList.setAttribute('class', 'fas fa-trash');
       removeList.addEventListener('click', () => {
-        lists.items.splice(i,1);
+        lists.items.splice(i_list, 1);
         lists.updateLists();
       });
       let listitems = document.createElement('div');
@@ -93,11 +93,11 @@ const changeBoard = {
       listitems.appendChild(inputDiv);
 
       if (listObject.Cards.length > 0) {
-        for (let i2 = 0; i2 < listObject.Cards.length; i2++) {
+        for (let i_card = 0; i_card < listObject.Cards.length; i_card++) {
           let itemDiv = document.createElement('div');
-          itemDiv.setAttribute('class', `done-${listObject.Cards[i2].isDone}`);
-          itemDiv.setAttribute('id', `item-${i}-${i2}`);
-          itemDiv.innerHTML = listObject.Cards[i2].title;
+          itemDiv.setAttribute('class', `done-${listObject.Cards[i_card].isDone}`);
+          itemDiv.setAttribute('id', `item-${i_list}-${i_card}`);
+          itemDiv.innerHTML = listObject.Cards[i_card].title;
           itemDiv.addEventListener('click', e => {
             let id = e.currentTarget.id.split('-');
             if (e.target.localName == 'div') {
@@ -117,7 +117,7 @@ const changeBoard = {
           itemDiv.appendChild(itemButtons);
           
           let itemDone = document.createElement('i');
-          itemDone.setAttribute('class', `fas fa-${lists.isItemDone(i, i2)}`);
+          itemDone.setAttribute('class', `fas fa-${lists.isItemDone(i_list, i_card)}`);
           
           let removeCard = document.createElement('i');
           removeCard.setAttribute('class', 'fas fa-minus');
@@ -127,7 +127,7 @@ const changeBoard = {
           inputDiv.appendChild(itemDiv);
         }
       }
-      this.addCardButton(inputDiv, i);
+      this.addCardButton(inputDiv, i_list);
     }
     this.addDiv();
   },
@@ -138,7 +138,7 @@ const changeBoard = {
     addbutton.setAttribute('value', 'Add Task');
     return addbutton;
   },
-  addCardButton: function(input, i) {
+  addCardButton: function(input, i_list) {
     let form = document.createElement('div');
     form.setAttribute('class', 'form');
     form.setAttribute('id', 'ItemAddButtonList');
@@ -154,14 +154,14 @@ const changeBoard = {
         addItemOnlyOnce = 0;
         this.showList();
       }
-      this.addMoreItems(input, form, i);
+      this.addMoreItems(input, form, i_list);
     });
 
     button.appendChild(addbutton);
     form.appendChild(button);
     input.appendChild(form);
   },
-  makeCardObjet: function(addfield, cardDiscr, form, i) {
+  makeCardObjet: function(addfield, cardDiscr, form, i_list) {
     if(addfield.value != '') {
       Card = {
         title: addfield.value,
@@ -171,10 +171,10 @@ const changeBoard = {
       };
       addItemOnlyOnce = 0;
       form.classList.remove('hidden');
-      lists.addCard(i, Card);
+      lists.addCard(i_list, Card);
     }
   },
-  addMoreItems: function(input, form, i) {
+  addMoreItems: function(input, form, i_list) {
     form.classList.add('hidden');
     
     let newFormDiv = document.createElement('div');
@@ -189,7 +189,7 @@ const changeBoard = {
     addfield.setAttribute('placeholder', 'Task Name...');
     addfield.addEventListener('keydown', e => {
       if (e.isComposing || e.key === 'Enter') {
-        this.makeCardObjet(addfield, cardDiscr, form, i);
+        this.makeCardObjet(addfield, cardDiscr, form, i_list);
       }
     });
 
@@ -212,7 +212,7 @@ const changeBoard = {
     
     let addbutton = this.makeAddTaskBtn();
     addbutton.addEventListener('click', () => {
-      this.makeCardObjet(addfield, cardDiscr, form, i);
+      this.makeCardObjet(addfield, cardDiscr, form, i_list);
     });
     let cardDiscr = document.createElement('textarea');
     cardDiscr.setAttribute('id', 'CardDescription');
@@ -230,9 +230,9 @@ const changeBoard = {
     newFormDiv.appendChild(buttonDiv);
     input.appendChild(newFormDiv);
   },
-  showPopUp: function(i, i2) {
+  showPopUp: function(i_list, i_card) {
     let done;
-    let card = lists.items[i].Cards[i2];
+    let card = lists.items[i_list].Cards[i_card];
     ModalCont.innerHTML = `<h1>${card.title}</h1>`;
     card.isDone == true ? done = 'DONE' : done = 'not Done';
     ModalCont.innerHTML += `<p class="classDone">This Task is: ${done}</p><br>`;
@@ -261,40 +261,40 @@ const lists = {
     this.items.push(list);
     this.updateLists();
   },
-  addCard: function(i, cardObj) {
-    let object = lists.items[i];
+  addCard: function(i_list, cardObj) {
+    let object = lists.items[i_list];
     object.Cards.push(cardObj);
-    lists.items[i] = object;
+    lists.items[i_list] = object;
     this.updateLists();
   },
-  removeCard: function(i, i2) {
-    let item = lists.items[i];
-    item.Cards.splice([i2], 1);
+  removeCard: function(i_list, i_card) {
+    let item = lists.items[i_list];
+    item.Cards.splice([i_card], 1);
 
     //Get Endless Item Object
     /*
       let item2 = [...lists.items];
-      var object = lists.items[i];
+      var object = lists.items[i_list];
       object.Cards = item2;
-      lists.items[i] = object;
+      lists.items[i_list] = object;
       console.log(object);
     */
     this.updateLists();
   },
-  makeItemDone: function(i, i2) {
-    let object = lists.items[i];
-    if(object.Cards[i2].isDone == false) {
-      object.Cards[i2].isDone = true;
+  makeItemDone: function(i_list, i_card) {
+    let object = lists.items[i_list];
+    if(object.Cards[i_card].isDone == false) {
+      object.Cards[i_card].isDone = true;
     } else {
-      object.Cards[i2].isDone = false;
+      object.Cards[i_card].isDone = false;
     }
-    lists.items[i] = object;
+    lists.items[i_list] = object;
     localObject.set(localKey, this.items);
     changeBoard.showList();
   },
-  isItemDone: function(i, i2) {
-    let object = lists.items[i];
-    if(object.Cards[i2].isDone == false) {
+  isItemDone: function(i_list, i_card) {
+    let object = lists.items[i_list];
+    if(object.Cards[i_card].isDone == false) {
       return 'check';
     } else {
       return 'times';
