@@ -35,11 +35,7 @@ const changeBoard = {
       addfield.setAttribute('id', 'addfield');
       addfield.setAttribute('type', 'text');
       addfield.setAttribute('placeholder', 'List Title...');
-      addfield.addEventListener('keydown', e => {
-        if (e.isComposing || e.key === 'Enter') {
-          this.addList();
-        }
-      });
+      addfield.addEventListener('keydown', this.addList);
 
       let cleanaddlist = document.createElement('i');
       cleanaddlist.setAttribute('class', 'fas fa-eraser');
@@ -62,20 +58,22 @@ const changeBoard = {
       itemDiv.appendChild(buttonDiv);
     }
   },
-  addList: function() {
-    var listTitle = addfield.value;
-    if(listTitle != '') {
-      lists.addList(listTitle);
+  addList: function(e) {
+    if (e.key === 'Enter' || e.type === 'click') {
+      var listTitle = addfield.value;
+      if(listTitle != '') {
+        lists.addList(listTitle);
+      }
     }
   },
   showList: function() {
-    board.innerHTML = "";
+    board.innerHTML = '';
     for (let i_list = 0; i_list < lists.items.length; i_list++) {
       var listObject = lists.items[i_list];
       let itemDiv = this.makeInputAndItemsDiv();
       let title = document.createElement('p');
       title.setAttribute('class', 'title');
-      title.innerHTML = listObject.Title;
+      title.innerText = listObject.Title;
       let removeList = document.createElement('i');
       removeList.setAttribute('class', 'fas fa-trash');
       removeList.addEventListener('click', () => {
@@ -97,7 +95,7 @@ const changeBoard = {
           let itemDiv = document.createElement('div');
           itemDiv.setAttribute('class', `done-${listObject.Cards[i_card].isDone}`);
           itemDiv.setAttribute('id', `item-${i_list}-${i_card}`);
-          itemDiv.innerHTML = listObject.Cards[i_card].title;
+          itemDiv.innerText = listObject.Cards[i_card].title;
           itemDiv.addEventListener('click', e => {
             let id = e.currentTarget.id.split('-');
             if (e.target.localName == 'div') {
@@ -231,17 +229,33 @@ const changeBoard = {
     input.appendChild(newFormDiv);
   },
   showPopUp: function(i_list, i_card) {
+    ModalCont.innerHTML = '';
+
     let done;
     let card = lists.items[i_list].Cards[i_card];
-    ModalCont.innerHTML = `<h1>${card.title}</h1>`;
+    
+    let title = document.createElement('h1');
+    title.innerText = card.title;
+
+    //Make Card DONE
     card.isDone == true ? done = 'DONE' : done = 'not Done';
-    ModalCont.innerHTML += `<p class="classDone">This Task is: ${done}</p><br>`;
+
+    let doneMsg = document.createElement('p')
+    doneMsg.setAttribute('class', 'classDone')
+    doneMsg.innerText = `This Task is: ${done}`;
+
+    ModalCont.appendChild(title);
+    ModalCont.appendChild(doneMsg);
+
     if(card.descr != '') {
-      card.descr = card.descr.split('\n').join('<br>');
-      ModalCont.innerHTML += `<h3>Description</h3><p>${card.descr}</p><br>`
+      ModalCont.innerHTML += '<h3>Description</h3>';
+      let descrText = document.createElement('p');
+      descrText.innerText = card.descr;
+      ModalCont.appendChild(descrText);
     }
+
     ModalCont.innerHTML += `<br><p class="TaskCreatet">Task Createt: ${timeConverter(card.timestemp)}</p>`
-    modal.style.display = "block";
+    modal.style.display = 'block';
   }
 }
 /***************************************************************************************************************
@@ -262,39 +276,27 @@ const lists = {
     this.updateLists();
   },
   addCard: function(i_list, cardObj) {
-    let object = lists.items[i_list];
-    object.Cards.push(cardObj);
-    lists.items[i_list] = object;
+    lists.items[i_list].Cards.push(cardObj);
     this.updateLists();
   },
   removeCard: function(i_list, i_card) {
-    let item = lists.items[i_list];
-    item.Cards.splice([i_card], 1);
-
-    //Get Endless Item Object
-    /*
-      let item2 = [...lists.items];
-      var object = lists.items[i_list];
-      object.Cards = item2;
-      lists.items[i_list] = object;
-      console.log(object);
-    */
+    lists.items[i_list].Cards.splice(i_card, 1);
     this.updateLists();
   },
   makeItemDone: function(i_list, i_card) {
     let object = lists.items[i_list];
-    if(object.Cards[i_card].isDone == false) {
-      object.Cards[i_card].isDone = true;
+    let cards = object.Cards[i_card];
+    if(cards.isDone == false) {
+      cards.isDone = true;
     } else {
-      object.Cards[i_card].isDone = false;
+      cards.isDone = false;
     }
     lists.items[i_list] = object;
     localObject.set(localKey, this.items);
     changeBoard.showList();
   },
   isItemDone: function(i_list, i_card) {
-    let object = lists.items[i_list];
-    if(object.Cards[i_card].isDone == false) {
+    if(lists.items[i_list].Cards[i_card].isDone == false) {
       return 'check';
     } else {
       return 'times';
@@ -305,14 +307,14 @@ const lists = {
 Pop Up | Task Details
 ***************************************************************************************************************/
 const modal = document.querySelector('#myModal');
-const Modalspan = document.querySelector('.close');
+const ModalSpan = document.querySelector('.close');
 const ModalCont = document.querySelector('#ModalCont');
-Modalspan.addEventListener('click', () => {
-  modal.style.display = "none";
+ModalSpan.addEventListener('click', () => {
+  modal.style.display = 'none';
 });
 window.addEventListener('click', e => {
   if (e.target == modal) {
-    modal.style.display = "none";
+    modal.style.display = 'none';
   }
 });
 /***************************************************************************************************************
