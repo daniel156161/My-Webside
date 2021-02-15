@@ -4,12 +4,17 @@ const board = document.querySelector('#board');
 
 const localKey = 'ToDo';
 
+/***************************************************************************************************************
+Remove into localStorage the Key
+***************************************************************************************************************/
 document.querySelector('#removeall').addEventListener('click', () => {
   localStorage.removeItem(localKey);
   lists.items = [];
   changeBoard.showList();
 });
-
+/***************************************************************************************************************
+Change the Boarder
+***************************************************************************************************************/
 const changeBoard = {
   makeInputAndItemsDiv: function() {
     let addnewDiv = document.createElement('div');
@@ -32,10 +37,7 @@ const changeBoard = {
       addfield.setAttribute('placeholder', 'List Title...');
       addfield.addEventListener('keydown', e => {
         if (e.isComposing || e.key === 'Enter') {
-          var listTitle = addfield.value;
-          if(listTitle != '') {
-            lists.addList(listTitle);
-          }
+          this.addList();
         }
       });
 
@@ -50,12 +52,7 @@ const changeBoard = {
       addbutton.setAttribute('id', 'addbutton');
       addbutton.setAttribute('type', 'button');
       addbutton.setAttribute('value', 'Add List');
-      addbutton.addEventListener('click', () => {
-        var listTitle = addfield.value;
-        if(listTitle != '') {
-          lists.addList(listTitle);
-        }
-      });
+      addbutton.addEventListener('click', this.addList);
 
       let itemDiv = this.makeInputAndItemsDiv();
       buttonDiv.appendChild(addbutton);
@@ -63,6 +60,12 @@ const changeBoard = {
       textDiv.appendChild(cleanaddlist);
       itemDiv.appendChild(textDiv);
       itemDiv.appendChild(buttonDiv);
+    }
+  },
+  addList: function() {
+    var listTitle = addfield.value;
+    if(listTitle != '') {
+      lists.addList(listTitle);
     }
   },
   showList: function() {
@@ -145,7 +148,6 @@ const changeBoard = {
 
     let addbutton = this.makeAddTaskBtn();
     addbutton.addEventListener('click', () => {
-      console.log(addItemOnlyOnce);
       if (addItemOnlyOnce == 0) {
         addItemOnlyOnce = 1;
       } else {
@@ -233,15 +235,18 @@ const changeBoard = {
     let card = lists.items[i].Cards[i2];
     ModalCont.innerHTML = `<h1>${card.title}</h1>`;
     card.isDone == true ? done = 'DONE' : done = 'not Done';
-    ModalCont.innerHTML += `This Task is: ${done}<br>`;
+    ModalCont.innerHTML += `<p class="classDone">This Task is: ${done}</p><br>`;
     if(card.descr != '') {
-      ModalCont.innerHTML += `<h3>Description</h3>${card.descr}<br>`
+      card.descr = card.descr.split('\n').join('<br>');
+      ModalCont.innerHTML += `<h3>Description</h3><p>${card.descr}</p><br>`
     }
-    ModalCont.innerHTML += `<br>Task Createt: ${timeConverter(card.timestemp)}`
+    ModalCont.innerHTML += `<br><p class="TaskCreatet">Task Createt: ${timeConverter(card.timestemp)}</p>`
     modal.style.display = "block";
   }
 }
-//Lists Storage and functions
+/***************************************************************************************************************
+Lists Storage and Methods
+***************************************************************************************************************/
 const lists = {
   items: [],
   updateLists: function() {
@@ -268,9 +273,11 @@ const lists = {
 
     //Get Endless Item Object
     /*
+      let item2 = [...lists.items];
       var object = lists.items[i];
-      object.Cards = item;
+      object.Cards = item2;
       lists.items[i] = object;
+      console.log(object);
     */
     this.updateLists();
   },
@@ -294,7 +301,9 @@ const lists = {
     }
   }
 }
-//Pop Up
+/***************************************************************************************************************
+Pop Up | Task Details
+***************************************************************************************************************/
 const modal = document.querySelector('#myModal');
 const Modalspan = document.querySelector('.close');
 const ModalCont = document.querySelector('#ModalCont');
@@ -306,25 +315,27 @@ window.addEventListener('click', e => {
     modal.style.display = "none";
   }
 });
-//Converter Unix time to User Time
+/***************************************************************************************************************
+Converter Unix time to User Time
+***************************************************************************************************************/
 function timeConverter(UNIX_timestamp){
-  var time = new Date(UNIX_timestamp).toLocaleString('de-AT');
+  var time = new Date(UNIX_timestamp).toLocaleString(navigator.language);
   return time;
 }
-//Make Object into LocalStorage
-const localObject = {
+/***************************************************************************************************************
+Local Storage [SAVE, LOAD]
+***************************************************************************************************************/
+let localObject = {
   set: function(key, Object) {
-    typeof key == 'string' ? localStorage.setItem(key, JSON.stringify(Object)) : console.log('Key is not a String');
+    localStorage.setItem(String(key), JSON.stringify(Object));
   },
   get: function(key) {
-    if (typeof key == 'string') {
-      var item = localStorage.getItem(key);
-      item != null ? item = JSON.parse(localStorage.getItem(key)) : item = null;
-      return item;
-    }
+    var item = localStorage.getItem(String(key));
+    item != null ? item = JSON.parse(item) : item = null;
+    return item;
   }
 }
-//Load LocalStorage
+
 if(localStorage.length != 0) {
   const localOut = localObject.get(localKey);
   if (localOut != null) {
