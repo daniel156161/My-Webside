@@ -60,11 +60,19 @@ const changeBoard = {
   },
   addList: function(e) {
     if (e.key === 'Enter' || e.type === 'click') {
+      let addDivField = document.querySelector('#addfield');
       var listTitle = addDivField.value;
       if(listTitle != '') {
         lists.addList(listTitle);
       }
     }
+  },
+  addCard: function(addfield, cardDiscr, i_list, form) {
+    var CardTitle = addfield.value;
+    if(CardTitle != '') {
+      lists.addCard(CardTitle, cardDiscr, i_list);
+    }
+    form.classList.remove('hidden');
   },
   showList: function() {
     board.innerHTML = '';
@@ -159,19 +167,6 @@ const changeBoard = {
     form.appendChild(button);
     input.appendChild(form);
   },
-  makeCardObjet: function(addfield, cardDiscr, form, i_list) {
-    if(addfield.value != '') {
-      Card = {
-        title: addfield.value,
-        descr: cardDiscr.value,
-        isDone: false,
-        timestemp: Date.now()
-      };
-      addItemOnlyOnce = 0;
-      form.classList.remove('hidden');
-      lists.addCard(i_list, Card);
-    }
-  },
   addMoreItems: function(input, form, i_list) {
     form.classList.add('hidden');
     
@@ -187,7 +182,7 @@ const changeBoard = {
     addfield.setAttribute('placeholder', 'Task Name...');
     addfield.addEventListener('keydown', e => {
       if (e.isComposing || e.key === 'Enter') {
-        this.makeCardObjet(addfield, cardDiscr, form, i_list);
+        this.addCard(addfield, cardDiscr, i_list, form);
       }
     });
 
@@ -210,7 +205,7 @@ const changeBoard = {
     
     let addbutton = this.makeAddTaskBtn();
     addbutton.addEventListener('click', () => {
-      this.makeCardObjet(addfield, cardDiscr, form, i_list);
+      this.addCard(addfield, cardDiscr, i_list, form);
     });
     let cardDiscr = document.createElement('textarea');
     cardDiscr.setAttribute('id', 'CardDescription');
@@ -275,28 +270,35 @@ const lists = {
     this.items.push(list);
     this.updateLists();
   },
-  addCard: function(i_list, cardObj) {
-    lists.items[i_list].Cards.push(cardObj);
+  addCard: function(Title, cardDiscr, i_list) {
+    Card = {
+      title: Title,
+      descr: cardDiscr.value,
+      isDone: false,
+      timestemp: Date.now()
+    };
+    addItemOnlyOnce = 0;
+    this.items[i_list].Cards.push(Card);
     this.updateLists();
   },
   removeCard: function(i_list, i_card) {
-    lists.items[i_list].Cards.splice(i_card, 1);
+    this.items[i_list].Cards.splice(i_card, 1);
     this.updateLists();
   },
   makeItemDone: function(i_list, i_card) {
-    let object = lists.items[i_list];
+    let object = this.items[i_list];
     let cards = object.Cards[i_card];
     if(cards.isDone == false) {
       cards.isDone = true;
     } else {
       cards.isDone = false;
     }
-    lists.items[i_list] = object;
+    this.items[i_list] = object;
     localObject.set(localKey, this.items);
     changeBoard.showList();
   },
   isItemDone: function(i_list, i_card) {
-    if(lists.items[i_list].Cards[i_card].isDone == false) {
+    if(this.items[i_list].Cards[i_card].isDone == false) {
       return 'check';
     } else {
       return 'times';
