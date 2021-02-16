@@ -31,16 +31,16 @@ const changeBoard = {
       //AddList into the Boarder
       let textDiv = document.createElement('div');
       textDiv.setAttribute('class', 'text');
-      let addfield = document.createElement('input');
-      addfield.setAttribute('id', 'addfield');
-      addfield.setAttribute('type', 'text');
-      addfield.setAttribute('placeholder', 'List Title...');
-      addfield.addEventListener('keydown', this.addList);
+      let addDivField = document.createElement('input');
+      addDivField.setAttribute('id', 'addfield');
+      addDivField.setAttribute('type', 'text');
+      addDivField.setAttribute('placeholder', 'List Title...');
+      addDivField.addEventListener('keydown', this.addList);
 
       let cleanaddlist = document.createElement('i');
       cleanaddlist.setAttribute('class', 'fas fa-eraser');
       cleanaddlist.addEventListener('click', () => {
-        addfield.value = '';
+        addDivField.value = '';
       });
       let buttonDiv = document.createElement('div');
       buttonDiv.setAttribute('class', 'buttons');
@@ -52,7 +52,7 @@ const changeBoard = {
 
       let itemDiv = this.makeInputAndItemsDiv();
       buttonDiv.appendChild(addbutton);
-      textDiv.appendChild(addfield);
+      textDiv.appendChild(addDivField);
       textDiv.appendChild(cleanaddlist);
       itemDiv.appendChild(textDiv);
       itemDiv.appendChild(buttonDiv);
@@ -60,7 +60,7 @@ const changeBoard = {
   },
   addList: function(e) {
     if (e.key === 'Enter' || e.type === 'click') {
-      var listTitle = addfield.value;
+      var listTitle = addDivField.value;
       if(listTitle != '') {
         lists.addList(listTitle);
       }
