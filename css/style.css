@@ -222,6 +222,25 @@ i {
   transform: scale(1.1);
 }
 /**************************************************************************************
+Temp
+**************************************************************************************/
+#temp {
+  margin: 0 auto;
+  font-size: 0.9em;
+  border-spacing: 0;
+  padding-bottom: 10px;
+}
+
+#lastUpdateTime {
+  text-align: center;
+  font-size: 1.3em;
+}
+
+#temps-inside, #temps-outside {
+  width: 95vw;
+  overflow: hidden;
+}
+/**************************************************************************************
 Footer
 **************************************************************************************/
 footer {
@@ -255,6 +274,13 @@ footer li a {
 /**************************************************************************************
 Moble Device
 **************************************************************************************/
+@media (max-width: 690px) {
+  #temps-inside, #temps-outside {
+    width: 94vw;
+    overflow: hidden;
+  }
+}
+
 @media (max-width: 574px) {
   /* Nav */
   nav {
@@ -294,6 +320,10 @@ Moble Device
   }
   p {
     font-size: 0.8em;
+  }
+  #temps-inside, #temps-outside {
+    width: 89vw;
+    overflow: hidden;
   }
 }
 @media (max-width: 841px) {

@@ -47,7 +47,7 @@ copyright.innerHTML = '2020 - ' + new Date().getFullYear();
 /**************************************************************************************
 Fun / Ascii Art
 **************************************************************************************/
-console.log(navigator.oscpu, navigator.userAgent);
+console.log(navigator.userAgent);
 if (navigator.oscpu == 'Linux x86_64') {
   console.log(`%c   /$$       /$$                              
   | $$      |__/                              

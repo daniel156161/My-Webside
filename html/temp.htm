@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<html> 
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/fontawesome/all.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>daniel156161</title>
+    <link rel="icon" type="image/svg+xml" href="../img/favicon.svg" sizes="any">
+    <script src="../js/const.js"></script>
+    <script src='../js/module/plotly-2.0.0-rc.2.min.js'></script>
+  </head>
+  <body>
+    <div class="hamburger"><i class="fas fa-bars"></i><span>Menu</span></div>
+    <nav>
+      <ul>
+        <li><a href="https://daniel156161.keybase.pub/"><i class="fas fa-home"></i>Home</a></li>
+        <li><a class="submenuyes" href="#"><i class="fas fa-warehouse"></i>My Stuff<i class="arrow fas fa-sort-down"></i></a>
+          <ul class="submenu">
+            <li><a href="https://daniel156161.keybase.pub/html/keys.htm"><i class="fas fa-key"></i>Keys</a></li>
+            <li><a href="https://daniel156161.keybase.pub/html/gallery.htm"><i class="fas fa-image"></i>Gallery</a></li>
+            <li><a href="#"><i class="fas fa-cloud-sun"></i>Weather</a></li>
+            <li><a class="submenuyes2" href="#"><i class="fab fa-keybase"></i>Keybase<i class="arrow fas fa-caret-right"></i></a>
+              <ul class="submenu-2">
+                <li><a href="https://keybase.io/daniel156161/"><i class="fas fa-id-card"></i>My Profile</a></li>
+                <li><a href="https://keybase.io/daniel156161/graph"><i class="fas fa-chart-area"></i>Graph</a></li>
+                <li><a href="https://keybase.io/daniel156161/devices"><i class="fas fa-mobile-alt"></i>Devices</a></li>
+                <li><a href="https://keybase.io/daniel156161/sigchain"><i class="fas fa-link"></i>Chain</a></li>
+              </ul>
+            </li>
+            <li><a href="https://github.com/daniel156161"><i class="fab fa-github"></i>My Git</a></li>
+          </ul>
+        </li>
+        <li><a class="submenuyes" href="#"><i class="fas fa-file-code"></i>Codes<i class="arrow fas fa-sort-down"></i></a>
+          <ul class="submenu">
+            <li><a href="https://daniel156161.keybase.pub/html/myducky.htm"><i class="fab fa-usb"></i>Ducky</a></li>
+            <li><a class="submenuyes2" href="#"><i class="fab fa-js-square"></i>JS<i class="arrow fas fa-caret-right"></i></a>
+              <ul class="submenu-2">
+                <li><a href="https://daniel156161.keybase.pub/html/fun/rbody.htm">Blinking</a></li>
+                <li><a href="https://daniel156161.keybase.pub/html/fun/jsdom.htm">JS DOM Manipulation</a></li>
+                <li><a href="https://daniel156161.keybase.pub/html/fun/stopwatch.htm">Stopwatch</a></li>
+                <li><a href="https://daniel156161.keybase.pub/html/ToDo.htm">ToDo</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a class="submenuyes" href="#"><i class="fas fa-random"></i>Coloes<i class="arrow fas fa-sort-down"></i></a>
+          <ul class="submenu">
+            <li><a href="https://daniel156161.keybase.pub/html/random_color/index.htm">Menu</a></li>
+            <li><a href="https://daniel156161.keybase.pub/html/random_color/hex.htm">HEX</a></li>
+            <li><a href="https://daniel156161.keybase.pub/html/random_color/hsl.htm">HSL</a></li>
+            <li><a href="https://daniel156161.keybase.pub/html/random_color/rgb.htm">RGB</a></li>
+          </ul>
+        </li>
+        <li><a class="submenuyes" href="#"><i class="fas fa-gamepad"></i>Games<i class="arrow fas fa-sort-down"></i></i></a>
+          <ul class="submenu">
+            <li><a href="https://daniel156161.keybase.pub/html/games/memory.htm">Memory</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <header>
+      <h1>My Weather Station</h1>
+      <p id="msg">A <strong>responsive</strong> website created by me.</p>
+      <p id="age"></p>
+    </header>
+    <main class="centermain">
+      <table id="temp">
+        <tr>
+          <td id="lastUpdateTime" colspan="4"></td>
+        </tr>
+        <tr>
+          <th width="70px"></th>
+          <th width="100px">Temp</th>
+          <th width="70px">Humid</th>
+          <th width="70px">Heat Index</th>
+        </tr>
+        <tr>
+          <td>Inside:</td>
+          <td id="insideTemp"></td>
+          <td id="insideHumid"></td>
+          <td id="insideHeatIndex"></td>
+        </tr>
+        <tr>
+          <td>Outside:</td>
+          <td id="outsideTemp"></td>
+          <td id="outsideHumid"></td>
+          <td id="outsideHeatIndex"></td>
+        </tr>
+      </table>
+      <div id="temps-inside"></div>
+      <div id="temps-outside"></div>
+    </main>
+
+    <footer>
+      <ul>
+        <li>&#169; <span id="copyright">2020</span> Daniel Dolezal</li>
+      </ul>
+    </footer>
+
+    <script src="../js/temp.js"></script>
+    <script src="../js/nav.js"></script>
+    <script src="../js/msg.js"></script>
+  </body>
+</html>
