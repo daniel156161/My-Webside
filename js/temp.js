@@ -21,7 +21,7 @@ const newArrays = {
 }
 
 function getLastUpdate() {
-  fetch(`${apiHost}/temp/last`)
+  fetch(`${apiHost}/wheater/last`)
   .then(response => response.json())
   .then(result => {
     lastUpdateTime.innerText = `Last Update: ${result.data.date}`;
@@ -91,7 +91,7 @@ const plot = {
   },
   getHour: function(update) {
     this.dataFromDb.hour = []
-    fetch(`${apiHost}/temp/hour`)
+    fetch(`${apiHost}/wheater/hour`)
     .then(response => response.json())
     .then(result => {
       this.dataFromDb.hour = result.data;
@@ -103,7 +103,7 @@ const plot = {
   },
   getDay: function(update) {
     this.dataFromDb.day = []
-    fetch(`${apiHost}/temp/day`)
+    fetch(`${apiHost}/wheater/day`)
     .then(response => response.json())
     .then(result => {
       this.dataFromDb.day = result.data;
@@ -115,7 +115,7 @@ const plot = {
   },
   getMonth: function(update) {
     this.dataFromDb.month = []
-    fetch(`${apiHost}/temp/month`)
+    fetch(`${apiHost}/wheater/month`)
     .then(response => response.json())
     .then(result => {
       this.dataFromDb.month = result.data;
