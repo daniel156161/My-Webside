@@ -26,7 +26,7 @@ function getLastUpdate(uuid) {
 }
 
 function getStations() {
-  fetch('http://localhost:8080/wheater/')
+  fetch(`${apiHost}/wheater/`)
   .then(r => r.json())
   .then(result => {
     result.stations.forEach(ele => {
@@ -102,7 +102,7 @@ const plot = {
         }
       }
     }`
-    fetch('http://localhost:8080/graphql', {
+    fetch(`${apiHost}/graphql`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
