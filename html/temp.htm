@@ -66,31 +66,25 @@
       <p id="age"></p>
     </header>
     <main class="centermain">
-      <table id="temp">
-        <tr>
-          <td id="lastUpdateTime" colspan="4"></td>
-        </tr>
-        <tr>
-          <th width="70px"></th>
-          <th width="100px">Temp</th>
-          <th width="70px">Humid</th>
-          <th width="70px">Heat Index</th>
-        </tr>
-        <tr>
-          <td>Inside:</td>
-          <td id="insideTemp"></td>
-          <td id="insideHumid"></td>
-          <td id="insideHeatIndex"></td>
-        </tr>
-        <tr>
-          <td>Outside:</td>
-          <td id="outsideTemp"></td>
-          <td id="outsideHumid"></td>
-          <td id="outsideHeatIndex"></td>
-        </tr>
-      </table>
-      <div id="temps-inside"></div>
-      <div id="temps-outside"></div>
+      <div id="temp-div">
+        <table>
+          <tr>
+            <td id="lastUpdateTime" colspan="4"></td>
+          </tr>
+          <tr>
+            <th width="70">Temp</th>
+            <th width="70">Humid</th>
+            <th width="70">Heat Index</th>
+          </tr>
+          <tr>
+            <td id="temp"></td>
+            <td id="humid"></td>
+            <td id="heatIndex"></td>
+          </tr>
+        </table>
+        <select id="station"></select>
+      </div>
+      <div id="temps"></div>
     </main>
 
     <footer>

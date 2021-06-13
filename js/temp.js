@@ -1,53 +1,57 @@
 const lastUpdateTime = document.querySelector('#lastUpdateTime');
-const insideTemp = document.querySelector('#insideTemp');
-const insideHumid = document.querySelector('#insideHumid');
-const insideHeatIndex = document.querySelector('#insideHeatIndex');
-const outsideTemp = document.querySelector('#outsideTemp');
-const outsideHumid = document.querySelector('#outsideHumid');
-const outsideHeatIndex = document.querySelector('#outsideHeatIndex');
+const temp = document.querySelector('#temp');
+const humid = document.querySelector('#humid');
+const heatIndex = document.querySelector('#heatIndex');
+
+const station = document.querySelector('#station');
 
 const newArrays = {
   date: [],
-  inside: {
-    temp: [],
-    humid: [],
-    heatIndex: []
-  },
-  outside: {
-    temp: [],
-    humid: [],
-    heatIndex: []
-  }
+  temp: [],
+  humid: [],
+  heatIndex: []
 }
 
-function getLastUpdate() {
-  fetch(`${apiHost}/wheater/last`)
+function getLastUpdate(uuid) {
+  fetch(`${apiHost}/wheater/${uuid}/last`)
   .then(response => response.json())
   .then(result => {
     lastUpdateTime.innerText = `Last Update: ${result.data.date}`;
 
-    insideTemp.innerText = `${result.data.inside.temp.toFixed(2)} °C`;
-    insideHumid.innerText = `${result.data.inside.humid.toFixed(2)} %`;
-    insideHeatIndex.innerText = `${result.data.inside.heatIndex.toFixed(2)} °C`;
-
-    outsideTemp.innerText = `${result.data.outside.temp.toFixed(2)} °C`;
-    outsideHumid.innerText = `${result.data.outside.humid.toFixed(2)} %`;
-    outsideHeatIndex.innerText = `${result.data.outside.heatIndex.toFixed(2)} °C`;
+    temp.innerText = `${result.data.temp.toFixed(2)} °C`;
+    humid.innerText = `${result.data.humid.toFixed(2)} %`;
+    heatIndex.innerText = `${result.data.heatIndex.toFixed(2)} °C`;
   })
   .catch(err => console.log(err));
 }
 
+function getStations() {
+  fetch('http://localhost:8080/wheater/')
+  .then(r => r.json())
+  .then(result => {
+    result.stations.forEach(ele => {
+      const option = document.createElement('option');
+      option.setAttribute('value', ele.uuid);
+      option.innerText = `${ele.name} [${ele.city}]`;
+      station.appendChild(option);
+    })
+  });
+  station.addEventListener('change', e => {
+    plot.uuid = e.target.value;
+    getLastUpdate(plot.uuid);
+    plot.getData(plot.uuid);
+  });
+}
+
 const plot = {
+  uuid: "26d4f02d-3a00-4d13-971b-f3362c529dec",
   buffer: 5,
   label: {
     temp: 'Temp °C',
     humid: 'Humid %',
     heatIndex: 'HeatIndex °C'
   },
-  data: {
-    inside: [],
-    outside: []
-  },
+  data: [],
   dataFromDb: {
     hour: [],
     day: [],
@@ -56,24 +60,10 @@ const plot = {
   update: {
     hour: false
   },
-  maxRange: {
-    inside: null,
-    outside: null
-  },
-  minRange: {
-    inside: null,
-    outside: null
-  },
+  maxRange: null,
+  minRange: null,
   init: function() {
-    this.getHour(false);
-    this.getDay(false);
-    this.getMonth(false);
-    let getAllData = setInterval(() => {
-      if (this.dataFromDb.hour.length != 0 && this.dataFromDb.day.length != 0 && this.dataFromDb.month.length != 0) {
-        this.makeParse();
-        clearInterval(getAllData);
-      }
-    }, 500);
+    this.getData(plot.uuid);
   },
   setUpdater: function() {
     this.update.running = true;
@@ -82,62 +72,62 @@ const plot = {
       const date = new Date();
       if (date.getMinutes() == 1 && this.update.hour == false) {
         this.update.hour = true;
-        this.getHour(true);
+        this.getData(plot.uuid);
       }
       if (date.getMinutes() == 2) {
         this.update.hour = false;
       }
     }, 1000);
   },
-  getHour: function(update) {
-    this.dataFromDb.hour = []
-    fetch(`${apiHost}/wheater/hour`)
-    .then(response => response.json())
-    .then(result => {
-      this.dataFromDb.hour = result.data;
-      if (update) {
-        this.makeParse();
+  getData: function(uuid) {
+    const query = `{
+      wheater {
+        hour(stationUUID: "${uuid}") {
+          date
+          temp
+          humid
+          heatIndex
+        }
+        day(stationUUID: "${uuid}") {
+          date
+          temp
+          humid
+          heatIndex
+        }
+        month(stationUUID: "${uuid}") {
+          date
+          temp
+          humid
+          heatIndex
+        }
       }
+    }`
+    fetch('http://localhost:8080/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({query: query})
     })
-    .catch(err => console.log(err));
-  },
-  getDay: function(update) {
-    this.dataFromDb.day = []
-    fetch(`${apiHost}/wheater/day`)
-    .then(response => response.json())
+    .then(r => r.json())
     .then(result => {
-      this.dataFromDb.day = result.data;
-      if (update) {
-        this.makeParse();
-      }
-    })
-    .catch(err => console.log(err));
+      this.dataFromDb.hour = result.data.wheater.hour;
+      this.dataFromDb.day = result.data.wheater.day;
+      this.dataFromDb.month = result.data.wheater.month;
+      this.makeParse(uuid);
+    });
   },
-  getMonth: function(update) {
-    this.dataFromDb.month = []
-    fetch(`${apiHost}/wheater/month`)
-    .then(response => response.json())
-    .then(result => {
-      this.dataFromDb.month = result.data;
-      if (update) {
-        this.makeParse();
-      }
-    })
-    .catch(err => console.log(err));
-  },
-  makeParse: function() {
+  makeParse: function(uuid) {
     newArrays.date = [];
-    newArrays.inside.temp = [];
-    newArrays.inside.humid = [];
-    newArrays.inside.heatIndex = [];
-    newArrays.outside.temp = [];
-    newArrays.outside.humid = [];
-    newArrays.outside.heatIndex = [];
+    newArrays.temp = [];
+    newArrays.humid = [];
+    newArrays.heatIndex = [];
 
     this.parse(this.dataFromDb.hour);
     this.parse(this.dataFromDb.day);
     this.parse(this.dataFromDb.month);
-    this.makeArray();
+    this.makeArray(uuid);
     if (this.update.running == undefined) {
       this.setUpdater();
     }
@@ -148,25 +138,20 @@ const plot = {
         if (typeof value == 'string') {
           newArrays[key].push(value);
         } else {
-          for (const [key2, value2] of Object.entries(value)) {
-            newArrays[key][key2].push(value2.toFixed(2))
-          }
+          newArrays[key].push(value.toFixed(2))
         }
       }
     });
   },
-  makeArray: function() {
-    this.data.inside = [];
-    this.data.outside = [];
+  makeArray: function(uuid) {
+    this.data = [];
     for (const [key, value] of Object.entries(newArrays)) {
       if (key != 'date') {
-        for (const [key2, value2] of Object.entries(value)) {
-          this.data[key].push(this.makeTrace(this.label[key2], newArrays.date, newArrays[key][key2]));
-        }
+        this.data.push(this.makeTrace(this.label[key], newArrays.date, newArrays[key]));
       }
     }
     this.getMaxValuesHour();
-    this.draw();
+    this.draw(uuid);
   },
   makeTrace: function(name, x, y) {
     var trace = {
@@ -180,26 +165,15 @@ const plot = {
     };
     return trace;
   },
-  draw: function() {
-    Plotly.newPlot('temps-inside', this.data.inside, {
-      title:'Inside',
+  draw: function(uuid) {
+    Plotly.newPlot('temps', this.data, {
+      title:`Weather Station`,
       xaxis: {
-        range: [formatDate(minDays(Date.now(), 2), false), formatDate(Date.now(), true)],
+        range: [formatDate(minDays(Date.now(), 6), false), formatDate(Date.now(), true)],
         type: 'date'
       },
       yaxis: {
-        range: [(this.minRange.inside - this.buffer), (this.maxRange.inside + this.buffer)],
-        title: 'Value'
-      }
-    }, {responsive: true});
-    Plotly.newPlot('temps-outside', this.data.outside, {
-      title:'Outside',
-      xaxis: {
-        range: [formatDate(minDays(Date.now(), 2), false), formatDate(Date.now(), true)],
-        type: 'date'
-      },
-      yaxis: {
-        range: [(this.minRange.outside - this.buffer), (this.maxRange.outside + this.buffer)],
+        range: [(this.minRange - this.buffer), (this.maxRange + this.buffer)],
         title: 'Value'
       }
     }, {responsive: true});
@@ -208,16 +182,14 @@ const plot = {
     this.dataFromDb.hour.forEach(ele => {
       for (const [key, value] of Object.entries(ele)) {
         if (typeof value != 'string') {
-          for (const [key2, value2] of Object.entries(value)) {
-            if (this.maxRange[key] < value2) {
-              this.maxRange[key] = value2;
-            } else {
-              if (this.minRange[key] > value2 || this.minRange[key] == null) {
-                this.minRange[key] = value2;
-              }
+          if (this.maxRange < value) {
+            this.maxRange = value;
+          } else {
+            if (this.minRange > value || this.minRange == null) {
+              this.minRange = value;
             }
-            //console.log(key, key2, value2);
           }
+          //console.log(key, key2, value2);
         }
       }
     });
@@ -257,9 +229,11 @@ function formatDate(date, secondsyes) {
 setInterval(() => {
   const date = new Date();
   if (date.getSeconds() == 2) {
-    getLastUpdate();
+    getLastUpdate(plot.uuid);
   }
 }, 500)
 
-getLastUpdate();
+getStations();
+
+getLastUpdate(plot.uuid);
 plot.init();
