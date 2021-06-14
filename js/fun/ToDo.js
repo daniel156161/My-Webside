@@ -259,7 +259,7 @@ Lists Storage and Methods
 const lists = {
   items: [],
   updateLists: function() {
-    localObject.set(localKey, this.items);
+    LocalStorageHelper.set(localKey, this.items);
     changeBoard.showList();
   },
   addList: function (title) {
@@ -294,7 +294,7 @@ const lists = {
       cards.isDone = false;
     }
     this.items[i_list] = object;
-    localObject.set(localKey, this.items);
+    LocalStorageHelper.set(localKey, this.items);
     changeBoard.showList();
   },
   isItemDone: function(i_list, i_card) {
@@ -329,19 +329,8 @@ function timeConverter(UNIX_timestamp){
 /***************************************************************************************************************
 Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
-let localObject = {
-  set: function(key, Object) {
-    localStorage.setItem(String(key), JSON.stringify(Object));
-  },
-  get: function(key) {
-    var item = localStorage.getItem(String(key));
-    item != null ? item = JSON.parse(item) : item = null;
-    return item;
-  }
-}
-
 if(localStorage.length != 0) {
-  const localOut = localObject.get(localKey);
+  const localOut = LocalStorageHelper.get(localKey);
   if (localOut != null) {
     lists.items = localOut;
     lists.items.length > 0 ? changeBoard.showList() : changeBoard.addDiv();

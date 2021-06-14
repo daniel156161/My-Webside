@@ -169,7 +169,7 @@ const plot = {
     Plotly.newPlot('temps', this.data, {
       title:`Weather Station`,
       xaxis: {
-        range: [formatDate(minDays(Date.now(), 6), false), formatDate(Date.now(), true)],
+        range: [DateHelper.formatDate(DateHelper.minDays(Date.now(), 6), false), DateHelper.formatDate(Date.now(), true)],
         type: 'date'
       },
       yaxis: {
@@ -193,36 +193,6 @@ const plot = {
         }
       }
     });
-  }
-}
-
-function minDays(date, days) {
-  const result = new Date(date);
-  result.setTime(result.getTime() - days * 24 * 3600 * 1000);
-  return result;
-}
-
-function formatDate(date, secondsyes) {
-  const result = new Date(date);
-
-  let sec = result.getSeconds();
-  let hour = result.getHours();
-  let min = result.getMinutes();
-  let day = result.getDate();
-  let month = result.getMonth() + 1;
-
-  if (sec < 10) sec = `0${sec}`;
-  if (hour < 10) hour = `0${hour}`;
-  if (min < 10) min = `0${min}`;  
-  if (day < 10) day = `0${day}`;
-  if (month < 10) month = `0${month}`;
-
-  if (secondsyes) { 
-    //console.log(`${result.getFullYear()}-${month}-${day} ${hour}:${min}:${sec}`);
-    return `${result.getFullYear()}-${month}-${day} ${hour}:${min}:${sec}`;
-  } else {
-    //console.log(`${result.getFullYear()}-${month}-${day} 00:00:00`);
-    return `${result.getFullYear()}-${month}-${day} 00:00:00`;
   }
 }
 

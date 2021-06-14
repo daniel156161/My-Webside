@@ -95,7 +95,7 @@ function resetGame() {
     itemopen.splice(0,1)[0];
   }
   clearInterval(time);
-  localObject.set(localKey, Game);
+  LocalStorageHelper.set(localKey, Game);
   isrunning = false;
   playTime = 0;
   stopgame = 0;
@@ -130,13 +130,13 @@ pause.addEventListener('click', () => {
 //Score Button und Info
 scoreitem.addEventListener('click', () => {
   Game.setScoreSwitch();
-  localObject.set(localKey, Game);
+  LocalStorageHelper.set(localKey, Game);
   outScore();
 });
 //Time Button und Info
 gametime.addEventListener('click', () => {
   Game.setTimeSwitch();
-  localObject.set(localKey, Game);
+  LocalStorageHelper.set(localKey, Game);
   outTime();
 });
 /***************************************************************************************************************
@@ -320,7 +320,7 @@ function cardAddEventListener(c) {
                 databox.classList.replace(databox.classList[0], databoxcolor());
               }
             }
-            localObject.set(localKey, Game);
+            LocalStorageHelper.set(localKey, Game);
             gameField.classList.add('hidden');
             msgs(`<div><h2>You Win</h2><p>Played Time: ${toHHMMSS(Game.Time)}<br>Time: ${toHHMMSS(playTime)}<br>Level: ${Game.Level}<br>Score: ${Game.Score}<br>Trys: ${trys}</p><p>Play again?</p><i class="fas fa-play"></i></div>`);
             Game.addLevel();
@@ -385,7 +385,7 @@ Local Storage [SAVE, LOAD]
 ***************************************************************************************************************/
 function localLoadGameData() {
   if (localStorage.length != 0) {
-    const localOut = localObject.get(localKey);
+    const localOut = LocalStorageHelper.get(localKey);
     if(localOut != null) {
       Game.Level = localOut.Level;
       Game.Time = localOut.Time;
@@ -403,18 +403,6 @@ function localLoadGameData() {
           }
         }
       }
-    }
-  }
-}
-let localObject = {
-  set: function(key, Object) {
-    typeof key == 'string' ? localStorage.setItem(key, JSON.stringify(Object)) : console.log('Key is not a String');
-  },
-  get: function(key) {
-    if (typeof key == 'string') {
-      var item = localStorage.getItem(key);
-      item != null ? item = JSON.parse(localStorage.getItem(key)) : item = undefined;
-      return item;
     }
   }
 }
